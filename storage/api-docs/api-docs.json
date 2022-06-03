@@ -1,0 +1,1023 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Presences API",
+        "description": "Cara login:\n * Login ke endpoint /auth/login dgn email dan password Anda\n * Kopi token dari resultnya\n * Klik button authorize di pojok kanan atas\n * Masukkan token, dengan format::  Bearer <api_key>\n * Klik submit button Authorize",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api/",
+            "description": "LIVE server"
+        }
+    ],
+    "paths": {
+        "/auth/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Get authentication",
+                "description": "Authentication",
+                "operationId": "99d66635c4992aeaa6aa44ff653d0563",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthLogin"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "employee list"
+                    }
+                }
+            }
+        },
+        "/employees": {
+            "get": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Retrieve employee list",
+                "description": "Retrieve employee list",
+                "operationId": "9e1329829c4de5cbb565de40cd6f7721",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "example": "10"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "nip",
+                                "name"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "employee list"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/employees/{id}": {
+            "get": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Retrieve employee list",
+                "description": "Retrieve employees detail",
+                "operationId": "38fa0788c8731bbb0f3f7d9c016de542",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "employee detail"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/holidays": {
+            "get": {
+                "tags": [
+                    "Holidays"
+                ],
+                "summary": "Retrieve holiday list",
+                "description": "Retrieve holidays list",
+                "operationId": "124569597dbdd9d9882c8c910c919721",
+                "responses": {
+                    "200": {
+                        "description": "holiday list"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Holidays"
+                ],
+                "summary": "Create holidays",
+                "description": "Create holidays",
+                "operationId": "d628db20c40c955ea7ed54bb083ecd90",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Holiday"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "holiday created"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/holidays/{id}": {
+            "get": {
+                "tags": [
+                    "Holidays"
+                ],
+                "summary": "Retrieve holiday list",
+                "description": "Retrieve holidays detail",
+                "operationId": "06c31a81ec8eecd1df09939f0cf616c1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "holiday detail"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Holidays"
+                ],
+                "summary": "Update holidays",
+                "description": "Update holidays",
+                "operationId": "6ee3ceeb6c99bc24a8fefd8dc9ff3c36",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Holiday"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "holiday updated"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Holidays"
+                ],
+                "summary": "Delete holidays",
+                "description": "Delete holidays",
+                "operationId": "13d6e156740844160f9dd3e772a27d27",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "holiday deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/presences": {
+            "get": {
+                "tags": [
+                    "Presences"
+                ],
+                "summary": "Retrieve presence list",
+                "description": "Retrieve presences list",
+                "operationId": "767e4602c540e591ad1a5d531c6c028b",
+                "responses": {
+                    "200": {
+                        "description": "presence list"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Presences"
+                ],
+                "summary": "Create presences",
+                "description": "Create presences",
+                "operationId": "8011a1501d9aeb238509ef00d439848b",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Presence"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Presence created"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/presences/{id}": {
+            "get": {
+                "tags": [
+                    "Presences"
+                ],
+                "summary": "Retrieve presence list",
+                "description": "Retrieve presences detail",
+                "operationId": "1a248cdf89ca32bd04c2d24f6bf72172",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "presence detail"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Presences"
+                ],
+                "summary": "Update presences",
+                "description": "Update presences",
+                "operationId": "3b99b32d9b17ed6a837e87cd008a1618",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Presence"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Presence updated"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Presences"
+                ],
+                "summary": "Delete presences",
+                "description": "Delete presences",
+                "operationId": "65ff975cfb59cb17f550e0275280afe6",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Presence deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Retrieve user list",
+                "description": "Retrieve users list",
+                "operationId": "3781d77c37dcc6cb23f94a63898beefb",
+                "responses": {
+                    "200": {
+                        "description": "user list"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Create users",
+                "description": "Create users",
+                "operationId": "acfde54eaafdf3805ac7a08f41067b21",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User created"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Retrieve user list",
+                "description": "Retrieve users detail",
+                "operationId": "9c52b86c167749ffaa25e427cd0d7e07",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User detail"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update users",
+                "description": "Update users",
+                "operationId": "e3e210dfaf6f58768553de298e893db8",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User updated"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete users",
+                "description": "Delete users",
+                "operationId": "f3940a9ea9e791931e638ec542afe31d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/worktimes": {
+            "get": {
+                "tags": [
+                    "Worktimes"
+                ],
+                "summary": "Retrieve worktime list",
+                "description": "Retrieve worktimes list",
+                "operationId": "2c52c5d032843258ff251813c2a41457",
+                "responses": {
+                    "200": {
+                        "description": "worktime list"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Worktimes"
+                ],
+                "summary": "Create worktimes",
+                "description": "Create worktimes",
+                "operationId": "6f09341620c3c4159deb6f361c995397",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Worktime"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Worktime created"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/worktimes/{id}": {
+            "get": {
+                "tags": [
+                    "Worktimes"
+                ],
+                "summary": "Retrieve worktime list",
+                "description": "Retrieve worktimes detail",
+                "operationId": "8c5c7da584b0fd01958a446d4268cb9b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Worktime detail"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Worktimes"
+                ],
+                "summary": "Update worktimes",
+                "description": "Update worktimes",
+                "operationId": "e8990c93563b78e5baefa9a32cca2102",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Worktime"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Worktime updated"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Worktimes"
+                ],
+                "summary": "Delete worktimes",
+                "description": "Delete worktimes",
+                "operationId": "02e72a3e60a6b589ef8ef6bda0d8aca4",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Worktime deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/worktimes/{id}/items": {
+            "post": {
+                "tags": [
+                    "Worktimes"
+                ],
+                "summary": "Create worktime items",
+                "description": "Create worktimes",
+                "operationId": "c291b098f3c705770613b72a5d15b4f7",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WorktimeItem"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Worktime item created"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/worktimes/{id}/items/{item_id}": {
+            "put": {
+                "tags": [
+                    "Worktimes"
+                ],
+                "summary": "Update worktime items",
+                "description": "Update worktime items",
+                "operationId": "68b4fec27282ee65f92327e960fd3326",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "item_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WorktimeItem"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Worktime item updated"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Worktimes"
+                ],
+                "summary": "Delete worktime items",
+                "description": "Delete worktimes",
+                "operationId": "c5a026061b929dff5e2babf0010b669f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "item_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Worktime item deleted"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/workunits": {
+            "get": {
+                "tags": [
+                    "Workunits"
+                ],
+                "summary": "Retrieve workunit list",
+                "description": "Retrieve workunit list",
+                "operationId": "d9f82c5465d33bfa5ff937143aa64fa2",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "example": "10"
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer",
+                            "example": "1"
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "id",
+                                "created_at"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "order_by",
+                        "in": "query",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "asc",
+                                "desc"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "workunit list"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/workunits/{id}": {
+            "get": {
+                "tags": [
+                    "Workunits"
+                ],
+                "summary": "Retrieve workunit list",
+                "description": "Retrieve workunits detail",
+                "operationId": "ffe9991397d1f8b00f63d760236ea871",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "workunit detail"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AuthLogin": {
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "superuser@mail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password"
+                    }
+                },
+                "type": "object"
+            },
+            "Holiday": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Lebaran"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2022-01-01"
+                    }
+                },
+                "type": "object"
+            },
+            "Presence": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Example Name"
+                    },
+                    "tolerance_time": {
+                        "type": "integer",
+                        "example": 60
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Nama"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "email@mail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "password"
+                    },
+                    "role": {
+                        "type": "string",
+                        "example": "employee"
+                    },
+                    "employee_id": {
+                        "type": "number",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "Worktime": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Example Name"
+                    }
+                },
+                "type": "object"
+            },
+            "WorktimeItem": {
+                "properties": {
+                    "time": {
+                        "type": "string",
+                        "example": "00:00"
+                    },
+                    "day": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "presence_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "Bearer": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
+}

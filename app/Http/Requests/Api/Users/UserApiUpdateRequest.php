@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Http\Requests\Api\Users;
+
+use App\Http\APIRequest;
+
+class UserApiUpdateRequest extends APIRequest
+{
+
+    use RuleTrait;
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules()
+    {
+        return [
+            'id' => $this->getIdRules(),
+            'name' => $this->getNameRules(),
+            'email' => $this->getEmailUpdateRules(),
+            'password' => $this->getPasswordRules(),
+            'role' => $this->getRoleRules(),
+        ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'id' => $this->route('id'),
+        ]);
+    }
+
+    function getEmailUpdateRules()
+    {
+        $rule = $this->getEmailRules();
+        $rule[1] .= ','.$this->id;
+
+        return $rule;
+    }
+}
