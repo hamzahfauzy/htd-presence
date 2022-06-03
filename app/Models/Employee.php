@@ -13,4 +13,9 @@ class Employee extends Model
     {
         return $this->belongsTo(Workunit::class);
     }
+
+    function worktimes()
+    {
+        return $this->belongsToMany(Worktime::class)->withPivot('date_start','date_end');
+    }
 }

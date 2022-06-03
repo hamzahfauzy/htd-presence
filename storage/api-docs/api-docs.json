@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Presences API",
-        "description": "Cara login:\n * Login ke endpoint /auth/login dgn email dan password Anda\n * Kopi token dari resultnya\n * Klik button authorize di pojok kanan atas\n * Masukkan token, dengan format::  Bearer <api_key>\n * Klik submit button Authorize",
+        "description": "Cara login:\r\n * Login ke endpoint /auth/login dgn email dan password Anda\r\n * Kopi token dari resultnya\r\n * Klik button authorize di pojok kanan atas\r\n * Masukkan token, dengan format::  Bearer <api_key>\r\n * Klik submit button Authorize",
         "version": "1.0.0"
     },
     "servers": [
@@ -116,6 +116,80 @@
                 "responses": {
                     "200": {
                         "description": "employee detail"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/employees/{id}/worktime": {
+            "post": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Add Worktime",
+                "description": "Employee add worktime",
+                "operationId": "c87ac365d20a9cffc3722af77d0d765a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EmployeeWorktime"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "add worktime"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "delete Worktime",
+                "description": "Employee delete worktime",
+                "operationId": "01e483ca44ea37babde8a183b086a6b1",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WorktimeId"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "delete worktime"
                     }
                 },
                 "security": [
@@ -705,6 +779,47 @@
                 ]
             }
         },
+        "/worktimes/{id}/workunit": {
+            "post": {
+                "tags": [
+                    "Worktimes"
+                ],
+                "summary": "Assign workunits on worktime",
+                "description": "Assgin workunits",
+                "operationId": "d2b40c7a74784e21ebd6ddfbdb4e2bd2",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WorktimeWorkunits"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Workunit assigned"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
         "/worktimes/{id}/items": {
             "post": {
                 "tags": [
@@ -916,6 +1031,83 @@
                     }
                 ]
             }
+        },
+        "/workunits/{id}/worktime": {
+            "delete": {
+                "tags": [
+                    "Workunits"
+                ],
+                "summary": "delete Worktime",
+                "description": "Workunit delete worktime",
+                "operationId": "de9039491c281d662b3eece4186ae7ef",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WorktimeId"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "delete worktime"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Workunits"
+                ],
+                "summary": "Assign worktimes on workunits",
+                "description": "Assign worktimes on workunits",
+                "operationId": "a1ac06a5f6eee891ce154c4a2ba22579",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WorktimeId"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Workunit updated"
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -929,6 +1121,25 @@
                     "password": {
                         "type": "string",
                         "example": "password"
+                    }
+                },
+                "type": "object"
+            },
+            "EmployeeWorktime": {
+                "properties": {
+                    "worktime_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "date_start": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2022-01-01"
+                    },
+                    "date_end": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2022-02-01"
                     }
                 },
                 "type": "object"
@@ -994,6 +1205,15 @@
                 },
                 "type": "object"
             },
+            "WorktimeId": {
+                "properties": {
+                    "worktime_id": {
+                        "type": "integer",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
             "WorktimeItem": {
                 "properties": {
                     "time": {
@@ -1007,6 +1227,16 @@
                     "presence_id": {
                         "type": "integer",
                         "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "WorktimeWorkunits": {
+                "properties": {
+                    "workunit": {
+                        "type": "array",
+                        "items": "integer",
+                        "example": "[1,2,3]"
                     }
                 },
                 "type": "object"

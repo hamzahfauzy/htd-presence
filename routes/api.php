@@ -62,16 +62,24 @@ Route::middleware('auth:api')->group(function(){
         Route::post('{id}/items',[WorktimeItemApiController::class,'create']);
         Route::put('{id}/items/{item_id}',[WorktimeItemApiController::class,'update']);
         Route::delete('{id}/items/{item_id}',[WorktimeItemApiController::class,'destroy']);
+
+        Route::post('{id}/workunit',[WorktimeApiController::class,'assign']);
     });
     
     Route::prefix('workunits')->group(function(){
         Route::get('/',[WorkunitApiController::class,'lists']);
         Route::get('{id}',[WorkunitApiController::class,'detail']);
+        Route::put('{id}',[WorkunitApiController::class,'update']);
+
+        Route::patch('{id}/worktime',[WorkunitApiController::class,'assign']);
+        Route::delete('{id}/worktime',[WorkunitApiController::class,'deleteWorktime']);
     });
     
     Route::prefix('employees')->group(function(){
         Route::get('/',[EmployeeApiController::class,'lists']);
         Route::get('{id}',[EmployeeApiController::class,'detail']);
+        Route::post('{id}/worktime',[EmployeeApiController::class,'addWorktime']);
+        Route::delete('{id}/worktime',[EmployeeApiController::class,'deleteWorktime']);
     });
 
     Route::prefix('users')->group(function(){

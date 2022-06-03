@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController as Controller;
 use App\Repositories\Api\Employees\EmployeeApiRepository;
 use App\Http\Requests\Api\Employees\EmployeeApiDetailRequest;
+use App\Http\Requests\Api\Employees\EmployeeApiAddWorktimeRequest;
+use App\Http\Requests\Api\Employees\EmployeeApiDeleteWorktimeRequest;
 
 class EmployeeApiController extends Controller
 {
@@ -100,5 +102,83 @@ class EmployeeApiController extends Controller
     {
         $data = $EmployeeApiRepository->findOne($EmployeeApiDetailRequest->id);
         return $this->sendResponse($data, __('messages.employee.detail'));
+    }
+
+    
+    /**
+     * Employee add worktime
+     * 
+     * @param int $id
+     * @param EmployeeApiAddWorktimeRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Post(
+     *   path="/employees/{id}/worktime",
+     *   summary="Add Worktime",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *  @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/EmployeeWorktime")
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="add worktime",
+     *   )
+     * )
+     */
+    function addWorktime($id,EmployeeApiAddWorktimeRequest $EmployeeApiAddWorktimeRequest, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->addWorktime($EmployeeApiAddWorktimeRequest);
+        return $this->sendResponse($data, __('messages.employee.add.worktime'));
+    }
+
+    /**
+     * Employee delete worktime
+     * 
+     * @param int $id
+     * @param EmployeeApiDeleteWorktimeRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Delete(
+     *   path="/employees/{id}/worktime",
+     *   summary="delete Worktime",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     * @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/WorktimeId")
+     *   ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="delete worktime",
+     *   )
+     * )
+     */
+    function deleteWorktime($id,EmployeeApiDeleteWorktimeRequest $EmployeeApiDeleteWorktimeRequest, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->deleteWorktime($EmployeeApiDeleteWorktimeRequest);
+        return $this->sendResponse($data, __('messages.employee.delete.worktime'));
     }
 }

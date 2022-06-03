@@ -13,7 +13,7 @@ class CreateEmployeePresencesTable extends Migration
      */
     public function up()
     {
-        Schema::create('employee_presences', function (Blueprint $table) {
+        Schema::create('employee_presence', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('employee_id');
             $table->bigInteger('workunit_id');
@@ -33,6 +33,6 @@ class CreateEmployeePresencesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employee_presences');
+        Schema::dropIfExists('employee_presence');
     }
 }

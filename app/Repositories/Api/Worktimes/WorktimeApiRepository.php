@@ -2,6 +2,7 @@
 namespace App\Repositories\Api\Worktimes;
 
 use App\Models\Worktime;
+use App\Repositories\Api\Worktimes\Assigner;
 
 class WorktimeApiRepository
 {
@@ -9,12 +10,14 @@ class WorktimeApiRepository
     private $creator;
     private $updater;
     private $deleter;
+    private $assigner;
 
-    function __construct(Creator $creator, Updater $updater, Deleter $deleter)
+    function __construct(Creator $creator, Updater $updater, Deleter $deleter, Assigner $assigner)
     {
         $this->creator = $creator;
         $this->updater = $updater;
         $this->deleter = $deleter;
+        $this->assigner = $assigner;
     }
 
     public function lists()
@@ -24,7 +27,7 @@ class WorktimeApiRepository
 
     public function findOne($id)
     {
-        return Worktime::with('items.presence')->whereId($id)->first();
+        return Worktime::with(['items.presence','workunits'])->whereId($id)->first();
     }
 
     public function create($input)
@@ -50,6 +53,15 @@ class WorktimeApiRepository
         $this->deleter
                 ->prepare($id)
                 ->execute();
+    }
+
+    public function assign($input)
+    {
+       $update =  $this->assigner
+                ->prepare($input)
+                ->execute();
+
+        return $this->findOne($update->id);
     }
 
 }

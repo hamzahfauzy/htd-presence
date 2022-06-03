@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController as Controller;
 use App\Repositories\Api\Workunits\WorkunitApiRepository;
+use App\Http\Requests\Api\Workunits\WorkunitApiAssignRequest;
 use App\Http\Requests\Api\Workunits\WorkunitApiDetailRequest;
+use App\Http\Requests\Api\Workunits\WorkunitApiDeleteWorktimeRequest;
 
 class WorkunitApiController extends Controller
 {
@@ -99,4 +101,87 @@ class WorkunitApiController extends Controller
         $data = $WorkunitApiRepository->findOne($WorkunitApiDetailRequest->id);
         return $this->sendResponse($data, __('messages.workunit.detail'));
     }
+
+    /**
+     * Assign worktimes on workunits
+     *
+     * @param int $id
+     * @param WorkunitApiAssignRequest $request
+     * @param WorkunitApiRepository $WorktimeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Patch(
+     *   path="/workunits/{id}/worktime",
+     *   summary="Assign worktimes on workunits",
+     *   tags={"Workunits"},
+     *   security={{"Bearer":{}}},
+     * 
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *   @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/WorktimeId")
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Workunit updated",
+     *   ),
+     *   @OA\Response(
+     *     response=400,
+     *     description="Invalid input",
+     *   )
+     * )
+     */
+    function assign($id, WorkunitApiAssignRequest $WorkunitApiAssignRequest, WorkunitApiRepository $WorkunitApiRepository)
+    {
+        $data = $WorkunitApiRepository->assign($WorkunitApiAssignRequest);
+        return $this->sendResponse($data, __('messages.workunit.assign'));
+    }
+
+    /**
+     * Workunit delete worktime
+     * 
+     * @param int $id
+     * @param WorkunitApiDeleteWorktimeRequest $request
+     * @param WorkunitApiRepository $WorkunitApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Delete(
+     *   path="/workunits/{id}/worktime",
+     *   summary="delete Worktime",
+     *   tags={"Workunits"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     * @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/WorktimeId")
+     *   ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="delete worktime",
+     *   )
+     * )
+     */
+    function deleteWorktime($id,WorkunitApiDeleteWorktimeRequest $WorkunitApiDeleteWorktimeRequest, WorkunitApiRepository $WorkunitApiRepository)
+    {
+        $data = $WorkunitApiRepository->deleteWorktime($WorkunitApiDeleteWorktimeRequest);
+        return $this->sendResponse($data, __('messages.workunit.delete.worktime'));
+    }
+
 }

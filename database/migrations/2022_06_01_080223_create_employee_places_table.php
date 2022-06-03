@@ -13,7 +13,7 @@ class CreateEmployeePlacesTable extends Migration
      */
     public function up()
     {
-        Schema::create('employee_places', function (Blueprint $table) {
+        Schema::create('employee_place', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('employee_id');
             $table->string('lat');
@@ -29,6 +29,6 @@ class CreateEmployeePlacesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('employee_places');
+        Schema::dropIfExists('employee_place');
     }
 }

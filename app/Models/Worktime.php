@@ -23,4 +23,9 @@ class Worktime extends Model
     {
         return $this->hasMany(WorktimeItem::class);
     }
+
+    function workunits()
+    {
+        return $this->belongsToMany(Workunit::class);
+    }
 }

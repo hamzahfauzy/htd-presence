@@ -13,7 +13,7 @@ class CreateWorktimeWorkunitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('worktime_workunits', function (Blueprint $table) {
+        Schema::create('worktime_workunit', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('worktime_id');
             $table->bigInteger('workunit_id');
@@ -28,6 +28,6 @@ class CreateWorktimeWorkunitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('worktime_workunits');
+        Schema::dropIfExists('worktime_workunit');
     }
 }

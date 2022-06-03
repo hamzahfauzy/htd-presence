@@ -46,7 +46,7 @@ class SipakarSyncAsn extends Command
     public function handle()
     {
         $sipakar   = new SipakarService;
-        $workunits = $this->WorkunitApiRepository->lists();
+        $workunits = $this->WorkunitApiRepository->lists([]);
         foreach($workunits as $opd)
         {
             $all_asns = $sipakar->getAllAsnByOpd($opd->id);

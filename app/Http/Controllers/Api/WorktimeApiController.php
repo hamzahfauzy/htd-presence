@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController as Controller;
 use App\Repositories\Api\Worktimes\WorktimeApiRepository;
+use App\Http\Requests\Api\Worktimes\WorktimeApiAssignRequest;
 use App\Http\Requests\Api\Worktimes\WorktimeApiCreateRequest;
 use App\Http\Requests\Api\Worktimes\WorktimeApiDeleteRequest;
 use App\Http\Requests\Api\Worktimes\WorktimeApiDetailRequest;
@@ -183,5 +184,48 @@ class WorktimeApiController extends Controller
     {
         $data = $WorktimeApiRepository->delete($WorktimeApiDeleteRequest->id);
         return $this->sendResponse([], __('messages.worktime.delete'));
+    }
+
+    /**
+     * Assgin workunits
+     *
+     * @param int $id
+     * @param WorktimeApiUpdateRequest $request
+     * @param WorktimeApiRepository $WorktimeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Post(
+     *   path="/worktimes/{id}/workunit",
+     *   summary="Assign workunits on worktime",
+     *   tags={"Worktimes"},
+     *   security={{"Bearer":{}}},
+     * 
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *   @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/WorktimeWorkunits")
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Workunit assigned",
+     *   ),
+     *   @OA\Response(
+     *     response=400,
+     *     description="Invalid input",
+     *   )
+     * )
+     */
+    function assign($id, WorktimeApiAssignRequest $WorktimeApiAssignRequest, WorktimeApiRepository $WorktimeApiRepository)
+    {
+        $data = $WorktimeApiRepository->assign($WorktimeApiAssignRequest);
+        return $this->sendResponse($data, __('messages.worktime.assign'));
     }
 }
