@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\EmployeePlace;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Employee extends Model
 {
@@ -17,5 +18,10 @@ class Employee extends Model
     function worktimes()
     {
         return $this->belongsToMany(Worktime::class)->withPivot('date_start','date_end');
+    }
+
+    function place()
+    {
+        return $this->hasOne(EmployeePlace::class);
     }
 }

@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController as Controller;
 use App\Repositories\Api\Employees\EmployeeApiRepository;
 use App\Http\Requests\Api\Employees\EmployeeApiDetailRequest;
+use App\Http\Requests\Api\Employees\EmployeeApiAddPlaceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiAddWorktimeRequest;
+use App\Http\Requests\Api\Employees\EmployeeApiDeletePlaceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDeleteWorktimeRequest;
 
 class EmployeeApiController extends Controller
@@ -180,5 +182,82 @@ class EmployeeApiController extends Controller
     {
         $data = $EmployeeApiRepository->deleteWorktime($EmployeeApiDeleteWorktimeRequest);
         return $this->sendResponse($data, __('messages.employee.delete.worktime'));
+    }
+
+    /**
+     * Employee add place
+     * 
+     * @param int $id
+     * @param EmployeeApiAddPlaceRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Post(
+     *   path="/employees/{id}/place",
+     *   summary="Add Place",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *  @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/EmployeePlace")
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="add Place",
+     *   )
+     * )
+     */
+    function addPlace($id,EmployeeApiAddPlaceRequest $EmployeeApiAddPlaceRequest, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->addPlace($EmployeeApiAddPlaceRequest);
+        return $this->sendResponse($data, __('messages.employee.add.place'));
+    }
+
+    /**
+     * Employee delete place
+     * 
+     * @param int $id
+     * @param EmployeeApiDeletePlaceRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Delete(
+     *   path="/employees/{id}/place",
+     *   summary="delete Place",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     * @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/PlaceId")
+     *   ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="delete place",
+     *   )
+     * )
+     */
+    function deletePlace($id,EmployeeApiDeletePlaceRequest $EmployeeApiDeletePlaceRequest, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->deletePlace($EmployeeApiDeletePlaceRequest);
+        return $this->sendResponse($data, __('messages.employee.delete.place'));
     }
 }

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 /**
  * @OA\Schema(
  *      @OA\Property(
@@ -19,10 +20,10 @@ use Illuminate\Database\Eloquent\Model;
  *   ),
  * )
  */
-class EmployeePlace extends Model
+class WorkunitPlace extends Model
 {
     use HasFactory;
 
+    protected $table="workunit_place";
     protected $guarded = [];
-    protected $table = "employee_place";
 }

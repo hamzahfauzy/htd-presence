@@ -2,22 +2,28 @@
 namespace App\Repositories\Api\Employees;
 
 use App\Models\Employee;
+use App\Repositories\Api\Employees\AdderPlace;
+use App\Repositories\Api\Employees\DeleterPlace;
 
 class EmployeeApiRepository
 {
     private $creator;
     private $updater;
-    private $deleter;
+    private $deleter;   
     private $adderWorktime;
     private $deleterWorktime;
-
-    function __construct(Creator $creator, Updater $updater, Deleter $deleter, AdderWorktime $adderWorktime,DeleterWorktime $deleterWorktime)
+    private $adderPlace;
+    private $deleterPlace;
+    
+    function __construct(Creator $creator, Updater $updater, Deleter $deleter, AdderWorktime $adderWorktime,DeleterWorktime $deleterWorktime,AdderPlace $adderPlace,DeleterPlace $deleterPlace)
     {
         $this->creator = $creator;
         $this->updater = $updater;
         $this->deleter = $deleter;
         $this->adderWorktime = $adderWorktime;
         $this->deleterWorktime = $deleterWorktime;
+        $this->adderPlace = $adderPlace;
+        $this->deleterPlace = $deleterPlace;
     }
 
     public function lists($input)
@@ -33,7 +39,7 @@ class EmployeeApiRepository
 
     public function findOne($id)
     {
-        return Employee::with(['workunit','worktimes.items'])->whereId($id)->first();
+        return Employee::with(['workunit','worktimes.items','place'])->whereId($id)->first();
     }
 
     public function create($input)
@@ -85,6 +91,24 @@ class EmployeeApiRepository
     public function deleteWorktime($input)
     {
         $delete = $this->deleterWorktime
+                ->prepare($input)
+                ->execute();
+
+        return $this->findOne($delete->id);
+    }
+
+    public function addPlace($input)
+    {
+        $update = $this->adderPlace
+                ->prepare($input)
+                ->execute();
+
+        return $this->findOne($update->id);
+    }
+
+    public function deletePlace($input)
+    {
+        $delete = $this->deleterPlace
                 ->prepare($input)
                 ->execute();
 

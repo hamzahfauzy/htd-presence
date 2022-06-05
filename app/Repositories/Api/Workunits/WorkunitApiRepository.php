@@ -2,6 +2,7 @@
 namespace App\Repositories\Api\Workunits;
 
 use App\Models\Workunit;
+use App\Repositories\Api\Workunits\AdderPlace;
 
 class WorkunitApiRepository
 {
@@ -10,14 +11,16 @@ class WorkunitApiRepository
     private $deleter;
     private $assigner;
     private $deleterWorktime;
+    private $adderPlace;
 
-    function __construct(Creator $creator, Updater $updater, Deleter $deleter,Assigner $assigner,DeleterWorktime $deleterWorktime)
+    function __construct(Creator $creator, Updater $updater, Deleter $deleter,Assigner $assigner,DeleterWorktime $deleterWorktime,AdderPlace $adderPlace)
     {
         $this->creator = $creator;
         $this->updater = $updater;
         $this->deleter = $deleter;
         $this->assigner = $assigner;
         $this->deleterWorktime = $deleterWorktime;
+        $this->adderPlace = $adderPlace;
     }
 
     public function lists($input)
@@ -34,7 +37,7 @@ class WorkunitApiRepository
 
     public function findOne($id)
     {
-        return Workunit::with(['employees','worktimes.items'])->whereId($id)->first();
+        return Workunit::with(['employees','worktimes.items','place'])->whereId($id)->first();
     }
 
     public function create($input)
@@ -78,6 +81,15 @@ class WorkunitApiRepository
                 ->execute();
 
         return $this->findOne($delete->id);
+    }
+
+    public function addPlace($input)
+    {
+        $update = $this->adderPlace
+                ->prepare($input)
+                ->execute();
+
+        return $this->findOne($update->id);
     }
     
 }

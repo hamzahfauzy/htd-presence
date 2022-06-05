@@ -3,6 +3,7 @@ namespace App\Http\Requests\Api\Employees;
 
 use App\Models\Employee;
 use App\Models\Worktime;
+use App\Models\EmployeePlace;
 
 trait RuleTrait
 {
@@ -27,6 +28,28 @@ trait RuleTrait
         return [
             'required',
             'date',
+        ];
+    }
+
+    function getLatRules()
+    {
+        return [
+            'required'
+        ];
+    }
+
+    function getLngRules()
+    {
+        return [
+            'required'
+        ];
+    }
+
+    function getPlaceRules()
+    {
+        return [
+            'required',
+            'exists:'.EmployeePlace::class.',id'
         ];
     }
 }

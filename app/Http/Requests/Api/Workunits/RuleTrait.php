@@ -3,6 +3,7 @@ namespace App\Http\Requests\Api\Workunits;
 
 use App\Models\Worktime;
 use App\Models\Workunit;
+use App\Models\WorkunitPlace;
 
 trait RuleTrait
 {
@@ -19,6 +20,28 @@ trait RuleTrait
         return [
             'required',
             'exists:'.Worktime::class.',id'
+        ];
+    }
+
+    function getLatRules()
+    {
+        return [
+            'required'
+        ];
+    }
+
+    function getLngRules()
+    {
+        return [
+            'required'
+        ];
+    }
+
+    function getPlaceRules()
+    {
+        return [
+            'required',
+            'exists:'.WorkunitPlace::class.',id'
         ];
     }
 }

@@ -73,6 +73,7 @@ Route::middleware('auth:api')->group(function(){
 
         Route::patch('{id}/worktime',[WorkunitApiController::class,'assign']);
         Route::delete('{id}/worktime',[WorkunitApiController::class,'deleteWorktime']);
+        Route::patch('{id}/place',[WorkunitApiController::class,'addPlace']);
     });
     
     Route::prefix('employees')->group(function(){
@@ -80,6 +81,8 @@ Route::middleware('auth:api')->group(function(){
         Route::get('{id}',[EmployeeApiController::class,'detail']);
         Route::post('{id}/worktime',[EmployeeApiController::class,'addWorktime']);
         Route::delete('{id}/worktime',[EmployeeApiController::class,'deleteWorktime']);
+        Route::post('{id}/place',[EmployeeApiController::class,'addPlace']);
+        Route::delete('{id}/place',[EmployeeApiController::class,'deletePlace']);
     });
 
     Route::prefix('users')->group(function(){

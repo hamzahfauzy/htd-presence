@@ -199,6 +199,80 @@
                 ]
             }
         },
+        "/employees/{id}/place": {
+            "post": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "Add Place",
+                "description": "Employee add place",
+                "operationId": "bf7229ebea603f85cd2e4eeb901b757b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/EmployeePlace"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "add Place"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "delete Place",
+                "description": "Employee delete place",
+                "operationId": "8b5ccc44d7a9210f35a056978940ce38",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/PlaceId"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "delete place"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
         "/holidays": {
             "get": {
                 "tags": [
@@ -1108,6 +1182,44 @@
                     }
                 ]
             }
+        },
+        "/workunits/{id}/place": {
+            "patch": {
+                "tags": [
+                    "Workunits"
+                ],
+                "summary": "Add Place",
+                "description": "Workunit add place",
+                "operationId": "b748446287e28b4c58614e9a49619a77",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WorkunitPlace"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "add Place"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -1121,6 +1233,19 @@
                     "password": {
                         "type": "string",
                         "example": "password"
+                    }
+                },
+                "type": "object"
+            },
+            "EmployeePlace": {
+                "properties": {
+                    "lat": {
+                        "type": "string",
+                        "example": "6.2088"
+                    },
+                    "lng": {
+                        "type": "string",
+                        "example": "106.8456"
                     }
                 },
                 "type": "object"
@@ -1154,6 +1279,15 @@
                         "type": "string",
                         "format": "date",
                         "example": "2022-01-01"
+                    }
+                },
+                "type": "object"
+            },
+            "PlaceId": {
+                "properties": {
+                    "place_id": {
+                        "type": "integer",
+                        "example": "1"
                     }
                 },
                 "type": "object"
@@ -1237,6 +1371,19 @@
                         "type": "array",
                         "items": "integer",
                         "example": "[1,2,3]"
+                    }
+                },
+                "type": "object"
+            },
+            "WorkunitPlace": {
+                "properties": {
+                    "lat": {
+                        "type": "string",
+                        "example": "6.2088"
+                    },
+                    "lng": {
+                        "type": "string",
+                        "example": "106.8456"
                     }
                 },
                 "type": "object"

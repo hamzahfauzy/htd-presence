@@ -18,4 +18,9 @@ class Workunit extends Model
     {
         return $this->belongsToMany(Worktime::class);
     }
+
+    function place()
+    {
+        return $this->hasOne(WorkunitPlace::class);
+    }
 }

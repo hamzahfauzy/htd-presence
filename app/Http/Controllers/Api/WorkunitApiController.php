@@ -7,6 +7,7 @@ use App\Http\Controllers\ApiController as Controller;
 use App\Repositories\Api\Workunits\WorkunitApiRepository;
 use App\Http\Requests\Api\Workunits\WorkunitApiAssignRequest;
 use App\Http\Requests\Api\Workunits\WorkunitApiDetailRequest;
+use App\Http\Requests\Api\Workunits\WorkunitApiAddPlaceRequest;
 use App\Http\Requests\Api\Workunits\WorkunitApiDeleteWorktimeRequest;
 
 class WorkunitApiController extends Controller
@@ -182,6 +183,44 @@ class WorkunitApiController extends Controller
     {
         $data = $WorkunitApiRepository->deleteWorktime($WorkunitApiDeleteWorktimeRequest);
         return $this->sendResponse($data, __('messages.workunit.delete.worktime'));
+    }
+
+    /**
+     * Workunit add place
+     * 
+     * @param int $id
+     * @param WorkunitApiAddPlaceRequest $request
+     * @param WorkunitApiRepository $WorkunitApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Patch(
+     *   path="/workunits/{id}/place",
+     *   summary="Add Place",
+     *   tags={"Workunits"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *  @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/WorkunitPlace")
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="add Place",
+     *   )
+     * )
+     */
+    function addPlace($id,WorkunitApiAddPlaceRequest $WorkunitApiAddPlaceRequest, WorkunitApiRepository $WorkunitApiRepository)
+    {
+        $data = $WorkunitApiRepository->addPlace($WorkunitApiAddPlaceRequest);
+        return $this->sendResponse($data, __('messages.workunit.add.place'));
     }
 
 }
