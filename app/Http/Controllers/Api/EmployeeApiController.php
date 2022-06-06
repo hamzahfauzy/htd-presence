@@ -7,6 +7,7 @@ use App\Http\Controllers\ApiController as Controller;
 use App\Repositories\Api\Employees\EmployeeApiRepository;
 use App\Http\Requests\Api\Employees\EmployeeApiDetailRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiAddPlaceRequest;
+use App\Http\Requests\Api\Employees\EmployeeApiFreePlaceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiAddWorktimeRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDeletePlaceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDeleteWorktimeRequest;
@@ -259,5 +260,40 @@ class EmployeeApiController extends Controller
     {
         $data = $EmployeeApiRepository->deletePlace($EmployeeApiDeletePlaceRequest);
         return $this->sendResponse($data, __('messages.employee.delete.place'));
+    }
+
+    /**
+     * Employee Free place
+     * 
+     * @param int $id
+     * @param EmployeeApiFreePlaceRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Patch(
+     *   path="/employees/{id}/place",
+     *   summary="free Place",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="delete place",
+     *   )
+     * )
+     */
+    function freePlace($id,EmployeeApiFreePlaceRequest $EmployeeApiFreePlaceRequest, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->freePlace($EmployeeApiFreePlaceRequest);
+        return $this->sendResponse($data, __('messages.employee.free.place'));
     }
 }

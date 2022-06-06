@@ -271,6 +271,33 @@
                         "Bearer": []
                     }
                 ]
+            },
+            "patch": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "free Place",
+                "description": "Employee Free place",
+                "operationId": "3e2b2fd2bcd1fc875f6be22deb3c8113",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "delete place"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
             }
         },
         "/holidays": {

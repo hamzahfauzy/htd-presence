@@ -83,6 +83,7 @@ Route::middleware('auth:api')->group(function(){
         Route::delete('{id}/worktime',[EmployeeApiController::class,'deleteWorktime']);
         Route::post('{id}/place',[EmployeeApiController::class,'addPlace']);
         Route::delete('{id}/place',[EmployeeApiController::class,'deletePlace']);
+        Route::patch('{id}/place',[EmployeeApiController::class,'freePlace']);
     });
 
     Route::prefix('users')->group(function(){

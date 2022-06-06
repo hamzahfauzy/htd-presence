@@ -2,6 +2,7 @@
 namespace App\Repositories\Api\Employees;
 
 use App\Models\Employee;
+use App\Repositories\Api\Employees\FPlace;
 use App\Repositories\Api\Employees\AdderPlace;
 use App\Repositories\Api\Employees\DeleterPlace;
 
@@ -14,8 +15,9 @@ class EmployeeApiRepository
     private $deleterWorktime;
     private $adderPlace;
     private $deleterPlace;
+    private $fPlace;
     
-    function __construct(Creator $creator, Updater $updater, Deleter $deleter, AdderWorktime $adderWorktime,DeleterWorktime $deleterWorktime,AdderPlace $adderPlace,DeleterPlace $deleterPlace)
+    function __construct(Creator $creator, Updater $updater, Deleter $deleter, AdderWorktime $adderWorktime,DeleterWorktime $deleterWorktime,AdderPlace $adderPlace,DeleterPlace $deleterPlace,FPlace $fPlace)
     {
         $this->creator = $creator;
         $this->updater = $updater;
@@ -24,6 +26,7 @@ class EmployeeApiRepository
         $this->deleterWorktime = $deleterWorktime;
         $this->adderPlace = $adderPlace;
         $this->deleterPlace = $deleterPlace;
+        $this->fPlace = $fPlace;
     }
 
     public function lists($input)
@@ -109,6 +112,15 @@ class EmployeeApiRepository
     public function deletePlace($input)
     {
         $delete = $this->deleterPlace
+                ->prepare($input)
+                ->execute();
+
+        return $this->findOne($delete->id);
+    }
+
+    public function freePlace($input)
+    {
+        $delete = $this->fPlace
                 ->prepare($input)
                 ->execute();
 
