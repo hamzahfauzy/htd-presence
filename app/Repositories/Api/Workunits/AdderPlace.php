@@ -24,11 +24,13 @@ class AdderPlace
             $Workunit->place()->update([
                 'lat'=>$input->lat,
                 'lng'=>$input->lng,
+                'radius'=>$input->radius,
             ]);
         }else{
             $Workunit->place()->create([
                 'lat'=>$input->lat,
                 'lng'=>$input->lng,
+                'radius'=>$input->radius,
             ]);
         }
         return $Workunit;
