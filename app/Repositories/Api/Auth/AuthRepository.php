@@ -28,7 +28,7 @@ class AuthRepository
 
         $user = User::where('email', $input['email'])->first();
 
-        $token = $user->createToken('auth_token')->accessToken;
+        $token = $user->createToken('auth_token')->plainTextToken;
 
         return $token;
     }

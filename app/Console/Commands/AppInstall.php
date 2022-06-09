@@ -39,7 +39,7 @@ class AppInstall extends Command
      */
     public function handle()
     {
-        $this->output->progressStart(5);
+        $this->output->progressStart(4);
 
         // database installation
         $schemaName = env('DB_DATABASE');
@@ -64,10 +64,6 @@ class AppInstall extends Command
 
         // sync data ASN
         Artisan::call("sipakar:sync_asn");
-        $this->output->progressAdvance();
-        sleep(1);
-        
-        Artisan::call("passport:install");
         $this->output->progressAdvance();
         sleep(1);
 

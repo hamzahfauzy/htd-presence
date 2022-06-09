@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use Laravel\Passport\Passport;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -26,7 +25,7 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         if (! $this->app->routesAreCached()) {
-            Passport::routes();
+            
         }
     }
 }
