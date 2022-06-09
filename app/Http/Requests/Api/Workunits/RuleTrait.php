@@ -44,4 +44,12 @@ trait RuleTrait
             'exists:'.WorkunitPlace::class.',id'
         ];
     }
+    
+    function getRadiusRules()
+    {
+        return [
+            'required',
+            'integer'
+        ];
+    }
 }

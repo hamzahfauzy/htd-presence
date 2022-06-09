@@ -19,6 +19,7 @@ class CreateWorkunitsTable extends Migration
             $table->string('name');
             $table->string('lat');
             $table->string('lng');
+            $table->integer('radius')->nullable();
             $table->timestamps();
         });
     }

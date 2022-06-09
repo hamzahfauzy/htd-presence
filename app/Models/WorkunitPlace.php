@@ -18,6 +18,11 @@ use Illuminate\Database\Eloquent\Model;
  *     type="string",
  *     example="106.8456"
  *   ),
+ * @OA\Property(
+ *     property="radius",
+ *     type="integer",
+ *     example="100"
+ *   ),
  * )
  */
 class WorkunitPlace extends Model

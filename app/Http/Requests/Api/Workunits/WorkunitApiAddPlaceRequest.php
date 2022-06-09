@@ -20,6 +20,7 @@ class WorkunitApiAddPlaceRequest extends APIRequest
             'id' => $this->getIdRules(),
             'lat'=>$this->getLatRules(),
             'lng'=>$this->getLngRules(),
+            'radius'=>$this->getRadiusRules(),
         ];
     }
 

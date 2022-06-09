@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Presences API",
-        "description": "Cara login:\r\n * Login ke endpoint /auth/login dgn email dan password Anda\r\n * Kopi token dari resultnya\r\n * Klik button authorize di pojok kanan atas\r\n * Masukkan token, dengan format::  Bearer <api_key>\r\n * Klik submit button Authorize",
+        "description": "Cara login:\n * Login ke endpoint /auth/login dgn email dan password Anda\n * Kopi token dari resultnya\n * Klik button authorize di pojok kanan atas\n * Masukkan token, dengan format::  Bearer <api_key>\n * Klik submit button Authorize",
         "version": "1.0.0"
     },
     "servers": [
@@ -1411,6 +1411,10 @@
                     "lng": {
                         "type": "string",
                         "example": "106.8456"
+                    },
+                    "radius": {
+                        "type": "integer",
+                        "example": "100"
                     }
                 },
                 "type": "object"
