@@ -84,6 +84,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::post('{id}/place',[EmployeeApiController::class,'addPlace']);
         Route::delete('{id}/place',[EmployeeApiController::class,'deletePlace']);
         Route::patch('{id}/place',[EmployeeApiController::class,'freePlace']);
+        Route::post('{id}/presences',[EmployeeApiController::class,'presences']);
     });
 
     Route::prefix('users')->group(function(){

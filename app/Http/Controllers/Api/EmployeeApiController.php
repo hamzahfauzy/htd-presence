@@ -7,6 +7,7 @@ use App\Http\Controllers\ApiController as Controller;
 use App\Repositories\Api\Employees\EmployeeApiRepository;
 use App\Http\Requests\Api\Employees\EmployeeApiDetailRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiAddPlaceRequest;
+use App\Http\Requests\Api\Employees\EmployeeApiPresenceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiFreePlaceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiAddWorktimeRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDeletePlaceRequest;
@@ -295,5 +296,47 @@ class EmployeeApiController extends Controller
     {
         $data = $EmployeeApiRepository->freePlace($EmployeeApiFreePlaceRequest);
         return $this->sendResponse($data, __('messages.employee.free.place'));
+    }
+
+    /**
+     * Employee presence
+     * 
+     * @param int $id
+     * @param EmployeeApiPresenceRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Post(
+     *   path="/employees/{id}/presences",
+     *   summary="employee presence",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+        * @OA\RequestBody(
+        *     @OA\MediaType(
+        *       mediaType="multipart/form-data",
+        *       @OA\Schema(ref="#/components/schemas/EmployeePresence")
+        *     )
+        *  ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="employee precence",
+     *   )
+     * )
+     */
+    function presences($id,EmployeeApiPresenceRequest $EmployeeApiPresenceRequest, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->presences($EmployeeApiPresenceRequest);
+        return $this->sendResponse($data, __('messages.employee.presences'));
     }
 }

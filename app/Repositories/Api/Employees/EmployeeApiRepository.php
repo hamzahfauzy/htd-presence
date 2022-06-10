@@ -42,7 +42,7 @@ class EmployeeApiRepository
 
     public function findOne($id)
     {
-        return Employee::with(['workunit','worktimes.items','place'])->whereId($id)->first();
+        return Employee::with(['workunit','worktimes.items','place','presences'])->whereId($id)->first();
     }
 
     public function create($input)
@@ -125,5 +125,27 @@ class EmployeeApiRepository
                 ->execute();
 
         return $this->findOne($delete->id);
+    }
+
+    public function presences($input)
+    {
+        $Employee = Employee::whereId($input['id'])->first();
+
+        $attachment = $input->file('attachment');
+        
+        if($attachment){
+            $attachment_url = $attachment->store('presences');
+
+            $Employee->presences()->create([
+                'type'=>$input['type'],
+                'workunit_id'=>$Employee->workunit->id,
+                'presence_id'=>$input['presence_id'],
+                'attachment_url'=>$attachment_url,
+                'pic_url'=>'',
+                'status'=>'',
+            ]);
+        }
+
+        return $this->findOne($Employee->id);
     }
 }

@@ -52,4 +52,21 @@ trait RuleTrait
             'exists:'.EmployeePlace::class.',id'
         ];
     }
+
+    function getTypeRules()
+    {
+        return [
+            'required',
+            'string',
+            'in:hadir,sakit,izin',
+        ];
+    }
+
+    function getAttachmentRules()
+    {
+        return [
+            'required',
+            'file'
+        ];
+    }
 }
