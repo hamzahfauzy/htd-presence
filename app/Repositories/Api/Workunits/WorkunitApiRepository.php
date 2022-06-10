@@ -26,13 +26,20 @@ class WorkunitApiRepository
     public function lists($input)
     {
         $sortBy = $input['sort_by'] ?? 'id';
-        $orderBy = $input['order_by'] ?? 'desc';
+        $orderBy = $input['order_by'] ?? 'asc';
         $perPage = $input['per_page'] ?? 10;
 
+        $workunit = Workunit::orderBy($sortBy, $orderBy);
+
+        if(isset($input['id']) && !empty($input['id']))
+            $workunit = $workunit->where('id',$input['id']);
+
+        if(isset($input['name']) && !empty($input['name']))
+            $workunit = $workunit->where('name','LIKE','%'.$input['name'].'%');
+
         if(empty($input))
-            return Workunit::orderBy($sortBy, $orderBy)->get();
-        return Workunit::orderBy($sortBy, $orderBy)
-                ->paginate($perPage);
+            return $workunit->get();
+        return $workunit->paginate($perPage);
     }
 
     public function findOne($id)

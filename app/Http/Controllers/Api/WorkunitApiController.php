@@ -45,7 +45,7 @@ class WorkunitApiController extends Controller
      *     in="query",
      *     @OA\Schema(
      *       type="string",
-     *       enum={"id", "created_at"}
+     *       enum={"id", "name", "created_at"}
      *     )
      *   ),
      *   @OA\Parameter(
@@ -54,6 +54,13 @@ class WorkunitApiController extends Controller
      *     @OA\Schema(
      *       type="string",
      *       enum={"asc", "desc"}
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="name",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string"
      *     )
      *   ),
      *   @OA\Response(

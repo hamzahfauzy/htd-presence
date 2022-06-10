@@ -1076,6 +1076,7 @@
                             "type": "string",
                             "enum": [
                                 "id",
+                                "name",
                                 "created_at"
                             ]
                         }
@@ -1089,6 +1090,13 @@
                                 "asc",
                                 "desc"
                             ]
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
