@@ -17,11 +17,11 @@ class CreateEmployeePresencesTable extends Migration
             $table->id();
             $table->bigInteger('employee_id');
             $table->bigInteger('workunit_id');
-            $table->bigInteger('presence_id');
+            $table->bigInteger('presence_id')->nullable();
             $table->string('type');
             $table->string('attachment_url')->nullable();
             $table->string('pic_url')->nullable();
-            $table->string('status');
+            $table->string('status')->default('diajukan');
             $table->timestamps();
         });
     }

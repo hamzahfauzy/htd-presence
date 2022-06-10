@@ -11,7 +11,10 @@ use App\Http\Requests\Api\Employees\EmployeeApiPresenceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiFreePlaceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiAddWorktimeRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDeletePlaceRequest;
+use App\Http\Requests\Api\Employees\EmployeeApiListPresenceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDeleteWorktimeRequest;
+use App\Http\Requests\Api\Employees\EmployeeApiDetailPresenceRequest;
+use App\Http\Requests\Api\Employees\EmployeeApiUpdatePresenceRequest;
 
 class EmployeeApiController extends Controller
 {
@@ -338,5 +341,163 @@ class EmployeeApiController extends Controller
     {
         $data = $EmployeeApiRepository->presences($EmployeeApiPresenceRequest);
         return $this->sendResponse($data, __('messages.employee.presences'));
+    }
+
+    /**
+     * Employee list presences
+     * 
+     * @param int $id
+     * @param EmployeeApiListPresenceRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Get(
+     *   path="/employees/{id}/presences",
+     *   summary="employee list presence",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     * @OA\Parameter(
+     *     name="date_from",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="date",
+     *     )
+     *   ),
+     * 
+     * @OA\Parameter(
+     *     name="date_to",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="date",
+     *     )
+     *   ),
+     * 
+     * @OA\Parameter(
+     *     name="type",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="string",
+     *     )
+     *   ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="employee precence",
+     *   )
+     * )
+     */
+    function listPresence($id,EmployeeApiListPresenceRequest $EmployeeApiListPresenceRequest, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->listPresence($EmployeeApiListPresenceRequest);
+        return $this->sendResponse($data, __('messages.employee.list.presence'));
+    }
+
+    /**
+     * Detail Employee presence
+     * 
+     * @param int $id
+     * @param EmployeeApiDetailPresenceRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Get(
+     *   path="/employees/{id}/presences/{employee_presence_id}",
+     *   summary="detail employee presence",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *   @OA\Parameter(
+     *     name="employee_presence_id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="detail employee precence",
+     *   )
+     * )
+     */
+    function detailPresence($id,EmployeeApiDetailPresenceRequest $EmployeeApiDetailPresenceRequest, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->detailPresence($EmployeeApiDetailPresenceRequest);
+        return $this->sendResponse($data, __('messages.employee.detail.presence'));
+    }
+
+    /**
+     * Employee Update Status Presence
+     * 
+     * @param int $id
+     * @param EmployeeApiUpdatePresenceRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Patch(
+     *   path="/employees/{id}/presences/{employee_presence_id}",
+     *   summary="update status presence",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     * @OA\Parameter(
+     *     name="employee_presence_id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *  @OA\RequestBody(
+     *      @OA\MediaType(
+     *          mediaType="application/json",
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                  property="status",
+     *                  type="string",
+     *                  example="ditolak"
+     *              )
+     *          )
+     *      )
+     *  ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="update status presence",
+     *   )
+     * )
+     */
+    function updatePresence($id,EmployeeApiUpdatePresenceRequest $EmployeeApiUpdatePresenceRequest, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->updatePresence($EmployeeApiUpdatePresenceRequest);
+        return $this->sendResponse($data, __('messages.employee.update.presence'));
     }
 }

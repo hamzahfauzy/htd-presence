@@ -13,11 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  *     type="string",
  *     example="hadir"
  *   ),
- * @OA\Property(
- *     property="presence_id",
- *     type="integer",
- *     example="1"
- *   ),
+ * 
  * @OA\Property(
  *     property="attachment",
  *     type="file",

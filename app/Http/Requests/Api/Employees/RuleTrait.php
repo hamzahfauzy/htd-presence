@@ -4,6 +4,7 @@ namespace App\Http\Requests\Api\Employees;
 use App\Models\Employee;
 use App\Models\Worktime;
 use App\Models\EmployeePlace;
+use App\Models\EmployeePresence;
 
 trait RuleTrait
 {
@@ -67,6 +68,23 @@ trait RuleTrait
         return [
             'required',
             'file'
+        ];
+    }
+
+    function getPresenceRules()
+    {
+        return [
+            'required',
+            'exists:'.EmployeePresence::class.',id'
+        ];
+    }
+
+    function getStatusRules()
+    {
+        return [
+            'required',
+            'string',
+            'in:ditolak,disetujui',
         ];
     }
 }

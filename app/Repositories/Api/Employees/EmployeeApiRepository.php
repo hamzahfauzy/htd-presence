@@ -139,13 +139,43 @@ class EmployeeApiRepository
             $Employee->presences()->create([
                 'type'=>$input['type'],
                 'workunit_id'=>$Employee->workunit->id,
-                'presence_id'=>$input['presence_id'],
-                'attachment_url'=>$attachment_url,
-                'pic_url'=>'',
-                'status'=>'',
+                'attachment_url'=>$attachment_url
             ]);
         }
 
         return $this->findOne($Employee->id);
+    }
+
+    public function listPresence($input)
+    {
+        $Employee = Employee::whereId($input['id'])->first();
+
+        return $this->findOne($Employee->id);
+    }
+
+    
+    public function detailPresence($input)
+    {
+        $Employee = Employee::whereId($input['id'])->first();
+
+        $employe_presence = $Employee->presences()->whereId($input['employee_presence_id'])->first();
+
+        return $employe_presence;
+    }
+
+    public function updatePresence($input)
+    {
+        $Employee = Employee::whereId($input['id'])->first();
+
+        $employe_presence = $Employee->presences()->whereId($input['employee_presence_id'])->first();
+
+        if($employe_presence)
+        {
+            $employe_presence->update([
+                'status'=>$input['status']
+            ]);
+        }
+
+        return $employe_presence;
     }
 }

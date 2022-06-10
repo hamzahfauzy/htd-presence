@@ -301,6 +301,54 @@
             }
         },
         "/employees/{id}/presences": {
+            "get": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "employee list presence",
+                "description": "Employee list presences",
+                "operationId": "53e63d6ab71d35e7e1c692c2f85479d9",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "date_from",
+                        "in": "path",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "date_to",
+                        "in": "path",
+                        "schema": {
+                            "type": "date"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "path",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "employee precence"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Employees"
@@ -329,6 +377,91 @@
                 "responses": {
                     "200": {
                         "description": "employee precence"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        },
+        "/employees/{id}/presences/{employee_presence_id}": {
+            "get": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "detail employee presence",
+                "description": "Detail Employee presence",
+                "operationId": "eb11c543121154fadd046878cc963213",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "employee_presence_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "detail employee precence"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "patch": {
+                "tags": [
+                    "Employees"
+                ],
+                "summary": "update status presence",
+                "description": "Employee Update Status Presence",
+                "operationId": "c0cf96bdbd4e9262031b41a4252a888b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "employee_presence_id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "status": {
+                                        "type": "string",
+                                        "example": "ditolak"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "update status presence"
                     }
                 },
                 "security": [
@@ -1328,10 +1461,6 @@
                     "type": {
                         "type": "string",
                         "example": "hadir"
-                    },
-                    "presence_id": {
-                        "type": "integer",
-                        "example": "1"
                     },
                     "attachment": {
                         "type": "file",
