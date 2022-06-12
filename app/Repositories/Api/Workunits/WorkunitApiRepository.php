@@ -26,16 +26,18 @@ class WorkunitApiRepository
     public function lists($input)
     {
         $sortBy = $input['sort_by'] ?? 'id';
-        $orderBy = $input['order_by'] ?? 'asc';
+        $orderBy = $input['order_by'] ?? 'desc';
         $perPage = $input['per_page'] ?? 10;
 
         $workunit = Workunit::orderBy($sortBy, $orderBy);
 
         if(isset($input['id']) && !empty($input['id']))
-            $workunit = $workunit->where('id',$input['id']);
-
-        if(isset($input['name']) && !empty($input['name']))
-            $workunit = $workunit->where('name','LIKE','%'.$input['name'].'%');
+        
+        if(isset($input['keyword']) && !empty($input['keyword']))
+        {
+            $workunit = $workunit->where('name','LIKE','%'.$input['keyword'].'%')
+                            ->orwhere('id','LIKE','%'.$input['keyword'].'%');
+        }
 
         if(empty($input))
             return $workunit->get();

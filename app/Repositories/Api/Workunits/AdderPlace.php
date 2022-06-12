@@ -20,19 +20,11 @@ class AdderPlace
     {
         $input   = $this->input;
         $Workunit = Workunit::whereId($this->id)->first();
-        if($Workunit->place){
-            $Workunit->place()->update([
-                'lat'=>$input->lat,
-                'lng'=>$input->lng,
-                'radius'=>$input->radius,
-            ]);
-        }else{
-            $Workunit->place()->create([
-                'lat'=>$input->lat,
-                'lng'=>$input->lng,
-                'radius'=>$input->radius,
-            ]);
-        }
+        $Workunit->lat = $input['lat'];
+        $Workunit->lng = $input['lng'];
+        $Workunit->radius = $input['radius'];
+        $Workunit->save();
+        
         return $Workunit;
     }
 }

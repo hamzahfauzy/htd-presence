@@ -17,9 +17,20 @@ class PresenceApiRepository
         $this->deleter = $deleter;
     }
 
-    public function lists()
+    public function lists($input)
     {
-        return Presence::get();
+        $sortBy = $input['sort_by'] ?? 'id';
+        $orderBy = $input['order_by'] ?? 'desc';
+        $perPage = $input['per_page'] ?? 10;
+
+        $presences = new Presence;
+
+        if(isset($input['keyword']) && !empty($input['keyword']))
+        {
+            $presences = $presences->where('name','LIKE','%'.$input['keyword'].'%');
+        }
+        
+        return $presences->orderBy($sortBy, $orderBy)->paginate($perPage);
     }
 
     public function findOne($id)

@@ -35,9 +35,18 @@ class EmployeeApiRepository
         $orderBy = $input['order_by'] ?? 'desc';
         $perPage = $input['per_page'] ?? 10;
 
-        return Employee::with('workunit')
-                ->orderBy($sortBy, $orderBy)
-                ->paginate($perPage);
+        $employees = Employee::with('workunit');
+
+        if(isset($input['keyword']) && !empty($input['keyword']))
+        {
+            $employees = $employees->where('name','LIKE','%'.$input['keyword'].'%')
+                            ->orwhere('nip','LIKE','%'.$input['keyword'].'%')
+                            ->orwhere('position','LIKE','%'.$input['keyword'].'%')
+                            ->orwhere('phone','LIKE','%'.$input['keyword'].'%');
+        }
+        
+
+        return $employees->orderBy($sortBy, $orderBy)->paginate($perPage);
     }
 
     public function findOne($id)

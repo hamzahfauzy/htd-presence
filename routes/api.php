@@ -33,7 +33,7 @@ Route::prefix('auth')->group(function(){
 Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('user', function(Request $request){
-        return $request->user();
+        return $request->user()->employee;
     });
     
     Route::prefix('holidays')->group(function(){

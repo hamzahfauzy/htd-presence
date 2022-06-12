@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use App\Services\SipakarService;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\Api\Employees\EmployeeApiRepository;
+use App\Repositories\Api\Users\UserApiRepository;
 use App\Repositories\Api\Workunits\WorkunitApiRepository;
 
 class SipakarSyncAsn extends Command
@@ -24,18 +25,19 @@ class SipakarSyncAsn extends Command
      */
     protected $description = 'Singkronisasi data ASN';
 
-    public $EmployeeApiRepository, $WorkunitApiRepository;
+    public $EmployeeApiRepository, $WorkunitApiRepository, $UserApiRepository;
 
     /**
      * Create a new command instance.
      *
      * @return void
      */
-    public function __construct(EmployeeApiRepository $employee, WorkunitApiRepository $wu)
+    public function __construct(EmployeeApiRepository $employee, WorkunitApiRepository $wu, UserApiRepository $user)
     {
         parent::__construct();
         $this->EmployeeApiRepository = $employee;
         $this->WorkunitApiRepository = $wu;
+        $this->UserApiRepository = $user;
     }
 
     /**
@@ -80,6 +82,20 @@ class SipakarSyncAsn extends Command
                         "head_name" => $asn->nama_atasan,
                         "phone" => $asn->ponsel,
                     ]);
+
+                    try {
+                        //code...
+                        $this->UserApiRepository->create([
+                            'employee_id'  => $asn->id_pegawai,
+                            'name'  => $asn->nama,
+                            'email' => $asn->nip,
+                            'role'  => 'employee',
+                            'password' => 12345678
+                        ]);
+                    } catch (\Throwable $th) {
+                        //throw $th;
+                        Log::info('duplicate : '.$asn->nip.', '.$opd->name);
+                    }
                 }
             }
         }

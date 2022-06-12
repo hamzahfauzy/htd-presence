@@ -19,7 +19,19 @@ class HolidayApiRepository
 
     public function lists()
     {
-        return Holiday::get();
+        $sortBy = $input['sort_by'] ?? 'id';
+        $orderBy = $input['order_by'] ?? 'desc';
+        $perPage = $input['per_page'] ?? 10;
+
+        $holidays = new Holiday;
+
+        if(isset($input['keyword']) && !empty($input['keyword']))
+        {
+            $holidays = $holidays->where('name','LIKE','%'.$input['keyword'].'%')
+                                 ->orwhere('date','LIKE','%'.$input['keyword'].'%');
+        }
+        
+        return $holidays->orderBy($sortBy, $orderBy)->paginate($perPage);
     }
 
     public function findOne($id)

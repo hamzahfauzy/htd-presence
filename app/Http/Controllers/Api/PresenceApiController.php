@@ -31,9 +31,9 @@ class PresenceApiController extends Controller
      *   )
      * )
      */
-    function lists(PresenceApiRepository $PresenceApiRepository)
+    function lists(Request $request, PresenceApiRepository $PresenceApiRepository)
     {
-        $data = $PresenceApiRepository->lists();
+        $data = $PresenceApiRepository->lists($request);
         
         return $this->sendResponse($data, __('messages.presence.lists'));
     }
