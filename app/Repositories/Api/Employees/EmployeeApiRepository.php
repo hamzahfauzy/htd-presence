@@ -157,9 +157,19 @@ class EmployeeApiRepository
 
     public function listPresence($input)
     {
-        $Employee = Employee::whereId($input['id'])->first();
+        $Employee = Employee::whereId($input['id'])->with(
+        [
+            'presences'=>function($query) use ($input){
+                if($input['type']){
+                    $query->where('type',$input['type']);
+                }
+                if($input['date_from'] && $input['date_to']){
+                    $query->whereBetween('created_at',[$input['date_from'],$input['date_to']]);
+                }
+            }
+        ])->first();
 
-        return $this->findOne($Employee->id);
+        return $Employee;
     }
 
     

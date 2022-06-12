@@ -318,21 +318,21 @@
                     },
                     {
                         "name": "date_from",
-                        "in": "path",
+                        "in": "query",
                         "schema": {
                             "type": "date"
                         }
                     },
                     {
                         "name": "date_to",
-                        "in": "path",
+                        "in": "query",
                         "schema": {
                             "type": "date"
                         }
                     },
                     {
                         "name": "type",
-                        "in": "path",
+                        "in": "query",
                         "schema": {
                             "type": "string"
                         }
