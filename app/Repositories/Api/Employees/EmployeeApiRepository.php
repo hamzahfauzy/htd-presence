@@ -146,13 +146,10 @@ class EmployeeApiRepository
         $Employee = Employee::whereId($input['id'])->first();
         $presence_id = null;
 
-        Log::debug('Hadir');
         if($input['type'] == 'hadir')
         {
             if($Employee->worktimes && !empty($Employee->worktimes) && count($Employee->worktimes))
             {
-                Log::debug('Employee worktime');
-                Log::debug($Employee->worktimes);
                 foreach($Employee->worktimes as $worktime)
                 {
                     $presence_id = $this->check_worktime($worktime);
@@ -161,12 +158,10 @@ class EmployeeApiRepository
             else
             {
                 if($Employee->workunit->worktimes && !empty($Employee->workunit->worktimes) && count($Employee->workunit->worktimes)){
-                    Log::debug('Employee workunit worktime');
                     $worktime = $Employee->worktimes[0];
                 }
                 else
                 {
-                    Log::debug('default worktime');
                     $worktime = Worktime::whereId(1)->first();
                 }
                 
@@ -251,20 +246,21 @@ class EmployeeApiRepository
         $items = $worktime->items()->where('day', date('N'));
         if(!$items->exists())
         {
-            throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('message.presence.not-found')), 400));
+            throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('messages.presence.not-found')), 400));
         }
 
         $items = $items->get();
         foreach($items as $item)
         {
             $from = date('Y-m-d').' '.$item->time.':00';
-            $to = date('Y-m-d H:i', strtotime($from.' +'.$item->presence->tolerance_time)).':00';
-            if($this->check_in_range($from, $to, date('Y-m-d H:i:s'))){
+            $to = date('Y-m-d H:i', strtotime($from.' +'.$item->presence->tolerance_time.' minutes')).':00';
+            $date = date('Y-m-d H:i:s');
+            if($this->check_in_range($from, $to, $date)){
                 return $item->presence_id;
             }
         }
 
-        throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('message.presence.not-found')), 400));
+        throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('messages.presence.not-found')), 400));
         return null;
     }
 }
