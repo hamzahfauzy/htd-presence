@@ -32,7 +32,7 @@ class EmployeeApiRepository
     public function lists($input)
     {
         $sortBy = $input['sort_by'] ?? 'id';
-        $orderBy = $input['order_by'] ?? 'desc';
+        $orderBy = $input['order_by'] ?? 'asc';
         $perPage = $input['per_page'] ?? 10;
 
         $employees = Employee::with('workunit');

@@ -368,7 +368,7 @@ class EmployeeApiController extends Controller
      * 
      * @OA\Parameter(
      *     name="date_from",
-     *     in="path",
+     *     in="query",
      *     @OA\Schema(
      *       type="date",
      *     )
@@ -376,7 +376,7 @@ class EmployeeApiController extends Controller
      * 
      * @OA\Parameter(
      *     name="date_to",
-     *     in="path",
+     *     in="query",
      *     @OA\Schema(
      *       type="date",
      *     )
@@ -384,7 +384,7 @@ class EmployeeApiController extends Controller
      * 
      * @OA\Parameter(
      *     name="type",
-     *     in="path",
+     *     in="query",
      *     @OA\Schema(
      *       type="string",
      *     )
