@@ -10,6 +10,7 @@ return [
         'create' => 'Presence created success.',
         'update' => 'Presence updated success.',
         'delete' => 'Presence deleted success.',
+        'not-found' => 'Presence fail because schedule not found.',
     ],
     'worktime' => [
         'detail' => 'Worktime detail retrieved.',

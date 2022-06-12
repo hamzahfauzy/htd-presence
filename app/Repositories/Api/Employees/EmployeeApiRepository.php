@@ -1,10 +1,15 @@
 <?php
 namespace App\Repositories\Api\Employees;
 
+use Response;
 use App\Models\Employee;
+use App\Models\Worktime;
+use App\Http\ResponseUtil;
+use Illuminate\Support\Facades\Log;
 use App\Repositories\Api\Employees\FPlace;
 use App\Repositories\Api\Employees\AdderPlace;
 use App\Repositories\Api\Employees\DeleterPlace;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class EmployeeApiRepository
 {
@@ -139,6 +144,36 @@ class EmployeeApiRepository
     public function presences($input)
     {
         $Employee = Employee::whereId($input['id'])->first();
+        $presence_id = null;
+
+        Log::debug('Hadir');
+        if($input['type'] == 'hadir')
+        {
+            if($Employee->worktimes && !empty($Employee->worktimes) && count($Employee->worktimes))
+            {
+                Log::debug('Employee worktime');
+                Log::debug($Employee->worktimes);
+                foreach($Employee->worktimes as $worktime)
+                {
+                    $presence_id = $this->check_worktime($worktime);
+                }
+            }
+            else
+            {
+                if($Employee->workunit->worktimes && !empty($Employee->workunit->worktimes) && count($Employee->workunit->worktimes)){
+                    Log::debug('Employee workunit worktime');
+                    $worktime = $Employee->worktimes[0];
+                }
+                else
+                {
+                    Log::debug('default worktime');
+                    $worktime = Worktime::whereId(1)->first();
+                }
+                
+                $presence_id = $this->check_worktime($worktime);
+            }
+
+        }
 
         $attachment = $input->file('attachment');
         
@@ -147,6 +182,7 @@ class EmployeeApiRepository
 
             $Employee->presences()->create([
                 'type'=>$input['type'],
+                'presence_id'=>$presence_id,
                 'workunit_id'=>$Employee->workunit->id,
                 'attachment_url'=>$attachment_url
             ]);
@@ -196,5 +232,38 @@ class EmployeeApiRepository
         }
 
         return $employe_presence;
+    }
+
+    function check_in_range($start_date, $end_date, $date_from_user)
+    {
+        // Convert to timestamp
+        $start_ts = strtotime($start_date);
+        $end_ts = strtotime($end_date);
+        $user_ts = strtotime($date_from_user);
+
+        // Check that user date is between start & end
+        return (($user_ts >= $start_ts) && ($user_ts <= $end_ts));
+    }
+
+    function check_worktime($worktime)
+    {
+        $items = $worktime->items()->where('day', date('N'));
+        if(!$items->exists())
+        {
+            throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('message.presence.not-found')), 400));
+        }
+
+        $items = $items->get();
+        foreach($items as $item)
+        {
+            $from = date('Y-m-d').' '.$item->time.':00';
+            $to = date('Y-m-d H:i', strtotime($from.' +'.$item->presence->tolerance_time)).':00';
+            if($this->check_in_range($from, $to, date('Y-m-d H:i:s'))){
+                return $item->presence_id;
+            }
+        }
+
+        throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('message.presence.not-found')), 400));
+        return null;
     }
 }
