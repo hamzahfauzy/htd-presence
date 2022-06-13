@@ -150,10 +150,9 @@ class EmployeeApiRepository
         {
             if($Employee->worktimes && !empty($Employee->worktimes) && count($Employee->worktimes))
             {
-                foreach($Employee->worktimes as $worktime)
-                {
-                    $presence_id = $this->check_worktime($worktime);
-                }
+                $now = date('Y-m-d');
+                $worktime = $Employee->worktimes()->wherePivot('start_date','<=',$now)->wherePivot('end_date','>=',$now)->first();
+                $presence_id = $this->check_worktime($worktime);
             }
             else
             {

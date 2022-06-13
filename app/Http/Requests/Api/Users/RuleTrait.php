@@ -56,7 +56,7 @@ trait RuleTrait
     {
         return [
             'required',
-            'in:employee,operator'
+            'in:pegawai,kasubagumum,adminkepegawaian,adminopd'
         ];
     }
 }

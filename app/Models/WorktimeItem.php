@@ -34,4 +34,9 @@ class WorktimeItem extends Model
     {
         return $this->belongsTo(Presence::class);
     }
+
+    function worktime()
+    {
+        return $this->hasOne(Worktime::class,'id','worktime_id');
+    }
 }

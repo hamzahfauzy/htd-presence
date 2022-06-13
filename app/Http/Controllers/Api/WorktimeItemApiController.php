@@ -13,6 +13,69 @@ use App\Http\Requests\Api\WorktimeItems\WorktimeItemApiUpdateRequest;
 
 class WorktimeItemApiController extends Controller
 {
+    /**
+     * Retrieve worktime items list
+     *
+     * @param WorktimeItemApiRepository $WorktimeItemApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Get(
+     *   path="/worktimes/{id}/items",
+     *   summary="Retrieve worktime item list",
+     *   tags={"Worktimes"},
+     *   security={{"Bearer":{}}},
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="per_page",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="integer",
+     *       example="10"
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="page",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="integer",
+     *       example="1"
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="sort_by",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       enum={"id"}
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="order_by",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       enum={"asc", "desc"}
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="worktime list",
+     *   )
+     * )
+     */
+    function lists($id, Request $request, WorktimeItemApiRepository $WorktimeItemApiRepository)
+    {
+        $data = $WorktimeItemApiRepository->lists($id, $request);
+        
+        return $this->sendResponse($data, __('messages.worktime.detail'));
+    }
 
     /**
      * Create worktimes

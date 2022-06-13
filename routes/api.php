@@ -33,7 +33,9 @@ Route::prefix('auth')->group(function(){
 Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('user', function(Request $request){
-        return $request->user()->employee;
+        $user = $request->user();
+        $user->employee;
+        return $user;
     });
     
     Route::prefix('holidays')->group(function(){
@@ -59,6 +61,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::put('{id}',[WorktimeApiController::class,'update']);
         Route::delete('{id}',[WorktimeApiController::class,'destroy']);
         
+        Route::get('{id}/items',[WorktimeItemApiController::class,'lists']);
         Route::post('{id}/items',[WorktimeItemApiController::class,'create']);
         Route::put('{id}/items/{item_id}',[WorktimeItemApiController::class,'update']);
         Route::delete('{id}/items/{item_id}',[WorktimeItemApiController::class,'destroy']);

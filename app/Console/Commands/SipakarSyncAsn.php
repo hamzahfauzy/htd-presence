@@ -89,7 +89,7 @@ class SipakarSyncAsn extends Command
                             'employee_id'  => $asn->id_pegawai,
                             'name'  => $asn->nama,
                             'email' => $asn->nip,
-                            'role'  => 'employee',
+                            'role'  => 'pegawai',
                             'password' => 12345678
                         ]);
                     } catch (\Throwable $th) {

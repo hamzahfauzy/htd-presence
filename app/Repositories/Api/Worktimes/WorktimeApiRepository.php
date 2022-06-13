@@ -20,9 +20,15 @@ class WorktimeApiRepository
         $this->assigner = $assigner;
     }
 
-    public function lists()
+    public function lists($input)
     {
-        return Worktime::with('items.presence')->get();
+        $sortBy = $input['sort_by'] ?? 'id';
+        $orderBy = $input['order_by'] ?? 'asc';
+        $perPage = $input['per_page'] ?? 10;
+
+        $Worktime = Worktime::with('items.presence');
+        $Worktime->orderBy($sortBy, $orderBy);
+        return $Worktime->paginate($perPage);
     }
 
     public function findOne($id)

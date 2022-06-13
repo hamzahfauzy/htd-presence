@@ -26,16 +26,47 @@ class WorktimeApiController extends Controller
      *   summary="Retrieve worktime list",
      *   tags={"Worktimes"},
      *   security={{"Bearer":{}}},
-     *
+     *   @OA\Parameter(
+     *     name="per_page",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="integer",
+     *       example="10"
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="page",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="integer",
+     *       example="1"
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="sort_by",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       enum={"id", "name"}
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="order_by",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       enum={"asc", "desc"}
+     *     )
+     *   ),
      *   @OA\Response(
      *     response=200,
      *     description="worktime list",
      *   )
      * )
      */
-    function lists(WorktimeApiRepository $WorktimeApiRepository)
+    function lists(Request $request, WorktimeApiRepository $WorktimeApiRepository)
     {
-        $data = $WorktimeApiRepository->lists();
+        $data = $WorktimeApiRepository->lists($request);
         
         return $this->sendResponse($data, __('messages.worktime.lists'));
     }
