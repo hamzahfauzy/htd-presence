@@ -177,7 +177,11 @@ class EmployeeApiRepository
             $type = 'diajukan';
             if(
                 $input['type'] == 'hadir' && 
-                (!empty($input['lat']) && !empty($input['lng']))
+                (
+                    (!empty($input['lat']) && !empty($input['lng']))
+                    ||
+                    $Employee->is_free_place
+                )
             )
             {
                 $type = 'disetujui';
