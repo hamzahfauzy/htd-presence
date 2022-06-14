@@ -13,6 +13,16 @@ use Illuminate\Database\Eloquent\Model;
  *     type="string",
  *     example="hadir"
  *   ),
+ *   @OA\Property(
+ *     property="lat",
+ *     type="string",
+ *     example="9.00"
+ *   ),
+ *   @OA\Property(
+ *     property="lng",
+ *     type="string",
+ *     example="2.00"
+ *   ),
  * 
  * @OA\Property(
  *     property="attachment",
