@@ -38,7 +38,12 @@ class AuthRepository
             if(!empty($user->employee->places) && count($user->employee->places))
                 $user->places = $user->employee->places;
             else
-                $user->places = [$workunit->place];
+                $user->places = [
+                    [
+                        "lat" => $workunit->lat,
+                        "lng" => $workunit->lng,
+                    ]
+                ];
 
             unset($user->employee);
         }
