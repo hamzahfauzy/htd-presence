@@ -34,7 +34,7 @@ class AuthRepository
         {
             $workunit = $user->employee->workunit;
             $user->radius = $workunit->radius;
-            $user->employee_id = $workunit->employee_id;
+            $user->employee_id = $workunit->employee->id;
             if($user->employee->places)
                 $user->places = $user->employee->places;
             else
