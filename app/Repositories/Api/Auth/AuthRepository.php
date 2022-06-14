@@ -33,7 +33,7 @@ class AuthRepository
         if(!in_array($user->role,['superuser','adminsistem']))
         {
             $workunit = $user->employee->workunit;
-            $user->radius = $workunit->radius;
+            $user->radius = $user->radius;
             $user->employee_id = $workunit->employee->id;
             if($user->employee->places)
                 $user->places = $user->employee->places;
