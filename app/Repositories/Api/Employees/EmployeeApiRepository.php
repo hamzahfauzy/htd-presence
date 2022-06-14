@@ -56,7 +56,7 @@ class EmployeeApiRepository
 
     public function findOne($id)
     {
-        return Employee::with(['workunit','worktimes.items','place','presences'])->whereId($id)->first();
+        return Employee::with(['workunit','worktimes.items','places','presences','user'])->whereId($id)->first();
     }
 
     public function create($input)
