@@ -17,7 +17,7 @@ class HolidayApiRepository
         $this->deleter = $deleter;
     }
 
-    public function lists()
+    public function lists($input)
     {
         $sortBy = $input['sort_by'] ?? 'id';
         $orderBy = $input['order_by'] ?? 'asc';

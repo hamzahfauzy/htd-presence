@@ -12,6 +12,7 @@ trait RuleTrait
     {
         return [
             'required',
+            'gt:10',
             'exists:'.WorktimeItem::class.',id'
         ];
     }

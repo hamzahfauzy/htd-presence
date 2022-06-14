@@ -30,7 +30,10 @@ class PresenceApiRepository
             $presences = $presences->where('name','LIKE','%'.$input['keyword'].'%');
         }
         
-        return $presences->orderBy($sortBy, $orderBy)->paginate($perPage);
+        $presences = $presences->orderBy($sortBy, $orderBy);
+        if($input['response'] && $input['response'] == 'array')
+            return $presences->get();
+        return $presences->paginate($perPage);
     }
 
     public function findOne($id)

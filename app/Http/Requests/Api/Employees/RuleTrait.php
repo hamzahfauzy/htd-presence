@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Requests\Api\Employees;
 
+use App\Models\Holiday;
 use App\Models\Employee;
 use App\Models\Worktime;
 use App\Models\EmployeePlace;
@@ -85,6 +86,15 @@ trait RuleTrait
             'required',
             'string',
             'in:ditolak,disetujui',
+        ];
+    }
+
+    function getPresenceDateRules()
+    {
+        return [
+            'required',
+            'date',
+            'unique:'.Holiday::class
         ];
     }
 }

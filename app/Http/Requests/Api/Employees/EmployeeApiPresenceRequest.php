@@ -16,11 +16,18 @@ class EmployeeApiPresenceRequest extends APIRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'id' => $this->getIdRules(),
             'type' => $this->getTypeRules(),
-            'attachment' => $this->getAttachmentRules()
+            'attachment' => $this->getAttachmentRules(),
         ];
+
+        if($this->type == 'hadir')
+        {
+            $rules['date'] = $this->getPresenceDateRules();
+        }
+
+        return $rules;
     }
 
     protected function prepareForValidation()
@@ -28,5 +35,12 @@ class EmployeeApiPresenceRequest extends APIRequest
         $this->merge([
             'id' => $this->route('id'),
         ]);
+
+        if($this->type == 'hadir')
+        {
+            $this->merge([
+                'date' => date('Y-m-d')
+            ]);
+        }
     }
 }

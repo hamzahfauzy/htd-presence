@@ -30,6 +30,16 @@ class WorktimeItem extends Model
 {
     use HasFactory;
 
+    protected $appends = [
+        'hari'
+    ];
+
+    function getHariAttribute()
+    {
+        $hari = ['','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
+        return $hari[$this->day];
+    }
+
     function presence()
     {
         return $this->belongsTo(Presence::class);

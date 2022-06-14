@@ -31,9 +31,9 @@ class HolidayApiController extends Controller
      *   )
      * )
      */
-    function lists(HolidayApiRepository $HolidayApiRepository)
+    function lists(Request $request, HolidayApiRepository $HolidayApiRepository)
     {
-        $data = $HolidayApiRepository->lists();
+        $data = $HolidayApiRepository->lists($request);
         
         return $this->sendResponse($data, __('messages.holiday.lists'));
     }
