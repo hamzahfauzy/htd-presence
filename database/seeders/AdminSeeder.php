@@ -19,7 +19,7 @@ class AdminSeeder extends Seeder
             'name'     => 'Super User',
             'email'    => 'superuser@mail.com',
             'password' => bcrypt('password'),
-            'role'     => 'super user'
+            'role'     => 'superuser'
         ]);
     }
 }

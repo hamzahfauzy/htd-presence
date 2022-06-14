@@ -30,15 +30,14 @@ class AuthRepository
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        if(!in_array($user->role,['superadmin','adminsistem']))
+        if(!in_array($user->role,['superuser','adminsistem']))
         {
             $workunit = $user->employee->workunit;
-            $place = $user->employee->place??$workunit;
-            $user->place = $user->employee->free_place ? [] : [
-                'lat' => $place->lat,
-                'lng' => $place->lng,
-                'radius' => $workunit->radius
-            ];
+            $user->radius = $workunit->radius;
+            if($user->employee->places)
+                $user->places = $user->employee->places;
+            else
+                $user->places = [$workunit->place];
 
             unset($user->employee);
         }

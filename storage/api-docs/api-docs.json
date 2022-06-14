@@ -1566,6 +1566,14 @@
                         "type": "string",
                         "example": "hadir"
                     },
+                    "lat": {
+                        "type": "string",
+                        "example": "9.00"
+                    },
+                    "lng": {
+                        "type": "string",
+                        "example": "2.00"
+                    },
                     "attachment": {
                         "type": "file",
                         "format": "file"

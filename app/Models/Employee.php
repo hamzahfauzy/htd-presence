@@ -27,6 +27,11 @@ class Employee extends Model
         return $this->hasOne(EmployeePlace::class);
     }
 
+    function places()
+    {
+        return $this->hasMany(EmployeePlace::class);
+    }
+
     function presences()
     {
         return $this->hasMany(EmployeePresence::class);
