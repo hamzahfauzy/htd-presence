@@ -22,6 +22,8 @@ class CreateEmployeePresencesTable extends Migration
             $table->string('attachment_url')->nullable();
             $table->string('pic_url')->nullable();
             $table->string('status')->default('diajukan');
+            $table->string('lat')->nullable();
+            $table->string('lng')->nullable();
             $table->timestamps();
         });
     }
