@@ -35,7 +35,7 @@ class AuthRepository
             $workunit = $user->employee->workunit;
             $user->radius = $workunit->radius;
             $user->employee_id = $user->employee->id;
-            if($user->employee->places)
+            if(!empty($user->employee->places) && count($user->employee->places))
                 $user->places = $user->employee->places;
             else
                 $user->places = [$workunit->place];
