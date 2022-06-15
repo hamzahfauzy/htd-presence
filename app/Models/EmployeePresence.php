@@ -37,4 +37,19 @@ class EmployeePresence extends Model
 
     protected $guarded = [];
     protected $table = "employee_presence";
+
+    function workunit()
+    {
+        return $this->belongsTo(Workunit::class);
+    }
+    
+    function employee()
+    {
+        return $this->belongsTo(Employee::class);
+    }
+    
+    function presence()
+    {
+        return $this->belongsTo(Presence::class);
+    }
 }

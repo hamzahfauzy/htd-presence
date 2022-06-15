@@ -72,6 +72,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::prefix('workunits')->group(function(){
         Route::get('/',[WorkunitApiController::class,'lists']);
         Route::get('{id}',[WorkunitApiController::class,'detail']);
+        Route::get('{id}/presences',[WorkunitApiController::class,'presenceList']);
         Route::put('{id}',[WorkunitApiController::class,'update']);
 
         Route::patch('{id}/worktime',[WorkunitApiController::class,'assign']);

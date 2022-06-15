@@ -2,6 +2,7 @@
 namespace App\Repositories\Api\Workunits;
 
 use App\Models\Workunit;
+use App\Models\EmployeePresence;
 use App\Repositories\Api\Workunits\AdderPlace;
 
 class WorkunitApiRepository
@@ -30,8 +31,6 @@ class WorkunitApiRepository
         $perPage = $input['per_page'] ?? 10;
 
         $workunit = Workunit::orderBy($sortBy, $orderBy);
-
-        if(isset($input['id']) && !empty($input['id']))
         
         if(isset($input['keyword']) && !empty($input['keyword']))
         {
@@ -42,6 +41,21 @@ class WorkunitApiRepository
         if(empty($input))
             return $workunit->get();
         return $workunit->paginate($perPage);
+    }
+
+    public function presenceList($input)
+    {
+        $sortBy = $input['sort_by'] ?? 'id';
+        $orderBy = $input['order_by'] ?? 'desc';
+        $perPage = $input['per_page'] ?? 10;
+
+        $presences = EmployeePresence::where('workunit_id',$input['id'])
+                        ->with(['workunit','employee','presence'])
+                        ->orderBy($sortBy, $orderBy);
+    
+        if(empty($input))
+            return $presences->get();
+        return $presences->paginate($perPage);
     }
 
     public function findOne($id)

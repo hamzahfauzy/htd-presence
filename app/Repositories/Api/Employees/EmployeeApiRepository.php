@@ -209,6 +209,9 @@ class EmployeeApiRepository
                 if($input['type']){
                     $query->where('type',$input['type']);
                 }
+                if($input['status']){
+                    $query->where('status',$input['status']);
+                }
                 if($input['date_from'] && $input['date_to']){
                     $query->whereBetween('created_at',[$input['date_from'],$input['date_to']]);
                 }

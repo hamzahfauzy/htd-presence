@@ -8,6 +8,7 @@ use App\Repositories\Api\Workunits\WorkunitApiRepository;
 use App\Http\Requests\Api\Workunits\WorkunitApiAssignRequest;
 use App\Http\Requests\Api\Workunits\WorkunitApiDetailRequest;
 use App\Http\Requests\Api\Workunits\WorkunitApiAddPlaceRequest;
+use App\Http\Requests\Api\Workunits\WorkunitApiPresenceRequest;
 use App\Http\Requests\Api\Workunits\WorkunitApiDeleteWorktimeRequest;
 
 class WorkunitApiController extends Controller
@@ -228,6 +229,40 @@ class WorkunitApiController extends Controller
     {
         $data = $WorkunitApiRepository->addPlace($WorkunitApiAddPlaceRequest);
         return $this->sendResponse($data, __('messages.workunit.add.place'));
+    }
+
+    /**
+     * Retrieve workunits presence list
+     * 
+     * @param int $id
+     * @param WorkunitApiPresenceRequest $request
+     * @param WorkunitApiRepository $WorkunitApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Get(
+     *   path="/workunits/{id}/presences",
+     *   summary="Retrieve workunit presence list",
+     *   tags={"Workunits"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="workunit detail",
+     *   )
+     * )
+     */
+    function presenceList(WorkunitApiPresenceRequest $WorkunitApiDetailRequest, WorkunitApiRepository $WorkunitApiRepository)
+    {
+        $data = $WorkunitApiRepository->presenceList($WorkunitApiPresenceRequest);
+        return $this->sendResponse($data, __('messages.workunit.presence-list'));
     }
 
 }
