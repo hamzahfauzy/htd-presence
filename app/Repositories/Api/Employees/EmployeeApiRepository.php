@@ -157,7 +157,7 @@ class EmployeeApiRepository
             else
             {
                 if($Employee->workunit->worktimes && !empty($Employee->workunit->worktimes) && count($Employee->workunit->worktimes)){
-                    $worktime = $Employee->worktimes[0];
+                    $worktime = $Employee->workunit->worktimes[0];
                 }
                 else
                 {
