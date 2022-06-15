@@ -20,17 +20,10 @@ class AdderPlace
     {
         $input   = $this->input;
         $Employee = Employee::whereId($this->id)->first();
-        if($Employee->place){
-            $Employee->place()->update([
-                'lat'=>$input->lat,
-                'lng'=>$input->lng,
-            ]);
-        }else{
-            $Employee->place()->create([
-                'lat'=>$input->lat,
-                'lng'=>$input->lng,
-            ]);
-        }
+        $Employee->place()->create([
+            'lat'=>$input->lat,
+            'lng'=>$input->lng,
+        ]);
         return $Employee;
     }
 }

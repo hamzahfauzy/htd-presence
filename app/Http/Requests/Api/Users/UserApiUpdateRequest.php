@@ -20,7 +20,6 @@ class UserApiUpdateRequest extends APIRequest
             'id' => $this->getIdRules(),
             'name' => $this->getNameRules(),
             'email' => $this->getEmailUpdateRules(),
-            'password' => $this->getPasswordRules(),
             'role' => $this->getRoleRules(),
         ];
     }

@@ -28,6 +28,8 @@ class WorktimeApiRepository
 
         $Worktime = Worktime::with('items.presence');
         $Worktime->orderBy($sortBy, $orderBy);
+        if($input['response'] && $input['response'] == 'array')
+            return $Worktime->get();
         return $Worktime->paginate($perPage);
     }
 

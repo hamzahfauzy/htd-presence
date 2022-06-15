@@ -23,7 +23,6 @@ class Updater
         $User->name = $input['name'];
         $User->email = $input['email'];
         $User->role = $input['role'];
-        $User->password = $input['password'] ? bcrypt($input['password']) : $User->password;
 
         $User->save();
 
