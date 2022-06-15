@@ -174,17 +174,17 @@ class EmployeeApiRepository
         if($attachment){
             $attachment_url = $attachment->store('presences');
 
-            $type = 'diajukan';
+            $status = 'diajukan';
             if(
                 $input['type'] == 'hadir' && 
                 (
-                    (!empty($input['lat']) && !empty($input['lng']))
+                    (isset($input['in_location']) && $input['in_location'] == true)
                     ||
                     $Employee->is_free_place
                 )
             )
             {
-                $type = 'disetujui';
+                $status = 'disetujui';
             }
 
             $Employee->presences()->create([
