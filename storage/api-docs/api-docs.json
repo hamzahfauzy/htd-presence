@@ -1530,6 +1530,35 @@
                     }
                 ]
             }
+        },
+        "/workunits/{id}/presences": {
+            "get": {
+                "tags": [
+                    "Workunits"
+                ],
+                "summary": "Retrieve workunit presence list",
+                "description": "Retrieve workunits presence list",
+                "operationId": "79ebc0540c9b1c3613caa5fd53bc6f63",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "workunit detail"
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
         }
     },
     "components": {

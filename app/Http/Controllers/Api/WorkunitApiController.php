@@ -259,7 +259,7 @@ class WorkunitApiController extends Controller
      *   )
      * )
      */
-    function presenceList(WorkunitApiPresenceRequest $WorkunitApiDetailRequest, WorkunitApiRepository $WorkunitApiRepository)
+    function presenceList(WorkunitApiPresenceRequest $WorkunitApiPresenceRequest, WorkunitApiRepository $WorkunitApiRepository)
     {
         $data = $WorkunitApiRepository->presenceList($WorkunitApiPresenceRequest);
         return $this->sendResponse($data, __('messages.workunit.presence-list'));
