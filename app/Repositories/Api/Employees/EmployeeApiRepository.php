@@ -151,7 +151,7 @@ class EmployeeApiRepository
             if($Employee->worktimes && !empty($Employee->worktimes) && count($Employee->worktimes))
             {
                 $now = date('Y-m-d');
-                $worktime = $Employee->worktimes()->wherePivot('start_date','<=',$now)->wherePivot('end_date','>=',$now)->first();
+                $worktime = $Employee->worktimes()->wherePivot('date_start','<=',$now)->wherePivot('date_end','>=',$now)->first();
                 $presence_id = $this->check_worktime($worktime);
             }
             else
