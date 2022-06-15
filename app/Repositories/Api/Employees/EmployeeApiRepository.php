@@ -178,7 +178,7 @@ class EmployeeApiRepository
             if(
                 $input['type'] == 'hadir' && 
                 (
-                    (isset($input['in_location']) && $input['in_location'] == true)
+                    (isset($input['in_location']) && $input['in_location'])
                     ||
                     $Employee->is_free_place
                 )
