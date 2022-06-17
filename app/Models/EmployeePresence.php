@@ -34,6 +34,11 @@ use Illuminate\Database\Eloquent\Model;
  *     type="file",
  *     format="file"
  *   ),
+ * @OA\Property(
+ *     property="in_location",
+ *     type="string",
+ *     enum={"Y","N"}
+ *   ),
  * )
  */
 class EmployeePresence extends Model
