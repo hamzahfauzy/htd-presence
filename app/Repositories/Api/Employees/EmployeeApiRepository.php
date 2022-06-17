@@ -172,7 +172,7 @@ class EmployeeApiRepository
         $attachment = $input->file('attachment');
         $pic = $input->file('attachment');
         
-        $attachment_url = $attachment ? $attachment->store('presences') : null;
+        $attachment_url = $attachment ? $attachment->store('attachments') : null;
         $pic_url = $pic ? $pic->store('presences') : null;
 
         $status = 'diajukan';
