@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\EmployeePlace;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use DateTimeInterface;
 
 class Employee extends Model
 {
@@ -40,5 +41,16 @@ class Employee extends Model
     function presences()
     {
         return $this->hasMany(EmployeePresence::class);
+    }
+
+    /**
+     * Prepare a date for array / JSON serialization.
+     *
+     * @param  \DateTimeInterface  $date
+     * @return string
+     */
+    protected function serializeDate(DateTimeInterface $date)
+    {
+        return $date->format('Y-m-d H:i:s');
     }
 }
