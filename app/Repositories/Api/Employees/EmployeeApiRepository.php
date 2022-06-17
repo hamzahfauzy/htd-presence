@@ -170,7 +170,7 @@ class EmployeeApiRepository
         }
 
         $attachment = $input->file('attachment');
-        $pic = $input->file('attachment');
+        $pic = $input->file('pic');
         
         $attachment_url = $attachment ? $attachment->store('attachments') : null;
         $pic_url = $pic ? $pic->store('presences') : null;
