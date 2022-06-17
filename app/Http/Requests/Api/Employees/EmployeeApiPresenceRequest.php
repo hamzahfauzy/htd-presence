@@ -20,6 +20,7 @@ class EmployeeApiPresenceRequest extends APIRequest
             'id' => $this->getIdRules(),
             'type' => $this->getTypeRules(),
             'attachment' => $this->getAttachmentRules(),
+            'pic' => $this->getPicRules(),
         ];
 
         if($this->type == 'hadir')
@@ -42,5 +43,31 @@ class EmployeeApiPresenceRequest extends APIRequest
                 'date' => date('Y-m-d')
             ]);
         }
+    }
+
+    function getAttachmentRules()
+    {
+        if(($this->type == 'hadir' && !$this->in_location) || $this->type != 'hadir')
+        {
+            return [
+                'required',
+                'file'
+            ];
+        }
+
+        return ['nullable','file'];
+    }
+
+    function getPicRules()
+    {
+        if($this->type == 'hadir')
+        {
+            return [
+                'required',
+                'file'
+            ];
+        }
+        
+        return ['nullable','file'];
     }
 }

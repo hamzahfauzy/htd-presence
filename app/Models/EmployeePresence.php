@@ -29,6 +29,11 @@ use Illuminate\Database\Eloquent\Model;
  *     type="file",
  *     format="file"
  *   ),
+ * @OA\Property(
+ *     property="pic",
+ *     type="file",
+ *     format="file"
+ *   ),
  * )
  */
 class EmployeePresence extends Model

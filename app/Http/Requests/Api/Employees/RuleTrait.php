@@ -64,14 +64,6 @@ trait RuleTrait
         ];
     }
 
-    function getAttachmentRules()
-    {
-        return [
-            'required',
-            'file'
-        ];
-    }
-
     function getPresenceRules()
     {
         return [

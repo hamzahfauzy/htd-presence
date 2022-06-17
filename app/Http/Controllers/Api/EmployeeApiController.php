@@ -324,12 +324,12 @@ class EmployeeApiController extends Controller
      *     )
      *   ),
      * 
-        * @OA\RequestBody(
-        *     @OA\MediaType(
-        *       mediaType="multipart/form-data",
-        *       @OA\Schema(ref="#/components/schemas/EmployeePresence")
-        *     )
-        *  ),
+    * @OA\RequestBody(
+    *     @OA\MediaType(
+    *       mediaType="multipart/form-data",
+    *       @OA\Schema(ref="#/components/schemas/EmployeePresence")
+    *     )
+    *  ),
      * 
      *   @OA\Response(
      *     response=200,

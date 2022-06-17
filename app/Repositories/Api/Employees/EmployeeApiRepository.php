@@ -170,33 +170,34 @@ class EmployeeApiRepository
         }
 
         $attachment = $input->file('attachment');
+        $pic = $input->file('attachment');
         
-        if($attachment){
-            $attachment_url = $attachment->store('presences');
+        $attachment_url = $attachment ? $attachment->store('presences') : null;
+        $pic_url = $pic ? $pic->store('presences') : null;
 
-            $status = 'diajukan';
-            if(
-                $input['type'] == 'hadir' && 
-                (
-                    (isset($input['in_location']) && $input['in_location'])
-                    ||
-                    $Employee->is_free_place
-                )
+        $status = 'diajukan';
+        if(
+            $input['type'] == 'hadir' && 
+            (
+                (isset($input['in_location']) && $input['in_location'])
+                ||
+                $Employee->is_free_place
             )
-            {
-                $status = 'disetujui';
-            }
-
-            $Employee->presences()->create([
-                'type'=>$input['type'],
-                'status'=>$input['type'] == 'hadir' ? 'disetujui' : 'diajukan',
-                'presence_id'=>$presence_id,
-                'workunit_id'=>$Employee->workunit->id,
-                'attachment_url'=>$attachment_url,
-                'lat' => $input->lat??null,
-                'lng' => $input->lng??null,
-            ]);
+        )
+        {
+            $status = 'disetujui';
         }
+
+        $Employee->presences()->create([
+            'type'=>$input['type'],
+            'status'=>$input['type'] == 'hadir' ? 'disetujui' : 'diajukan',
+            'presence_id'=>$presence_id,
+            'workunit_id'=>$Employee->workunit->id,
+            'attachment_url'=>$attachment_url,
+            'pic_url'=>$pic_url,
+            'lat' => $input->lat??null,
+            'lng' => $input->lng??null,
+        ]);
 
         return $this->findOne($Employee->id);
     }
