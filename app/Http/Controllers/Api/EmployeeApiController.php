@@ -389,7 +389,22 @@ class EmployeeApiController extends Controller
      *       type="string",
      *     )
      *   ),
-     * 
+     *   @OA\Parameter(
+     *     name="sort_by",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       enum={"nip", "name"}
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="order_by",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       enum={"asc", "desc"}
+     *     )
+     *   ),
      *   @OA\Response(
      *     response=200,
      *     description="employee precence",

@@ -207,6 +207,9 @@ class EmployeeApiRepository
         $Employee = Employee::whereId($input['id'])->with(
         [
             'presences'=>function($query) use ($input){
+                $sortBy = $input['sort_by'] ?? 'id';
+                $orderBy = $input['order_by'] ?? 'desc';
+
                 if($input['type']){
                     $query->where('type',$input['type']);
                 }
@@ -216,6 +219,7 @@ class EmployeeApiRepository
                 if($input['date_from'] && $input['date_to']){
                     $query->whereBetween('created_at',[$input['date_from'],$input['date_to']]);
                 }
+                $query->orderby($sortBy, $orderBy);
             }
         ])->first();
 
