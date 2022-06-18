@@ -17,6 +17,14 @@ trait RuleTrait
         ];
     }
 
+    function getItemIdUpdateRules()
+    {
+        return [
+            'required',
+            'exists:'.WorktimeItem::class.',id'
+        ];
+    }
+
     function getWorktimeIdRules()
     {
         return [
@@ -46,7 +54,7 @@ trait RuleTrait
         return [
             'required',
             'integer',
-            'between:1,6'
+            'between:1,7'
         ];
     }
 }

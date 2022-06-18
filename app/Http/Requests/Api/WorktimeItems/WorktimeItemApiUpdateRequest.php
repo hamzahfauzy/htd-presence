@@ -17,7 +17,7 @@ class WorktimeItemApiUpdateRequest extends APIRequest
     public function rules()
     {
         return [
-            'item_id' => $this->getItemIdRules(),
+            'item_id' => $this->getItemIdUpdateRules(),
             'worktime_id' => $this->getWorktimeIdRules(),
             'presence_id' => $this->getPresenceIdRules(),
             'time' => $this->getTimeRules(),
