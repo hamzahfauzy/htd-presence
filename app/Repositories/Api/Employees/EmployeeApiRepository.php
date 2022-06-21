@@ -188,6 +188,8 @@ class EmployeeApiRepository
             $status = 'disetujui';
         }
 
+        $status = $presence_id == null ? 'diajukan' : $status;
+
         $Employee->presences()->create([
             'type'=>$input['type'],
             'status'=>$status,
@@ -268,7 +270,8 @@ class EmployeeApiRepository
         $items = $worktime->items()->where('day', date('N'));
         if(!$items->exists())
         {
-            throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('messages.presence.not-found')), 400));
+            return null;
+            // throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('messages.presence.not-found')), 400));
         }
 
         $items = $items->get();
@@ -282,7 +285,7 @@ class EmployeeApiRepository
             }
         }
 
-        throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('messages.presence.not-found')), 400));
+        // throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('messages.presence.not-found')), 400));
         return null;
     }
 }
