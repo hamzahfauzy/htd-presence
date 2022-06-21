@@ -190,7 +190,7 @@ class EmployeeApiRepository
 
         $Employee->presences()->create([
             'type'=>$input['type'],
-            'status'=>$input['type'] == 'hadir' ? 'disetujui' : 'diajukan',
+            'status'=>$status,
             'presence_id'=>$presence_id,
             'workunit_id'=>$Employee->workunit->id,
             'attachment_url'=>$attachment_url,

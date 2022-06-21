@@ -20,7 +20,7 @@ class Updater
     {
         $input   = $this->input;
         $Employee = Employee::whereId($this->id)->first();
-        $Employee->user_id = isset($input['user_id']) || is_null($input['user_id'])?$input['user_id']:$Employee->user_id;
+        $Employee->user_id = !isset($input['user_id']) || is_null($input['user_id']) ? $Employee->user_id : $input['user_id'];
         $Employee->workunit_id = $input['workunit_id']??$Employee->workunit_id;
         $Employee->name = $input['name']??$Employee->name;
         $Employee->nip = $input['nip']??$Employee->nip;
