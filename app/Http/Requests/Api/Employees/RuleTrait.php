@@ -89,4 +89,11 @@ trait RuleTrait
             'unique:'.Holiday::class
         ];
     }
+
+    function getDatetimeRules()
+    {
+        return [
+            'date_format:Y-m-d H:i:s|',
+        ];
+    }
 }

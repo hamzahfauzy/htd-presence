@@ -199,6 +199,8 @@ class EmployeeApiRepository
             'pic_url'=>$pic_url,
             'lat' => $input->lat??null,
             'lng' => $input->lng??null,
+            'started_at' => $input->started_at??null,
+            'finished_at' => $input->finished_at??null,
         ]);
 
         return $this->findOne($Employee->id);

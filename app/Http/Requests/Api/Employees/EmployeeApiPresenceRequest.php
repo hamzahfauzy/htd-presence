@@ -21,6 +21,8 @@ class EmployeeApiPresenceRequest extends APIRequest
             'type' => $this->getTypeRules(),
             'attachment' => $this->getAttachmentRules(),
             'pic' => $this->getPicRules(),
+            'started_at' => $this->getDatetimeRules(),
+            'finished_at' => $this->getDatetimeRules(),
         ];
 
         if($this->type == 'hadir')
