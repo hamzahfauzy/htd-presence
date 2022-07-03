@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\EmployeeApiController;
 use App\Http\Controllers\Api\PresenceApiController;
 use App\Http\Controllers\Api\WorktimeApiController;
 use App\Http\Controllers\Api\WorkunitApiController;
+use App\Http\Controllers\Api\PaidLeaveApiController;
 use App\Http\Controllers\Api\WorktimeItemApiController;
 
 /*
@@ -101,5 +102,12 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::put('{id}',[UserApiController::class,'update']);
         Route::delete('{id}',[UserApiController::class,'destroy']);
     });
-
+    
+    Route::prefix('paid_leaves')->group(function(){
+        Route::get('/',[PaidLeaveApiController::class,'lists']);
+        Route::post('/',[PaidLeaveApiController::class,'create']);
+        Route::get('{id}',[PaidLeaveApiController::class,'detail']);
+        Route::put('{id}',[PaidLeaveApiController::class,'update']);
+        Route::delete('{id}',[PaidLeaveApiController::class,'destroy']);
+    });
 });
