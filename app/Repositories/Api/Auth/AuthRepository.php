@@ -32,8 +32,10 @@ class AuthRepository
             throw new HttpResponseException(Response::json(ResponseUtil::makeError('Device number not valid.'), 400));
         }
 
-        $user->device_number = $input['device_number'];
-        $user->save();
+        if(isset($input['device_number'])){
+            $user->device_number = $input['device_number'];
+            $user->save();
+        }
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
