@@ -4,6 +4,7 @@ namespace App\Http\Requests\Api\Employees;
 use App\Models\Holiday;
 use App\Models\Employee;
 use App\Models\Worktime;
+use App\Models\PaidLeave;
 use App\Models\EmployeePlace;
 use App\Models\EmployeePresence;
 
@@ -60,7 +61,7 @@ trait RuleTrait
         return [
             'required',
             'string',
-            'in:hadir,sakit,izin',
+            'exists:'.PaidLeave::class.',name',
         ];
     }
 
@@ -93,7 +94,7 @@ trait RuleTrait
     function getDatetimeRules()
     {
         return [
-            'date_format:Y-m-d H:i:s|',
+            'required',
         ];
     }
 }
