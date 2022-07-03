@@ -33,6 +33,6 @@ class AuthLoginRequest extends APIRequest
 
      function getDeviceNumberRules()
     {
-        return ['required','string'];
+        return ['string'];
     }
 }
