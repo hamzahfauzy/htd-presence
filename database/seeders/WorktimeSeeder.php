@@ -23,64 +23,20 @@ class WorktimeSeeder extends Seeder
         WorktimeItem::insert([
             [
                 'worktime_id' => 1,
-                'presence_id' => 1,
-                'time' => '07:00',
-                'day' => '1'
+                'name' => 'Pagi',
+                'start_time' => '07:00',
+                'end_time' => '11:59',
+                'on_time_start' => '07:00',
+                'on_time_end' => '08:00',
             ],
             [
                 'worktime_id' => 1,
-                'presence_id' => 1,
-                'time' => '07:00',
-                'day' => '2'
+                'name' => 'Siang',
+                'start_time' => '13:00',
+                'end_time' => '17:00',
+                'on_time_start' => '17:00',
+                'on_time_end' => '19:00',
             ],
-            [
-                'worktime_id' => 1,
-                'presence_id' => 1,
-                'time' => '07:00',
-                'day' => '3'
-            ],
-            [
-                'worktime_id' => 1,
-                'presence_id' => 1,
-                'time' => '07:00',
-                'day' => '4'
-            ],
-            [
-                'worktime_id' => 1,
-                'presence_id' => 1,
-                'time' => '07:00',
-                'day' => '5'
-            ],
-            [
-                'worktime_id' => 1,
-                'presence_id' => 2,
-                'time' => '16:30',
-                'day' => '1'
-            ],
-            [
-                'worktime_id' => 1,
-                'presence_id' => 2,
-                'time' => '16:30',
-                'day' => '2'
-            ],
-            [
-                'worktime_id' => 1,
-                'presence_id' => 2,
-                'time' => '16:30',
-                'day' => '3'
-            ],
-            [
-                'worktime_id' => 1,
-                'presence_id' => 2,
-                'time' => '16:30',
-                'day' => '4'
-            ],
-            [
-                'worktime_id' => 1,
-                'presence_id' => 2,
-                'time' => '12:00',
-                'day' => '5'
-            ]
         ]);
     }
 }

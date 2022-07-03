@@ -15,10 +15,16 @@ class CreateWorktimeItemsTable extends Migration
     {
         Schema::create('worktime_items', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('worktime_id');
-            $table->bigInteger('presence_id');
-            $table->string('time');
-            $table->string('day');
+            $table->foreignId('worktime_id')
+                ->nullable()
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->string('name');
+            $table->string('start_time');
+            $table->string('end_time');
+            $table->string('on_time_start');
+            $table->string('on_time_end');
             $table->timestamps();
         });
     }

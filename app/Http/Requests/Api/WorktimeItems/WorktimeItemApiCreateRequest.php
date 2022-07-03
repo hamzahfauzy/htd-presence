@@ -17,9 +17,11 @@ class WorktimeItemApiCreateRequest extends APIRequest
     {
         return [
             'worktime_id' => $this->getWorktimeIdRules(),
-            'presence_id' => $this->getPresenceIdRules(),
-            'time' => $this->getTimeRules(),
-            'day' => $this->getDayRules(),
+            'name' => $this->getStringRules(),
+            'start_time' => $this->getStringRules(),
+            'end_time' => $this->getStringRules(),
+            'on_time_start' => $this->getStringRules(),
+            'on_time_end' => $this->getStringRules(),
         ];
     }
 

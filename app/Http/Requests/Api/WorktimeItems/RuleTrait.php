@@ -57,4 +57,12 @@ trait RuleTrait
             'between:1,7'
         ];
     }
+
+    function getStringRules()
+    {
+        return [
+            'required',
+            'string'
+        ];
+    }
 }

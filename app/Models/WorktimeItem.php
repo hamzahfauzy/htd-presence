@@ -8,21 +8,32 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
  * @OA\Schema(
+ *  @OA\Property(
+ *     property="name",
+ *     type="string",
+ *     example="example"
+ *   ),
  *   @OA\Property(
- *     property="time",
+ *     property="start_time",
  *     type="string",
  *     example="00:00"
  *   ),
- *   @OA\Property(
- *     property="day",
- *     type="integer",
- *     example="1"
+ * @OA\Property(
+ *     property="end_time",
+ *     type="string",
+ *     example="00:00"
  *   ),
- *   @OA\Property(
- *     property="presence_id",
- *     type="integer",
- *     example="1"
+ * @OA\Property(
+ *     property="on_time_start",
+ *     type="string",
+ *     example="00:00"
  *   ),
+ * @OA\Property(
+ *     property="on_time_end",
+ *     type="string",
+ *     example="00:00"
+ *   ),
+ *   
  * )
  */
 
@@ -30,16 +41,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class WorktimeItem extends Model
 {
     use HasFactory;
-
-    protected $appends = [
-        'hari'
-    ];
-
-    function getHariAttribute()
-    {
-        $hari = ['','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu','Minggu'];
-        return $hari[$this->day];
-    }
 
     function presence()
     {

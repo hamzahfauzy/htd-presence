@@ -19,9 +19,11 @@ class Creator
         $input    = $this->input;
         $WorktimeItem = new WorktimeItem;
         $WorktimeItem->worktime_id = $input['worktime_id'];
-        $WorktimeItem->presence_id = $input['presence_id'];
-        $WorktimeItem->time = $input['time'];
-        $WorktimeItem->day = $input['day'];
+        $WorktimeItem->name = $input['name'];
+        $WorktimeItem->start_time = $input['start_time'];
+        $WorktimeItem->end_time = $input['end_time'];
+        $WorktimeItem->on_time_start = $input['on_time_start'];
+        $WorktimeItem->on_time_end = $input['on_time_end'];
 
         $WorktimeItem->save();
 
