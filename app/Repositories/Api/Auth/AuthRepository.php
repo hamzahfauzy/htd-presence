@@ -28,6 +28,13 @@ class AuthRepository
 
         $user = User::where('email', $input['email'])->first();
 
+        if($user->device_number != null && $user->device_number != $input['device_number']){
+            throw new HttpResponseException(Response::json(ResponseUtil::makeError('Device number not valid.'), 400));
+        }
+
+        $user->device_number = $input['device_number'];
+        $user->save();
+
         $token = $user->createToken('auth_token')->plainTextToken;
 
         if(!in_array($user->role,['superuser','adminsistem']))

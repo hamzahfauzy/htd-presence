@@ -16,7 +16,8 @@ class AuthLoginRequest extends APIRequest
         return [
             //
             'email'    => $this->getEmailRules(),
-            'password' => $this->getPasswordRules()
+            'password' => $this->getPasswordRules(),
+            'device_number' => $this->getDeviceNumberRules(),
         ];
     }
 
@@ -28,5 +29,10 @@ class AuthLoginRequest extends APIRequest
     function getPasswordRules()
     {
         return ['required'];
+    }
+
+     function getDeviceNumberRules()
+    {
+        return ['required','string'];
     }
 }

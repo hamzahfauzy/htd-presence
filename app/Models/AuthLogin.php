@@ -12,6 +12,11 @@ namespace App\Models;
  *     property="password",
  *     type="string",
  *     example="password"
+ *   ),
+ * @OA\Property(
+ *     property="device_number",
+ *     type="string",
+ *     example="12345"
  *   )
  * )
  */

@@ -21,6 +21,12 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('auth_token')->nullable();
             $table->string('role'); // super user, operator, employee
+            $table->foreignId('workunit_id')
+                ->nullable()
+                ->constrained()
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->string('device_number')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
