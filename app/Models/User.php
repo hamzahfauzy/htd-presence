@@ -33,7 +33,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  *     example="employee"
  *   ),
  *   @OA\Property(
- *     property="employee_id",
+ *     property="workunit_id",
  *     type="number",
  *     example="1"
  *   )

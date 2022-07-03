@@ -3,6 +3,7 @@ namespace App\Http\Requests\Api\Users;
 
 use App\Models\User;
 use App\Models\Employee;
+use App\Models\Workunit;
 
 trait RuleTrait
 {
@@ -19,6 +20,14 @@ trait RuleTrait
         return [
             'required',
             'exists:'.Employee::class.',id'
+        ];
+    }
+
+    function getWorkunitIdRules()
+    {
+        return [
+            'required',
+            'exists:'.Workunit::class.',id'
         ];
     }
 

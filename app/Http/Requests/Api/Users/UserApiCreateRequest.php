@@ -20,7 +20,7 @@ class UserApiCreateRequest extends APIRequest
             'email' => $this->getEmailRules(),
             'password' => $this->getPasswordRules(),
             'role' => $this->getRoleRules(),
-            'employee_id' => $this->getEmployeeIdRules(),
+            'workunit_id' => $this->getWorkunitIdRules(),
         ];
     }
 }

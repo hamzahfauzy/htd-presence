@@ -22,7 +22,22 @@ class UserApiRepository
 
     public function lists()
     {
-        return User::with('employee')->get();
+
+        $sortBy = $input['sort_by'] ?? 'id';
+        $orderBy = $input['order_by'] ?? 'asc';
+        $perPage = $input['per_page'] ?? 10;
+
+        $users = User::with('employee');
+
+        if(isset($input['keyword']) && !empty($input['keyword']))
+        {
+            $users = $users->where('name','LIKE','%'.$input['keyword'].'%')
+                            ->orwhere('email','LIKE','%'.$input['keyword'].'%')
+                            ->orwhere('role','LIKE','%'.$input['keyword'].'%');
+        }
+        
+
+        return $users->orderBy($sortBy, $orderBy)->paginate($perPage);
     }
 
     public function findOne($id)
@@ -35,11 +50,6 @@ class UserApiRepository
         $create = $this->creator
                 ->prepare($input)
                 ->execute();
-
-        $this->EmployeeApiRepository->update([
-            'id' => $input['employee_id'],
-            'user_id' => $create->id
-        ]);
 
         return $this->findOne($create->id);
     }
@@ -58,10 +68,6 @@ class UserApiRepository
         $this->deleter
                 ->prepare($id)
                 ->execute();
-
-        $this->EmployeeApiRepository->unlinkUser([
-            'user_id' => $id
-        ]);
     }
 
 }

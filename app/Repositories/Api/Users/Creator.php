@@ -21,6 +21,7 @@ class Creator
         $User->name = $input['name'];
         $User->email = $input['email'];
         $User->role = $input['role'];
+        $User->workunit_id = $input['workunit_id'];
         $User->password = bcrypt($input['password']);
 
         $User->save();
