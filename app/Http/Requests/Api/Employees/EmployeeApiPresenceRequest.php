@@ -23,6 +23,7 @@ class EmployeeApiPresenceRequest extends APIRequest
             'pic' => $this->getPicRules(),
             'started_at' => $this->getDatetimeRules(),
             'finished_at' => $this->getDatetimeRules(),
+            'worktime_item_id' => $this->getWorktimeItemIdRules(),
         ];
 
         if($this->type == 'hadir')

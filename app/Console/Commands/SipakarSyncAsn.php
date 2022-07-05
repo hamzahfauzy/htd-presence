@@ -90,11 +90,12 @@ class SipakarSyncAsn extends Command
                             'name'  => $asn->nama,
                             'email' => $asn->nip,
                             'role'  => 'pegawai',
+                            'workunit_id'=>null,
                             'password' => 12345678
                         ]);
                     } catch (\Throwable $th) {
                         //throw $th;
-                        Log::info('duplicate : '.$asn->nip.', '.$opd->name);
+                        Log::info($th);
                     }
                 }
             }

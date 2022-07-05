@@ -5,6 +5,7 @@ use App\Models\Holiday;
 use App\Models\Employee;
 use App\Models\Worktime;
 use App\Models\PaidLeave;
+use App\Models\WorktimeItem;
 use App\Models\EmployeePlace;
 use App\Models\EmployeePresence;
 
@@ -60,8 +61,7 @@ trait RuleTrait
     {
         return [
             'required',
-            'string',
-            'exists:'.PaidLeave::class.',name',
+            'string'
         ];
     }
 
@@ -95,6 +95,14 @@ trait RuleTrait
     {
         return [
             'required',
+        ];
+    }
+
+    function getWorktimeItemIdRules()
+    {
+        return [
+            'required',
+            'exists:'.WorktimeItem::class.',id'
         ];
     }
 }

@@ -146,29 +146,6 @@ class EmployeeApiRepository
         $Employee = Employee::whereId($input['id'])->first();
         $presence_id = null;
 
-        if($input['type'] == 'hadir')
-        {
-            if($Employee->worktimes && !empty($Employee->worktimes) && count($Employee->worktimes))
-            {
-                $now = date('Y-m-d');
-                $worktime = $Employee->worktimes()->wherePivot('date_start','<=',$now)->wherePivot('date_end','>=',$now)->first();
-                $presence_id = $this->check_worktime($worktime);
-            }
-            else
-            {
-                if($Employee->workunit->worktimes && !empty($Employee->workunit->worktimes) && count($Employee->workunit->worktimes)){
-                    $worktime = $Employee->workunit->worktimes[0];
-                }
-                else
-                {
-                    $worktime = Worktime::whereId(1)->first();
-                }
-                
-                $presence_id = $this->check_worktime($worktime);
-            }
-
-        }
-
         $attachment = $input->file('attachment');
         $pic = $input->file('pic');
         

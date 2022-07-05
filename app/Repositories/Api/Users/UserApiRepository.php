@@ -51,6 +51,11 @@ class UserApiRepository
                 ->prepare($input)
                 ->execute();
 
+        $this->EmployeeApiRepository->update([
+            'id' => $input['employee_id'],
+            'user_id' => $create->id
+        ]);
+
         return $this->findOne($create->id);
     }
 
