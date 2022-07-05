@@ -91,13 +91,6 @@ trait RuleTrait
         ];
     }
 
-    function getDatetimeRules()
-    {
-        return [
-            'required',
-        ];
-    }
-
     function getWorktimeItemIdRules()
     {
         return [

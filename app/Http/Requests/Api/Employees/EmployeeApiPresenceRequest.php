@@ -21,8 +21,6 @@ class EmployeeApiPresenceRequest extends APIRequest
             'type' => $this->getTypeRules(),
             'attachment' => $this->getAttachmentRules(),
             'pic' => $this->getPicRules(),
-            'started_at' => $this->getDatetimeRules(),
-            'finished_at' => $this->getDatetimeRules(),
             'worktime_item_id' => $this->getWorktimeItemIdRules(),
         ];
 

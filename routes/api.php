@@ -31,6 +31,11 @@ Route::prefix('auth')->group(function(){
     Route::post('login',[AuthController::class, 'login']);
 });
 
+Route::get('times',function(){
+    $data = date("H:i:s");
+    return response()->json(['data'=>$data],200);
+});
+
 Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('user', function(Request $request){
