@@ -78,6 +78,73 @@ class EmployeeApiController extends Controller
     }
 
     /**
+     * Retrieve employee list reports
+     *
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Get(
+     *   path="/employees/reports/{workunit_id}",
+     *   summary="Retrieve employee list reports",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     * 
+     *   @OA\Parameter(
+     *     name="per_page",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="integer",
+     *       example="10"
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="page",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="integer",
+     *       example="1"
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="sort_by",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       enum={"nip", "name"}
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="order_by",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       enum={"asc", "desc"}
+     *     )
+     *   ),
+     * @OA\Parameter(
+     *     name="workunit_id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *       example="1"
+     *     )
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="employee list"
+     *   )
+     * )
+     */
+    function reports($workunit_id,Request $request, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->reports($workunit_id,$request);
+        
+        return $this->sendResponse($data, __('messages.employee.lists'));
+    }
+
+    /**
      * Retrieve employees detail
      * 
      * @param int $id

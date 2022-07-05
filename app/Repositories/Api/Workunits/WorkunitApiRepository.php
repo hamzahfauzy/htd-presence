@@ -38,8 +38,9 @@ class WorkunitApiRepository
                             ->orwhere('id','LIKE','%'.$input['keyword'].'%');
         }
 
-        if(empty($input))
-            return $workunit->get();
+        if(isset($input['all']))
+            return ['data'=>$workunit->get()];
+
         return $workunit->paginate($perPage);
     }
 
