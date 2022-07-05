@@ -33,7 +33,7 @@ class WorktimeSeeder extends Seeder
                 'worktime_id' => 1,
                 'name' => 'Siang',
                 'start_time' => '13:00',
-                'end_time' => '17:00',
+                'end_time' => '19:00',
                 'on_time_start' => '17:00',
                 'on_time_end' => '19:00',
             ],
