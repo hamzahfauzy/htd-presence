@@ -59,6 +59,12 @@ class SipakarSyncOpd extends Command
                     'name' => $opd->opd,
                     'lat'  => 0,
                     'lng'  => 0,
+                    'radius'  => 100,
+                ]);
+
+                $this->WorkunitApiRepository->assign([
+                    'id' => $opd->id,
+                    'worktime_id' => 1
                 ]);
             }
         }

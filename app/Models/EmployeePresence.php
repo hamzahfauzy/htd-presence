@@ -15,6 +15,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *     example="hadir"
  *   ),
  *   @OA\Property(
+ *     property="worktime_item_id",
+ *     type="number",
+ *     example="1"
+ *   ),
+ *   @OA\Property(
  *     property="lat",
  *     type="string",
  *     example="9.00"

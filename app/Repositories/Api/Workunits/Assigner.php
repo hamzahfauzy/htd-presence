@@ -20,7 +20,7 @@ class Assigner
     {
         $input    = $this->input;
         $Workunit = Workunit::whereId($this->id)->first();
-        $Workunit->worktimes()->sync($input->worktime_id);
+        $Workunit->worktimes()->sync($input['worktime_id']);
 
         return $Workunit;
     }

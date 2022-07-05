@@ -5,6 +5,7 @@ use Response;
 use App\Models\Employee;
 use App\Models\Worktime;
 use App\Http\ResponseUtil;
+use App\Models\WorktimeItem;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\Api\Employees\FPlace;
@@ -174,7 +175,27 @@ class EmployeeApiRepository
     public function presences($input)
     {
         $Employee = Employee::whereId($input['id'])->first();
-        $presence_id = null;
+
+        if($input['type'] == 'hadir' && isset($input['worktime_item_id']))
+        {
+            $worktime_item = WorktimeItem::find($input['worktime_item_id']);
+            $from = $worktime_item->start_time;
+            $to = $worktime_item->end_time;
+            $date = date('Y-m-d H:i:s');
+            if(!$this->check_in_range($from, $to, $date)){
+                throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('messages.presence.not-found')), 400));
+            }
+
+            if(
+                $Employee->presences()
+                    ->where('presence_id',$input['worktime_item_id'])
+                    ->where('created_at','LIKE','%'.date('Y-m-d').'%')
+                    ->exists()
+            )
+            {
+                throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('messages.presence.once-alert')), 400));
+            }
+        }
 
         $attachment = $input->file('attachment');
         $pic = $input->file('pic');
@@ -195,12 +216,10 @@ class EmployeeApiRepository
             $status = 'disetujui';
         }
 
-        $status = $presence_id == null ? 'diajukan' : $status;
-
         $Employee->presences()->create([
             'type'=>$input['type'],
             'status'=>$status,
-            'presence_id'=>$presence_id,
+            'presence_id'=>$input['worktime_item_id']??null,
             'workunit_id'=>$Employee->workunit->id,
             'attachment_url'=>$attachment_url,
             'pic_url'=>$pic_url,

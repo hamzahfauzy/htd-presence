@@ -3,6 +3,9 @@
 namespace App\Http\Requests\Api\Employees;
 
 use App\Http\APIRequest;
+use App\Models\PaidLeave;
+use App\Models\WorktimeItem;
+use Illuminate\Support\Facades\Log;
 
 class EmployeeApiPresenceRequest extends APIRequest
 {
@@ -21,12 +24,14 @@ class EmployeeApiPresenceRequest extends APIRequest
             'type' => $this->getTypeRules(),
             'attachment' => $this->getAttachmentRules(),
             'pic' => $this->getPicRules(),
-            'worktime_item_id' => $this->getWorktimeItemIdRules(),
         ];
 
         if($this->type == 'hadir')
         {
             $rules['date'] = $this->getPresenceDateRules();
+            $rules['time'] = $this->getTimeRules();
+            Log::info($this->time);
+            $rules['worktime_item_id'] = $this->getWorktimeItemRules();
         }
 
         return $rules;
@@ -41,7 +46,8 @@ class EmployeeApiPresenceRequest extends APIRequest
         if($this->type == 'hadir')
         {
             $this->merge([
-                'date' => date('Y-m-d')
+                'date' => date('Y-m-d'),
+                'time' => date('H:i'),
             ]);
         }
     }
@@ -70,5 +76,24 @@ class EmployeeApiPresenceRequest extends APIRequest
         }
         
         return ['nullable','file'];
+    }
+
+    function getWorktimeItemRules()
+    {
+        return [
+            'required',
+            'exists:'.WorktimeItem::class.',id'
+        ];
+    }
+
+    function getTypeRules()
+    {
+        $types = PaidLeave::get()->pluck('name')->toArray();
+        $types = array_merge($types,['hadir']);
+        return [
+            'required',
+            'string',
+            'in:'.implode(',',$types)
+        ];
     }
 }

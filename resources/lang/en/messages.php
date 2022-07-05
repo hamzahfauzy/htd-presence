@@ -11,6 +11,7 @@ return [
         'update' => 'Presence updated success.',
         'delete' => 'Presence deleted success.',
         'not-found' => 'Presence fail because schedule not found.',
+        'once-alert' => 'Presence fail because you are already do it.',
     ],
     'worktime' => [
         'detail' => 'Worktime detail retrieved.',

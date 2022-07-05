@@ -49,7 +49,7 @@ class SipakarSyncAsn extends Command
     {
         $sipakar   = new SipakarService;
         $workunits = $this->WorkunitApiRepository->lists([]);
-        foreach($workunits as $opd)
+        foreach($workunits['data'] as $opd)
         {
             $all_asns = $sipakar->getAllAsnByOpd($opd->id);
             Log::info('Do id : '.$opd->id);

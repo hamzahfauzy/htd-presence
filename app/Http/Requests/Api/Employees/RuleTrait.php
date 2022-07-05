@@ -57,14 +57,6 @@ trait RuleTrait
         ];
     }
 
-    function getTypeRules()
-    {
-        return [
-            'required',
-            'string'
-        ];
-    }
-
     function getPresenceRules()
     {
         return [
@@ -96,6 +88,20 @@ trait RuleTrait
         return [
             'required',
             'exists:'.WorktimeItem::class.',id'
+        ];
+    }
+    
+    function getTimeRules()
+    {
+        $times = [];
+        for($i=0;$i<60;$i++)
+        {
+            $_i = $i < 10 ? '0'.$i : $i;
+            $times[] = '12:'.$_i;
+        }
+        return [
+            'required',
+            'not_in:'.implode(',',$times)
         ];
     }
 }
