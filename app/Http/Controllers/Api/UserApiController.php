@@ -31,9 +31,9 @@ class UserApiController extends Controller
      *   )
      * )
      */
-    function lists(UserApiRepository $UserApiRepository)
+    function lists(Request $request,UserApiRepository $UserApiRepository)
     {
-        $data = $UserApiRepository->lists();
+        $data = $UserApiRepository->lists($request);
         
         return $this->sendResponse($data, __('messages.user.lists'));
     }

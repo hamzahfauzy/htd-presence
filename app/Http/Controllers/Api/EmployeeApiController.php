@@ -369,6 +369,41 @@ class EmployeeApiController extends Controller
     }
 
     /**
+     * Employee Reset Device
+     * 
+     * @param int $id
+     * @param EmployeeApiFreePlaceRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Patch(
+     *   path="/employees/{id}/reset-device",
+     *   summary="reset device",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="reset device",
+     *   )
+     * )
+     */
+    function resetDevice($id,Request $request, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->resetDevice($id);
+        return $this->sendResponse($data, __('messages.employee.reset-device'));
+    }
+
+    /**
      * Employee presence
      * 
      * @param int $id

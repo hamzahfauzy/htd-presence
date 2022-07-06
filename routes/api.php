@@ -95,6 +95,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::post('{id}/place',[EmployeeApiController::class,'addPlace']);
         Route::delete('{id}/place',[EmployeeApiController::class,'deletePlace']);
         Route::patch('{id}/place',[EmployeeApiController::class,'freePlace']);
+        Route::post('{id}/reset-device',[EmployeeApiController::class,'resetDevice']);
         Route::post('{id}/presences',[EmployeeApiController::class,'presences']);
         Route::get('{id}/presences/{employee_presence_id}',[EmployeeApiController::class,'detailPresence']);
         Route::get('{id}/presences',[EmployeeApiController::class,'listPresence']);

@@ -172,6 +172,17 @@ class EmployeeApiRepository
         return $this->findOne($delete->id);
     }
 
+    public function resetDevice($id)
+    {
+        $employee = $this->findOne($id);
+
+        $employee->user()->update([
+            'device_number'=>null
+        ]);
+
+        return $employee; 
+    }
+
     public function presences($input)
     {
         $Employee = Employee::whereId($input['id'])->first();

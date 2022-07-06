@@ -20,7 +20,7 @@ class UserApiRepository
         $this->EmployeeApiRepository = $EmployeeApiRepository;
     }
 
-    public function lists()
+    public function lists($input)
     {
 
         $sortBy = $input['sort_by'] ?? 'id';
@@ -34,6 +34,10 @@ class UserApiRepository
             $users = $users->where('name','LIKE','%'.$input['keyword'].'%')
                             ->orwhere('email','LIKE','%'.$input['keyword'].'%')
                             ->orwhere('role','LIKE','%'.$input['keyword'].'%');
+        }
+
+        if(isset($input['user'])){
+            $users = $users->where('role','!=','pegawai')->where('role','!=','superuser');
         }
         
 
