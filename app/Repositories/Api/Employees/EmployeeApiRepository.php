@@ -75,6 +75,13 @@ class EmployeeApiRepository
             $query = $query->where('name','LIKE','%'.$input['keyword'].'%');    
         }
 
+        if(isset($input['date_start']) && isset($input['date_end'])){
+            $dateStart = date($input['date_start']);
+            $dateEnd = date($input['date_end']);
+
+            $query = $query->whereBetween('p.created_at',[$dateStart,$dateEnd]);
+        }
+
         $hadir = "SUM(CASE WHEN p.type='hadir' THEN 1 ELSE 0 END) as hadir";
         $izin = "SUM(CASE WHEN p.type='izin' THEN 1 ELSE 0 END) as izin";
         $cuti = "SUM(CASE WHEN p.type='cuti' THEN 1 ELSE 0 END) as cuti";

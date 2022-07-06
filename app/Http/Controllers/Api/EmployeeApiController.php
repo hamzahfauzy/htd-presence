@@ -130,7 +130,24 @@ class EmployeeApiController extends Controller
      *       example="1"
      *     )
      *   ),
+     * @OA\Parameter(
+     *     name="date_start",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       example="2022-01-01
+     *     )
+     *   ),
      *
+     * @OA\Parameter(
+     *     name="date_end",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       example="2022-02-01
+     *     )
+     *   ),
+     * 
      *   @OA\Response(
      *     response=200,
      *     description="employee list"
