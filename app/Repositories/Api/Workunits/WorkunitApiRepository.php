@@ -51,7 +51,7 @@ class WorkunitApiRepository
         $perPage = $input['per_page'] ?? 10;
 
         $presences = EmployeePresence::where('workunit_id',$input['id'])
-                        ->with(['workunit','employee','presence'])
+                        ->with(['workunit','employee','worktime_item'])
                         ->orderBy($sortBy, $orderBy);
     
         if(empty($input))

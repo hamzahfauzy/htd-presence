@@ -408,8 +408,8 @@ class EmployeeApiRepository
     {
         $Employee = Employee::whereId($input['id'])->first();
 
-        $employe_presence = $Employee->presences()->with('worktime_item')->whereId($input['employee_presence_id'])->first();
-
+        $employe_presence = $Employee->presences()->with('worktime_item','workunit')->whereId($input['employee_presence_id'])->first();
+        $employe_presence->employee;
         return $employe_presence;
     }
 

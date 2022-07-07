@@ -38,6 +38,14 @@ return [
         'create' => 'Buat OPD berhasil.',
         'update' => 'Update OPD berhasil.',
         'delete' => 'Hapus OPD berhasil.',
+        'presence-list' => 'Daftar pengajuan cuti.',
+    ],
+    'paid_leaves' => [
+        'detail' => 'Detail Cuti.',
+        'lists'  => 'Daftar Cuti.',
+        'create' => 'Buat Cuti berhasil.',
+        'update' => 'Update Cuti berhasil.',
+        'delete' => 'Hapus Cuti berhasil.',
     ],
     'employee' => [
         'detail' => 'Detail pegawai.',
