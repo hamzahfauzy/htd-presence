@@ -100,10 +100,17 @@ class EmployeeApiRepository
             $query->where('workunit_id',$workunit_id);
 
             if(isset($input['date_start']) && isset($input['date_end'])){
-                $dateStart = date($input['date_start']);
-                $dateEnd = date($input['date_end']);
+                $dateStart = date($input['date_start']).' 00:00:00';
+                $dateEnd = date($input['date_end']).' 23:59:59';
 
-                $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                if($dateStart != $dateEnd)
+                {
+                    $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                }
+                else
+                {
+                    $query->where('created_at',$dateStart);
+                }
             }
         })->withCount([
             'presences AS izin' => function ($query) {
@@ -127,7 +134,7 @@ class EmployeeApiRepository
             'presences AS alfa' => function ($query) {
                 $query->select(DB::raw("COUNT(*) as alfa"))->where('type', 'alfa');
             },
-        ]);
+        ])->with('presences');
 
         if(isset($input['keyword']) && !empty($input['keyword']))
         {
