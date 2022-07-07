@@ -89,6 +89,7 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::prefix('employees')->group(function(){
         Route::get('/',[EmployeeApiController::class,'lists']);
         Route::get('reports/{workunit_id}',[EmployeeApiController::class,'reports']);
+        Route::get('report-details/{workunit_id}',[EmployeeApiController::class,'reportDetails']);
         Route::get('{id}',[EmployeeApiController::class,'detail']);
         Route::post('{id}/worktime',[EmployeeApiController::class,'addWorktime']);
         Route::delete('{id}/worktime',[EmployeeApiController::class,'deleteWorktime']);

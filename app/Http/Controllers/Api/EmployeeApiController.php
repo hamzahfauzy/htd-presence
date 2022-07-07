@@ -63,6 +63,14 @@ class EmployeeApiController extends Controller
      *       enum={"asc", "desc"}
      *     )
      *   ),
+     *   @OA\Parameter(
+     *     name="workunit_id",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="integer",
+     *       example="1"
+     *     )
+     *   ),
      *
      *   @OA\Response(
      *     response=200,
@@ -159,6 +167,90 @@ class EmployeeApiController extends Controller
         $data = $EmployeeApiRepository->reports($workunit_id,$request);
         
         return $this->sendResponse($data, __('messages.employee.lists'));
+    }
+
+    /**
+     * Retrieve employee list report details
+     *
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Get(
+     *   path="/employees/report-details/{workunit_id}",
+     *   summary="Retrieve employee list report details",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     * 
+     *   @OA\Parameter(
+     *     name="per_page",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="integer",
+     *       example="10"
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="page",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="integer",
+     *       example="1"
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="sort_by",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       enum={"nip", "name"}
+     *     )
+     *   ),
+     *   @OA\Parameter(
+     *     name="order_by",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       enum={"asc", "desc"}
+     *     )
+     *   ),
+     * @OA\Parameter(
+     *     name="workunit_id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *       example="1"
+     *     )
+     *   ),
+     * @OA\Parameter(
+     *     name="date_start",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       example="2022-01-01"
+     *     )
+     *   ),
+     *
+     * @OA\Parameter(
+     *     name="date_end",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *       example="2022-02-01"
+     *     )
+     *   ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="employee list"
+     *   )
+     * )
+     */
+    function reportDetails($workunit_id,Request $request, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->reportDetails($workunit_id,$request);
+        
+        return $this->sendResponse($data, __('messages.employee.detail-lists'));
     }
 
     /**

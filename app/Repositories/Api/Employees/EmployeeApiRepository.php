@@ -6,6 +6,7 @@ use App\Models\Employee;
 use App\Models\Worktime;
 use App\Http\ResponseUtil;
 use App\Models\WorktimeItem;
+use App\Models\EmployeePresence;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Repositories\Api\Employees\FPlace;
@@ -50,6 +51,11 @@ class EmployeeApiRepository
                             ->orwhere('position','LIKE','%'.$input['keyword'].'%')
                             ->orwhere('phone','LIKE','%'.$input['keyword'].'%');
         }
+
+        if(isset($input['workunit_id']))
+        {
+            $employees = $employees->where('workunit_id',$input['workunit_id']);
+        }
         
 
         return $employees->orderBy($sortBy, $orderBy)->paginate($perPage);
@@ -57,7 +63,53 @@ class EmployeeApiRepository
 
     public function findOne($id)
     {
-        return Employee::with(['workunit.worktimes','worktimes.items','places','presences','user'])->whereId($id)->first();
+        $employee = Employee::with([
+            'workunit.worktimes.items' => function($q){
+                $q->where('start_time','<=',date('H:i'));
+                $q->where('end_time','>=',date('H:i'));
+            },
+            'worktimes.items' => function($q){
+                $q->where('start_time','<=',date('H:i'));
+                $q->where('end_time','>=',date('H:i'));
+            },'places','presences','user'])->whereId($id)->first();
+
+        $active_worktime = [];
+        foreach($employee->worktimes as $worktime)
+        {
+            if($worktime->items)
+            {
+                $active_worktime = $worktime->items[0];
+                break;
+            }
+        }
+        
+        if(empty($active_worktime) && $employee->workunit->worktimes)
+        {
+            foreach($employee->workunit->worktimes as $worktime)
+            {
+                if($worktime->items)
+                {
+                    $active_worktime = $worktime->items[0];
+                    break;
+                }
+            }
+        }
+
+        if(empty($active_worktime))
+        {
+            $worktime = Worktime::whereid(1)->with(['items' => function($q){
+                $q->where('start_time','<=',date('H:i'));
+                $q->where('end_time','>=',date('H:i'));
+            }])->first();
+            if($worktime->items)
+            {
+                $active_worktime = $worktime->items[0];
+            }
+        }
+        
+        $employee->active_worktime = $active_worktime;
+
+        return $employee;
     }
 
     public function reports($workunit_id,$input)
@@ -65,36 +117,6 @@ class EmployeeApiRepository
         $sortBy = $input['sort_by'] ?? 'id';
         $orderBy = $input['order_by'] ?? 'asc';
         $perPage = $input['per_page'] ?? 10;
-
-        // $query = DB::table('employees as e')
-        //     ->leftJoin('workunits as w', 'w.id', 'e.workunit_id')
-        //     ->leftJoin('employee_presence as p', 'p.employee_id', 'e.id'); 
-            
-        // if(isset($input['keyword']) && !empty($input['keyword']))
-        // {
-        //     $query = $query->where('name','LIKE','%'.$input['keyword'].'%');    
-        // }
-
-        // if(isset($input['date_start']) && isset($input['date_end'])){
-        //     $dateStart = date($input['date_start']);
-        //     $dateEnd = date($input['date_end']);
-
-        //     $query = $query->whereBetween('p.created_at',[$dateStart,$dateEnd]);
-        // }
-
-        // $hadir = "SUM(CASE WHEN p.type='hadir' THEN 1 ELSE 0 END) as hadir";
-        // $izin = "SUM(CASE WHEN p.type='izin' THEN 1 ELSE 0 END) as izin";
-        // $cuti = "SUM(CASE WHEN p.type='cuti' THEN 1 ELSE 0 END) as cuti";
-        // $sakit = "SUM(CASE WHEN p.type='sakit' THEN 1 ELSE 0 END) as sakit";
-        // $tugasluar = "SUM(CASE WHEN p.type='tugasluar' THEN 1 ELSE 0 END) as tugasluar";
-        // $kegiatan = "SUM(CASE WHEN p.type='kegiatan' THEN 1 ELSE 0 END) as kegiatan";
-        // $alfa = "SUM(CASE WHEN p.type='alfa' THEN 1 ELSE 0 END) as alfa";
-
-        // $raw = "e.id, e.name, e.nip, e.group, e.position, $hadir,$izin,$cuti,$sakit,$tugasluar,$kegiatan,$alfa";
-        
-        // $data = $query
-        // ->selectRaw($raw)
-        // ->where('w.id',$workunit_id);
 
         $data = Employee::whereHas('presences', function($query) use ($workunit_id, $input){
             $query->where('workunit_id',$workunit_id);
@@ -140,6 +162,24 @@ class EmployeeApiRepository
         {
             $data = $data->where('name','LIKE','%'.$input['keyword'].'%');    
         }
+
+        return $data->orderBy($sortBy, $orderBy)->paginate($perPage);
+    }
+
+    public function reportDetails($workunit_id,$input)
+    {
+        $sortBy = $input['sort_by'] ?? 'id';
+        $orderBy = $input['order_by'] ?? 'asc';
+        $perPage = $input['per_page'] ?? 10;
+
+        $data = EmployeePresence::whereHas(
+            'employee', function($q) use ($input){
+                if(isset($input['keyword']) && !empty($input['keyword']))
+                {
+                    $q->where('name','LIKE','%'.$input['keyword'].'%');    
+                }
+            }
+        )->with('employee','worktime_item');
 
         return $data->orderBy($sortBy, $orderBy)->paginate($perPage);
     }
