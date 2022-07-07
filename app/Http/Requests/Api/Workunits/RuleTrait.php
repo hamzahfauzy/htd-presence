@@ -23,6 +23,13 @@ trait RuleTrait
         ];
     }
 
+    function getNameRules()
+    {
+        return [
+            'required'
+        ];
+    }
+
     function getLatRules()
     {
         return [

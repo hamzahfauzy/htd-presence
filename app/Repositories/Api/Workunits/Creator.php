@@ -22,6 +22,7 @@ class Creator
         $Workunit->name = $input['name'];
         $Workunit->lat  = $input['lat'];
         $Workunit->lng  = $input['lng'];
+        $Workunit->radius  = $input['radius']??0;
         $Workunit->parent_id = $input['parent_id']??null;
 
         $Workunit->save();

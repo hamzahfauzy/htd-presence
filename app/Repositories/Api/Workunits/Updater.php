@@ -23,6 +23,7 @@ class Updater
         $Workunit->name = $input['name'];
         $Workunit->lat  = $input['lat']??$Workunit->lat;
         $Workunit->lng  = $input['lng']??$Workunit->lng;
+        $Workunit->radius  = $input['radius']??$Workunit->radius;
         $Workunit->parent_id = $input['parent_id']??$Workunit->parent_id;
 
         $Workunit->save();

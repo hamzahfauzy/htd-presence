@@ -82,21 +82,6 @@ class SipakarSyncAsn extends Command
                         "head_name" => $asn->nama_atasan,
                         "phone" => $asn->ponsel,
                     ]);
-
-                    try {
-                        //code...
-                        $this->UserApiRepository->create([
-                            'employee_id'  => $asn->id_pegawai,
-                            'name'  => $asn->nama,
-                            'email' => $asn->nip,
-                            'role'  => 'pegawai',
-                            'workunit_id'=>null,
-                            'password' => 12345678
-                        ]);
-                    } catch (\Throwable $th) {
-                        //throw $th;
-                        Log::info($th);
-                    }
                 }
             }
         }

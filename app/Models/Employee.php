@@ -7,6 +7,41 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use DateTimeInterface;
 
+/**
+ * @OA\Schema(
+ *   @OA\Property(
+ *     property="workunit_id",
+ *     type="integer",
+ *     example="1"
+ *   ),
+ * @OA\Property(
+ *     property="nip",
+ *     type="string",
+ *     example="1234"
+ *   ),
+ * @OA\Property(
+ *     property="name",
+ *     type="string",
+ *     example="nama pegawai"
+ *   ),
+ * @OA\Property(
+ *     property="group",
+ *     type="string",
+ *     example="group"
+ *   ),
+ * @OA\Property(
+ *     property="position",
+ *     type="string",
+ *     example="position"
+ *   ),
+ * @OA\Property(
+ *     property="phone",
+ *     type="string",
+ *     example="phone"
+ *   ),
+ * )
+ */
+
 class Employee extends Model
 {
     use HasFactory;

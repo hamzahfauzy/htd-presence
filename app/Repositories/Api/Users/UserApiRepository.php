@@ -2,7 +2,7 @@
 namespace App\Repositories\Api\Users;
 
 use App\Models\User;
-use App\Repositories\Api\Employees\EmployeeApiRepository;
+// use App\Repositories\Api\Employees\EmployeeApiRepository;
 
 class UserApiRepository
 {
@@ -10,14 +10,16 @@ class UserApiRepository
     private $creator;
     private $updater;
     private $deleter;
-    private $EmployeeApiRepository;
+    // private $EmployeeApiRepository;
 
-    function __construct(EmployeeApiRepository $EmployeeApiRepository, Creator $creator, Updater $updater, Deleter $deleter)
+    function __construct(
+        // EmployeeApiRepository $EmployeeApiRepository, 
+        Creator $creator, Updater $updater, Deleter $deleter)
     {
         $this->creator = $creator;
         $this->updater = $updater;
         $this->deleter = $deleter;
-        $this->EmployeeApiRepository = $EmployeeApiRepository;
+        // $this->EmployeeApiRepository = $EmployeeApiRepository;
     }
 
     public function lists($input)
@@ -55,12 +57,12 @@ class UserApiRepository
                 ->prepare($input)
                 ->execute();
 
-        if(isset($input['employee_id'])){
-            $this->EmployeeApiRepository->update([
-                'id' => $input['employee_id'],
-                'user_id' => $create->id
-            ]);
-        }
+        // if(isset($input['employee_id'])){
+        //     $this->EmployeeApiRepository->update([
+        //         'id' => $input['employee_id'],
+        //         'user_id' => $create->id
+        //     ]);
+        // }
 
 
         return $this->findOne($create->id);

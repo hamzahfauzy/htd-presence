@@ -79,7 +79,9 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::get('/',[WorkunitApiController::class,'lists']);
         Route::get('{id}',[WorkunitApiController::class,'detail']);
         Route::get('{id}/presences',[WorkunitApiController::class,'presenceList']);
+        Route::post('/',[WorkunitApiController::class,'create']);
         Route::put('{id}',[WorkunitApiController::class,'update']);
+        Route::delete('{id}',[WorkunitApiController::class,'destroy']);
 
         Route::patch('{id}/worktime',[WorkunitApiController::class,'assign']);
         Route::delete('{id}/worktime',[WorkunitApiController::class,'deleteWorktime']);
@@ -88,6 +90,9 @@ Route::middleware('auth:sanctum')->group(function(){
     
     Route::prefix('employees')->group(function(){
         Route::get('/',[EmployeeApiController::class,'lists']);
+        Route::post('/',[EmployeeApiController::class,'create']);
+        Route::put('{id}',[EmployeeApiController::class,'update']);
+        Route::delete('{id}',[EmployeeApiController::class,'destroy']);
         Route::get('reports/{workunit_id}',[EmployeeApiController::class,'reports']);
         Route::get('report-details/{workunit_id}',[EmployeeApiController::class,'reportDetails']);
         Route::get('{id}',[EmployeeApiController::class,'detail']);

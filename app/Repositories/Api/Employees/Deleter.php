@@ -8,9 +8,9 @@ class Deleter
 
     private $id;
 
-    public function prepare($id)
+    public function prepare($input)
     {
-        $this->id = $id;
+        $this->id = $input['id'];
         return $this;
     }
 

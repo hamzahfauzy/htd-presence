@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Repositories\Api\Employees\FPlace;
 use App\Repositories\Api\Employees\AdderPlace;
 use App\Repositories\Api\Employees\DeleterPlace;
+use App\Repositories\Api\Users\UserApiRepository;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class EmployeeApiRepository
@@ -24,8 +25,18 @@ class EmployeeApiRepository
     private $adderPlace;
     private $deleterPlace;
     private $fPlace;
+    private $UserApiRepository;
     
-    function __construct(Creator $creator, Updater $updater, Deleter $deleter, AdderWorktime $adderWorktime,DeleterWorktime $deleterWorktime,AdderPlace $adderPlace,DeleterPlace $deleterPlace,FPlace $fPlace)
+    function __construct(
+        Creator $creator, 
+        Updater $updater, 
+        Deleter $deleter, 
+        AdderWorktime $adderWorktime,
+        DeleterWorktime $deleterWorktime,
+        AdderPlace $adderPlace,
+        DeleterPlace $deleterPlace,
+        FPlace $fPlace, 
+        UserApiRepository $UserApiRepository)
     {
         $this->creator = $creator;
         $this->updater = $updater;
@@ -35,6 +46,7 @@ class EmployeeApiRepository
         $this->adderPlace = $adderPlace;
         $this->deleterPlace = $deleterPlace;
         $this->fPlace = $fPlace;
+        $this->UserApiRepository = $UserApiRepository;
     }
 
     public function lists($input)
@@ -190,6 +202,32 @@ class EmployeeApiRepository
                 ->prepare($input)
                 ->execute();
 
+        try {
+            //code...
+            $user = $this->UserApiRepository->create([
+                'name'  => $input['name'],
+                'email' => $input['nip'],
+                'role'  => 'pegawai',
+                'workunit_id'=>null,
+                'password' => 12345678
+            ]);
+
+            if(is_object($input)) // request
+            {
+                $input->merge(['id'=>$create->id,'user_id'=>$user->id]);
+            }
+            else
+            {
+                $input = array_merge($input,['id'=>$create->id,'user_id'=>$user->id]);
+            }
+
+            $update = $this->update($input);
+            return $update;
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::info($th);
+        }
+
         return $this->findOne($create->id);
     }
 
@@ -202,11 +240,14 @@ class EmployeeApiRepository
         return $this->findOne($update->id);
     }
 
-    public function delete($id)
+    public function delete($input)
     {
+        $employee = $this->findOne($input['id']);
         $this->deleter
-                ->prepare($id)
+                ->prepare($input)
                 ->execute();
+
+        $this->UserApiRepository->delete($employee->user_id);
     }
 
     public function unlinkUser($id)

@@ -4,6 +4,7 @@ namespace App\Http\Requests\Api\Employees;
 use App\Models\Holiday;
 use App\Models\Employee;
 use App\Models\Worktime;
+use App\Models\Workunit;
 use App\Models\PaidLeave;
 use App\Models\WorktimeItem;
 use App\Models\EmployeePlace;
@@ -16,6 +17,14 @@ trait RuleTrait
         return [
             'required',
             'exists:'.Employee::class
+        ];
+    }
+    
+    function getWorkunitIdRules()
+    {
+        return [
+            'required',
+            'exists:'.Workunit::class.',id'
         ];
     }
 
@@ -104,4 +113,40 @@ trait RuleTrait
             'not_in:'.implode(',',$times)
         ];
     }
+
+    function getNipRules()
+    {
+        return ['required'];
+    }
+    
+    function getNameRules()
+    {
+        return ['required'];
+    }
+    
+    function getGroupRules()
+    {
+        return ['required'];
+    }
+    
+    function getPositionRules()
+    {
+        return ['required'];
+    }
+    
+    function getHeadPositionRules()
+    {
+        return ['required'];
+    }
+    
+    function getHeadNameRules()
+    {
+        return ['required'];
+    }
+    
+    function getPhoneRules()
+    {
+        return ['required'];
+    }
+    
 }

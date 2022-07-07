@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController as Controller;
 use App\Repositories\Api\Workunits\WorkunitApiRepository;
 use App\Http\Requests\Api\Workunits\WorkunitApiAssignRequest;
+use App\Http\Requests\Api\Workunits\WorkunitApiCreateRequest;
+use App\Http\Requests\Api\Workunits\WorkunitApiDeleteRequest;
 use App\Http\Requests\Api\Workunits\WorkunitApiDetailRequest;
+use App\Http\Requests\Api\Workunits\WorkunitApiUpdateRequest;
 use App\Http\Requests\Api\Workunits\WorkunitApiAddPlaceRequest;
 use App\Http\Requests\Api\Workunits\WorkunitApiPresenceRequest;
 use App\Http\Requests\Api\Workunits\WorkunitApiDeleteWorktimeRequest;
@@ -109,6 +112,123 @@ class WorkunitApiController extends Controller
     {
         $data = $WorkunitApiRepository->findOne($WorkunitApiDetailRequest->id);
         return $this->sendResponse($data, __('messages.workunit.detail'));
+    }
+
+    /**
+     * create workunits
+     *
+     * @param int $id
+     * @param WorkunitApiCreateRequest $request
+     * @param WorkunitApiRepository $WorktimeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Post(
+     *   path="/workunits",
+     *   summary="Create workunits",
+     *   tags={"Workunits"},
+     *   security={{"Bearer":{}}},
+     * 
+     *   @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/Workunit")
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Workunit created",
+     *   ),
+     *   @OA\Response(
+     *     response=400,
+     *     description="Invalid input",
+     *   )
+     * )
+     */
+    function create(WorkunitApiCreateRequest $WorkunitApiCreateRequest, WorkunitApiRepository $WorkunitApiRepository)
+    {
+        $data = $WorkunitApiRepository->create($WorkunitApiCreateRequest);
+        return $this->sendResponse($data, __('messages.workunit.create'));
+    }
+    
+    /**
+     * update workunits
+     *
+     * @param int $id
+     * @param WorkunitApiUpdateRequest $request
+     * @param WorkunitApiRepository $WorktimeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Put(
+     *   path="/workunits/{id}",
+     *   summary="Update workunits",
+     *   tags={"Workunits"},
+     *   security={{"Bearer":{}}},
+     * 
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *   @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/Workunit")
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Workunit updated",
+     *   ),
+     *   @OA\Response(
+     *     response=400,
+     *     description="Invalid input",
+     *   )
+     * )
+     */
+    function update($id, WorkunitApiUpdateRequest $WorkunitApiUpdateRequest, WorkunitApiRepository $WorkunitApiRepository)
+    {
+        $data = $WorkunitApiRepository->update($WorkunitApiUpdateRequest);
+        return $this->sendResponse($data, __('messages.workunit.update'));
+    }
+
+    /**
+     * delete workunits
+     *
+     * @param int $id
+     * @param WorkunitApiAssignRequest $request
+     * @param WorkunitApiRepository $WorktimeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Delete(
+     *   path="/workunits/{id}",
+     *   summary="Delete workunits",
+     *   tags={"Workunits"},
+     *   security={{"Bearer":{}}},
+     * 
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Workunit deleted",
+     *   ),
+     *   @OA\Response(
+     *     response=400,
+     *     description="Invalid input",
+     *   )
+     * )
+     */
+    function destroy($id, WorkunitApiDeleteRequest $WorkunitApiDeleteRequest, WorkunitApiRepository $WorkunitApiRepository)
+    {
+        $data = $WorkunitApiRepository->delete($WorkunitApiDeleteRequest->id);
+        return $this->sendResponse($data, __('messages.workunit.delete'));
     }
 
     /**

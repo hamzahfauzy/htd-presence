@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController as Controller;
 use App\Repositories\Api\Employees\EmployeeApiRepository;
+use App\Http\Requests\Api\Employees\EmployeeApiCreateRequest;
+use App\Http\Requests\Api\Employees\EmployeeApiDeleteRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDetailRequest;
+use App\Http\Requests\Api\Employees\EmployeeApiUpdateRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiAddPlaceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiPresenceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiFreePlaceRequest;
@@ -83,6 +86,123 @@ class EmployeeApiController extends Controller
         $data = $EmployeeApiRepository->lists($request);
         
         return $this->sendResponse($data, __('messages.employee.lists'));
+    }
+
+    /**
+     * create employees
+     *
+     * @param int $id
+     * @param EmployeeApiCreateRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Post(
+     *   path="/employees",
+     *   summary="Create employees",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     * 
+     *   @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/Employee")
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Employee created",
+     *   ),
+     *   @OA\Response(
+     *     response=400,
+     *     description="Invalid input",
+     *   )
+     * )
+     */
+    function create(EmployeeApiCreateRequest $EmployeeApiCreateRequest, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->create($EmployeeApiCreateRequest);
+        return $this->sendResponse($data, __('messages.employee.create'));
+    }
+    
+    /**
+     * update employees
+     *
+     * @param int $id
+     * @param EmployeeApiUpdateRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Put(
+     *   path="/employees/{id}",
+     *   summary="Update employees",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     * 
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *   @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/Employee")
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Employee updated",
+     *   ),
+     *   @OA\Response(
+     *     response=400,
+     *     description="Invalid input",
+     *   )
+     * )
+     */
+    function update($id, EmployeeApiUpdateRequest $EmployeeApiUpdateRequest, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->update($EmployeeApiUpdateRequest);
+        return $this->sendResponse($data, __('messages.employee.update'));
+    }
+
+    /**
+     * delete employees
+     *
+     * @param int $id
+     * @param EmployeeApiAssignRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Delete(
+     *   path="/employees/{id}",
+     *   summary="Delete employee",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     * 
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="Employee deleted",
+     *   ),
+     *   @OA\Response(
+     *     response=400,
+     *     description="Invalid input",
+     *   )
+     * )
+     */
+    function destroy($id, EmployeeApiDeleteRequest $EmployeeApiDeleteRequest, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->delete($EmployeeApiDeleteRequest);
+        return $this->sendResponse($data, __('messages.employee.delete'));
     }
 
     /**
