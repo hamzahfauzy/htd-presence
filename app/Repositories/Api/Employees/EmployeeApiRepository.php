@@ -66,33 +66,73 @@ class EmployeeApiRepository
         $orderBy = $input['order_by'] ?? 'asc';
         $perPage = $input['per_page'] ?? 10;
 
-        $query = DB::table('employees as e')
-            ->leftJoin('workunits as w', 'w.id', 'e.workunit_id')
-            ->leftJoin('employee_presence as p', 'p.employee_id', 'e.id'); 
+        // $query = DB::table('employees as e')
+        //     ->leftJoin('workunits as w', 'w.id', 'e.workunit_id')
+        //     ->leftJoin('employee_presence as p', 'p.employee_id', 'e.id'); 
             
+        // if(isset($input['keyword']) && !empty($input['keyword']))
+        // {
+        //     $query = $query->where('name','LIKE','%'.$input['keyword'].'%');    
+        // }
+
+        // if(isset($input['date_start']) && isset($input['date_end'])){
+        //     $dateStart = date($input['date_start']);
+        //     $dateEnd = date($input['date_end']);
+
+        //     $query = $query->whereBetween('p.created_at',[$dateStart,$dateEnd]);
+        // }
+
+        // $hadir = "SUM(CASE WHEN p.type='hadir' THEN 1 ELSE 0 END) as hadir";
+        // $izin = "SUM(CASE WHEN p.type='izin' THEN 1 ELSE 0 END) as izin";
+        // $cuti = "SUM(CASE WHEN p.type='cuti' THEN 1 ELSE 0 END) as cuti";
+        // $sakit = "SUM(CASE WHEN p.type='sakit' THEN 1 ELSE 0 END) as sakit";
+        // $tugasluar = "SUM(CASE WHEN p.type='tugasluar' THEN 1 ELSE 0 END) as tugasluar";
+        // $kegiatan = "SUM(CASE WHEN p.type='kegiatan' THEN 1 ELSE 0 END) as kegiatan";
+        // $alfa = "SUM(CASE WHEN p.type='alfa' THEN 1 ELSE 0 END) as alfa";
+
+        // $raw = "e.id, e.name, e.nip, e.group, e.position, $hadir,$izin,$cuti,$sakit,$tugasluar,$kegiatan,$alfa";
+        
+        // $data = $query
+        // ->selectRaw($raw)
+        // ->where('w.id',$workunit_id);
+
+        $data = Employee::whereHas('presences', function($query) use ($workunit_id, $input){
+            $query->where('workunit_id',$workunit_id);
+
+            if(isset($input['date_start']) && isset($input['date_end'])){
+                $dateStart = date($input['date_start']);
+                $dateEnd = date($input['date_end']);
+
+                $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+            }
+        })->withCount([
+            'presences AS izin' => function ($query) {
+                $query->select(DB::raw("COUNT(*) as izin"))->where('type', 'izin');
+            },
+            'presences AS hadir' => function ($query) {
+                $query->select(DB::raw("COUNT(*) as hadir"))->where('type', 'hadir');
+            },
+            'presences AS cuti' => function ($query) {
+                $query->select(DB::raw("COUNT(*) as cuti"))->where('type', 'cuti');
+            },
+            'presences AS sakit' => function ($query) {
+                $query->select(DB::raw("COUNT(*) as sakit"))->where('type', 'sakit');
+            },
+            'presences AS tugasluar' => function ($query) {
+                $query->select(DB::raw("COUNT(*) as tugasluar"))->where('type', 'tugasluar');
+            },
+            'presences AS kegiatan' => function ($query) {
+                $query->select(DB::raw("COUNT(*) as kegiatan"))->where('type', 'kegiatan');
+            },
+            'presences AS alfa' => function ($query) {
+                $query->select(DB::raw("COUNT(*) as alfa"))->where('type', 'alfa');
+            },
+        ]);
+
         if(isset($input['keyword']) && !empty($input['keyword']))
         {
-            $query = $query->where('name','LIKE','%'.$input['keyword'].'%');    
+            $data = $data->where('name','LIKE','%'.$input['keyword'].'%');    
         }
-
-        if(isset($input['date_start']) && isset($input['date_end'])){
-            $dateStart = date($input['date_start']);
-            $dateEnd = date($input['date_end']);
-
-            $query = $query->whereBetween('p.created_at',[$dateStart,$dateEnd]);
-        }
-
-        $hadir = "SUM(CASE WHEN p.type='hadir' THEN 1 ELSE 0 END) as hadir";
-        $izin = "SUM(CASE WHEN p.type='izin' THEN 1 ELSE 0 END) as izin";
-        $cuti = "SUM(CASE WHEN p.type='cuti' THEN 1 ELSE 0 END) as cuti";
-        $sakit = "SUM(CASE WHEN p.type='sakit' THEN 1 ELSE 0 END) as sakit";
-        $tugasluar = "SUM(CASE WHEN p.type='tugasluar' THEN 1 ELSE 0 END) as tugasluar";
-        $kegiatan = "SUM(CASE WHEN p.type='kegiatan' THEN 1 ELSE 0 END) as kegiatan";
-        $alfa = "SUM(CASE WHEN p.type='alfa' THEN 1 ELSE 0 END) as alfa";
-
-        $raw = "e.id, e.name, e.nip, e.group, e.position, $hadir,$izin,$cuti,$sakit,$tugasluar,$kegiatan,$alfa";
-        
-        $data = $query->selectRaw($raw)->where('w.id',$workunit_id);
 
         return $data->orderBy($sortBy, $orderBy)->paginate($perPage);
     }
