@@ -42,7 +42,7 @@ class AuthRepository
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        if(!in_array($user->role,['superuser','adminsistem']))
+        if($user->role == 'pegawai')
         {
             $workunit = $user->employee->workunit;
             $user->radius = $workunit->radius;
