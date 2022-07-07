@@ -64,9 +64,9 @@ class EmployeePresence extends Model
         return $this->belongsTo(Employee::class);
     }
     
-    function presence()
+    function worktime_item()
     {
-        return $this->belongsTo(Presence::class);
+        return $this->hasOne(WorktimeItem::class,'id','presence_id');
     }
 
     /**

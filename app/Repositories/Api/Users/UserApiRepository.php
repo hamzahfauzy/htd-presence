@@ -60,13 +60,6 @@ class UserApiRepository
                 'id' => $input['employee_id'],
                 'user_id' => $create->id
             ]);
-        }else{
-            $this->EmployeeApiRepository->create([
-                'user_id' => $create->id,
-                'name' => $create->name,
-                'nip' => $create->email,
-                'workunit_id' => $create->workunit_id,
-            ]);
         }
 
 

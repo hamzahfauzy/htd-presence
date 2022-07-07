@@ -268,7 +268,8 @@ class EmployeeApiRepository
                     $query->whereBetween('created_at',[$input['date_from'],$input['date_to']]);
                 }
                 $query->orderby($sortBy, $orderBy);
-            }
+            },
+            'presences.worktime_item'
         ])->first();
 
         return $Employee;

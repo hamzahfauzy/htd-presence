@@ -135,7 +135,7 @@ class EmployeeApiController extends Controller
      *     in="query",
      *     @OA\Schema(
      *       type="string",
-     *       example="2022-01-01
+     *       example="2022-01-01"
      *     )
      *   ),
      *
@@ -144,7 +144,7 @@ class EmployeeApiController extends Controller
      *     in="query",
      *     @OA\Schema(
      *       type="string",
-     *       example="2022-02-01
+     *       example="2022-02-01"
      *     )
      *   ),
      * 
@@ -215,7 +215,7 @@ class EmployeeApiController extends Controller
      *     name="id",
      *     in="path",
      *     @OA\Schema(
-     *       type="integer",
+     *       type="integer"
      *     )
      *   ),
      * 
