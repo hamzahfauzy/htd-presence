@@ -55,10 +55,20 @@ class UserApiRepository
                 ->prepare($input)
                 ->execute();
 
-        $this->EmployeeApiRepository->update([
-            'id' => $input['employee_id'],
-            'user_id' => $create->id
-        ]);
+        if(isset($input['employee_id'])){
+            $this->EmployeeApiRepository->update([
+                'id' => $input['employee_id'],
+                'user_id' => $create->id
+            ]);
+        }else{
+            $this->EmployeeApiRepository->create([
+                'user_id' => $create->id,
+                'name' => $create->name,
+                'nip' => $create->email,
+                'workunit_id' => $create->workunit_id,
+            ]);
+        }
+
 
         return $this->findOne($create->id);
     }
