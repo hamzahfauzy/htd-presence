@@ -85,10 +85,10 @@ class EmployeeApiRepository
                 $q->where('end_time','>=',date('H:i'));
             },'places','presences','user'])->whereId($id)->first();
 
-        $active_worktime = [];
+        $active_worktime = null;
         foreach($employee->worktimes as $worktime)
         {
-            if($worktime->items)
+            if(count($worktime->items))
             {
                 $active_worktime = $worktime->items[0];
                 break;
@@ -99,7 +99,7 @@ class EmployeeApiRepository
         {
             foreach($employee->workunit->worktimes as $worktime)
             {
-                if($worktime->items)
+                if(count($worktime->items))
                 {
                     $active_worktime = $worktime->items[0];
                     break;
@@ -113,7 +113,7 @@ class EmployeeApiRepository
                 $q->where('start_time','<=',date('H:i'));
                 $q->where('end_time','>=',date('H:i'));
             }])->first();
-            if($worktime->items)
+            if(count($worktime->items))
             {
                 $active_worktime = $worktime->items[0];
             }
