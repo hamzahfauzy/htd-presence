@@ -90,7 +90,7 @@ class EmployeeApiRepository
         {
             if($worktime->items)
             {
-                $active_worktime = $worktime->items[0];
+                $active_worktime = reset($worktime->items);
                 break;
             }
         }
@@ -101,7 +101,7 @@ class EmployeeApiRepository
             {
                 if($worktime->items)
                 {
-                    $active_worktime = $worktime->items[0];
+                    $active_worktime = reset($worktime->items);
                     break;
                 }
             }
@@ -115,7 +115,7 @@ class EmployeeApiRepository
             }])->first();
             if($worktime->items)
             {
-                $active_worktime = $worktime->items[0];
+                $active_worktime = reset($worktime->items);
             }
         }
         
