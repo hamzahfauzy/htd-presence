@@ -21,6 +21,7 @@ class UserApiCreateRequest extends APIRequest
             'password' => $this->getPasswordRules(),
             'role' => $this->getRoleRules(),
             'workunit_id' => $this->getWorkunitIdRules(),
+            'shift_management' => $this->getShiftManagementRules(),
         ];
     }
 }

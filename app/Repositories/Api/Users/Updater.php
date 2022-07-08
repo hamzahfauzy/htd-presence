@@ -23,6 +23,7 @@ class Updater
         $User->name = $input['name'];
         $User->email = $input['email'];
         $User->role = $input['role'];
+        $User->shift_management = $input['shift_management'];
         $User->workunit_id = $input['workunit_id'];
 
         $User->save();

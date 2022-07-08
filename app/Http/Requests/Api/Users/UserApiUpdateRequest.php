@@ -21,6 +21,7 @@ class UserApiUpdateRequest extends APIRequest
             'name' => $this->getNameRules(),
             'email' => $this->getEmailUpdateRules(),
             'role' => $this->getRoleRules(),
+            'shift_management' => $this->getShiftManagementRules(),
         ];
     }
 

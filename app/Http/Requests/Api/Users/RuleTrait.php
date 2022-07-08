@@ -61,6 +61,13 @@ trait RuleTrait
         ];
     }
     
+    function getShiftManagementRules()
+    {
+        return [
+            'required'
+        ];
+    }
+    
     function getRoleRules()
     {
         return [

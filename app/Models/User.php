@@ -33,6 +33,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  *     example="employee"
  *   ),
  *   @OA\Property(
+ *     property="shift_management",
+ *     type="integer",
+ *     example=0
+ *   ),
+ *   @OA\Property(
  *     property="workunit_id",
  *     type="number",
  *     example="1"
@@ -54,7 +59,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
-        'api_token'
+        'api_token',
+        'shift_management'
     ];
 
     /**
