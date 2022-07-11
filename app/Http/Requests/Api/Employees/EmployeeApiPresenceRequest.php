@@ -54,13 +54,13 @@ class EmployeeApiPresenceRequest extends APIRequest
 
     function getAttachmentRules()
     {
-        if(($this->type == 'hadir' && !$this->in_location) || $this->type != 'hadir')
-        {
-            return [
-                'required',
-                'file'
-            ];
-        }
+        // if(($this->type == 'hadir' && !$this->in_location) || $this->type != 'hadir')
+        // {
+        //     return [
+        //         'required',
+        //         'file'
+        //     ];
+        // }
 
         return ['nullable','file'];
     }

@@ -318,6 +318,31 @@ class EmployeeApiRepository
         return $employee; 
     }
 
+    public function checkIfExists($input){
+        $Employee = Employee::whereId($input['id'])->first();
+        if(
+            $Employee->presences()
+                ->where('presence_id',$input['worktime_item_id'])
+                ->where('created_at','LIKE','%'.date('Y-m-d').'%')
+                ->exists()
+        )
+        {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function uploadAttachment($input){
+        $Employee = Employee::whereId($input['id'])->first();
+        $employee_presence = $Employee->presences()->with('worktime_item','workunit')->whereId($input['employee_presence_id'])->first();
+        $attachment = $input->file('attachment');
+        $attachment_url = $attachment ? $attachment->store('attachments') : null;
+        $employee_presence->attachment_url = $attachment_url;
+        $employee_presence->save();
+        return $employee_presence;
+    }
+
     public function presences($input)
     {
         $Employee = Employee::whereId($input['id'])->first();

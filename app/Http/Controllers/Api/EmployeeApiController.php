@@ -846,4 +846,102 @@ class EmployeeApiController extends Controller
         $data = $EmployeeApiRepository->updatePresence($EmployeeApiUpdatePresenceRequest);
         return $this->sendResponse($data, __('messages.employee.update.presence'));
     }
+
+    /**
+     * Employee check if exists presence
+     * 
+     * @param int $id
+     * @param EmployeeApiPresenceRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Get(
+     *   path="/employees/{id}/presences/check_if_exists/{worktime_item_id}",
+     *   summary="employee check if exists presence",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *       example=1,
+     *     )
+     *   ),
+     *
+     * @OA\Parameter(
+     *     name="worktime_item_id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *        example=2,
+     *     )
+     *   ), 
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="employee check if exists presence",
+     *   )
+     * )
+     */
+    function checkIfExists($id,Request $request, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->checkIfExists($request);
+        return $this->sendResponse($data, __('messages.employee.presences'));
+    }
+
+    
+    /**
+     * Detail Employee upload attachment presence
+     * 
+     * @param int $id
+     * @param EmployeeApiDetailPresenceRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Post(
+     *   path="/employees/{id}/presences/{employee_presence_id}/upload-attachment",
+     *   summary="detail employee upload attachment presence",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *      example=1,
+     *     )
+     *   ),
+     * 
+     *   @OA\Parameter(
+     *     name="employee_presence_id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *       example=6,
+     *     )
+     *   ),
+     * 
+     *  @OA\RequestBody(
+    *     @OA\MediaType(
+    *       mediaType="multipart/form-data",
+    *       @OA\Schema(ref="#/components/schemas/EmployeePresenceUpload")
+    *     )
+    *  ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="upload attachment presence",
+     *   )
+     * )
+     */
+    function uploadAttachment($id,Request $requst, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->uploadAttachment($requst);
+        return $this->sendResponse($data, __('messages.employee.presence.upload'));
+    }
 }

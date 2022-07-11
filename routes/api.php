@@ -103,6 +103,8 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::patch('{id}/place',[EmployeeApiController::class,'freePlace']);
         Route::post('{id}/reset-device',[EmployeeApiController::class,'resetDevice']);
         Route::post('{id}/presences',[EmployeeApiController::class,'presences']);
+        Route::get('{id}/presences/check_if_exists/{worktime_item_id}',[EmployeeApiController::class,'checkIfExists']);
+        Route::post('{id}/presences/{employee_presence_id}/upload-attachment',[EmployeeApiController::class,'uploadAttachment']);
         Route::get('{id}/presences/{employee_presence_id}',[EmployeeApiController::class,'detailPresence']);
         Route::get('{id}/presences',[EmployeeApiController::class,'listPresence']);
         Route::patch('{id}/presences/{employee_presence_id}',[EmployeeApiController::class,'updatePresence']);
