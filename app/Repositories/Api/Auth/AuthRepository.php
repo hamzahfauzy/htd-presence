@@ -40,12 +40,12 @@ class AuthRepository
             {
                 if($user->id != $userByDevice->id)
                 {
-                    throw new HttpResponseException(Response::json(ResponseUtil::makeError('Device number not valid.'), 400));
+                    throw new HttpResponseException(Response::json(ResponseUtil::makeError('Akun anda sudah terdaftar di perangkat lain.'), 401));
                 }
             }
 
             if($user->device_number != null && $user->device_number != $input['device_number']){
-                throw new HttpResponseException(Response::json(ResponseUtil::makeError('Device number not valid.'), 400));
+                throw new HttpResponseException(Response::json(ResponseUtil::makeError('Akun anda sudah terdaftar di perangkat lain.'), 401));
             }
     
             if(isset($input['device_number'])){
