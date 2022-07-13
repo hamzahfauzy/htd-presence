@@ -26,7 +26,7 @@ trait RuleTrait
     function getWorkunitIdRules()
     {
         return [
-            'required',
+            'nullable',
             'exists:'.Workunit::class.',id'
         ];
     }
@@ -72,7 +72,7 @@ trait RuleTrait
     {
         return [
             'required',
-            'in:pegawai,kasubagumum,adminkepegawaian,adminopd'
+            'in:pegawai,kasubagumum,adminkepegawaian,adminopd,adminsistem'
         ];
     }
 }

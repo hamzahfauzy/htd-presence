@@ -26,11 +26,26 @@ class AuthRepository
             throw new HttpResponseException(Response::json(ResponseUtil::makeError('Password not valid.'), 400));
         }
 
+        // sampai di sini login sukses
+        // tinggal cek apakah device number dan user nya valid
+
         $user = User::where('email', $input['email'])->first();
 
         if($user->role == "pegawai"){
+            // get user by device
+            $userByDevice = User::where('device_number',$input['device_number'])->first();
+
+            // compare user by device with user by email
+            if($userByDevice)
+            {
+                if($user->id != $userByDevice->id)
+                {
+                    throw new HttpResponseException(Response::json(ResponseUtil::makeError('Akun anda sudah terdaftar di perangkat lain.'), 401));
+                }
+            }
+
             if($user->device_number != null && $user->device_number != $input['device_number']){
-                throw new HttpResponseException(Response::json(ResponseUtil::makeError('Device number not valid.'), 400));
+                throw new HttpResponseException(Response::json(ResponseUtil::makeError('Akun anda sudah terdaftar di perangkat lain.'), 401));
             }
     
             if(isset($input['device_number'])){
@@ -57,7 +72,7 @@ class AuthRepository
                     ]
                 ];
 
-            unset($user->employee);
+            // unset($user->employee);
         }
 
         return [
