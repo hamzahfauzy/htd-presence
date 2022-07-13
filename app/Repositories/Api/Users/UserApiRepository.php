@@ -29,7 +29,7 @@ class UserApiRepository
         $orderBy = $input['order_by'] ?? 'asc';
         $perPage = $input['per_page'] ?? 10;
 
-        $users = User::with('employee');
+        $users = User::with(['employee','workunit','employee.workunit']);
 
         if(isset($input['keyword']) && !empty($input['keyword']))
         {
@@ -48,7 +48,7 @@ class UserApiRepository
 
     public function findOne($id)
     {
-        return User::with('employee')->whereId($id)->first();
+        return User::with(['employee','workunit','employee.workunit'])->whereId($id)->first();
     }
 
     public function create($input)

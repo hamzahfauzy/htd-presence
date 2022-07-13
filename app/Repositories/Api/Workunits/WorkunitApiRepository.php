@@ -53,6 +53,20 @@ class WorkunitApiRepository
         $presences = EmployeePresence::where('workunit_id',$input['id'])
                         ->with(['workunit','employee','worktime_item'])
                         ->orderBy($sortBy, $orderBy);
+
+        if(isset($input['date_start']) && isset($input['date_end'])){
+            $dateStart = date($input['date_start']).' 00:00:00';
+            $dateEnd = date($input['date_end']).' 23:59:59';
+
+            if($dateStart != $dateEnd)
+            {
+                $presences->whereBetween('created_at',[$dateStart,$dateEnd]);
+            }
+            else
+            {
+                $presences->where('created_at',$dateStart);
+            }
+        }
     
         if(empty($input))
             return $presences->get();

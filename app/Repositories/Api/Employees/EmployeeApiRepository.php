@@ -193,7 +193,7 @@ class EmployeeApiRepository
                     $q->where('name','LIKE','%'.$input['keyword'].'%');    
                 }
             }
-        )->with('employee','worktime_item');
+        )->with('employee','worktime_item','workunit');
 
         return $data->orderBy($sortBy, $orderBy)->paginate($perPage);
     }

@@ -88,6 +88,12 @@ class User extends Authenticatable
         return $this->hasOne(Employee::class,'user_id');
     }
 
+    function workunit()
+    {
+        return $this->belongsTo(Workunit::class);
+    }
+
+
     /**
      * Prepare a date for array / JSON serialization.
      *
