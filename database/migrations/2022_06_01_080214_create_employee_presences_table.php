@@ -24,6 +24,7 @@ class CreateEmployeePresencesTable extends Migration
             $table->string('status')->default('diajukan');
             $table->string('lat')->nullable();
             $table->string('lng')->nullable();
+            $table->boolean('in_location')->default(true);
             $table->dateTime('started_at')->nullable();
             $table->dateTime('finished_at')->nullable();
             $table->timestamps();

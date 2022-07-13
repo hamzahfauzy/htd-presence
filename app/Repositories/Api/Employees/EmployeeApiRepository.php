@@ -86,18 +86,8 @@ class EmployeeApiRepository
             },'places','presences','user'])->whereId($id)->first();
 
         $active_worktime = null;
-        foreach($employee->worktimes as $worktime)
-        {
-            if(count($worktime->items))
-            {
-                $active_worktime = $worktime->items[0];
-                break;
-            }
-        }
-        
-        if(empty($active_worktime) && $employee->workunit->worktimes)
-        {
-            foreach($employee->workunit->worktimes as $worktime)
+        if($employee){
+            foreach($employee->worktimes as $worktime)
             {
                 if(count($worktime->items))
                 {
@@ -105,21 +95,33 @@ class EmployeeApiRepository
                     break;
                 }
             }
-        }
-
-        if(empty($active_worktime))
-        {
-            $worktime = Worktime::whereid(1)->with(['items' => function($q){
-                $q->where('start_time','<=',date('H:i'));
-                $q->where('end_time','>=',date('H:i'));
-            }])->first();
-            if(count($worktime->items))
+            
+            if(empty($active_worktime) && $employee->workunit->worktimes)
             {
-                $active_worktime = $worktime->items[0];
+                foreach($employee->workunit->worktimes as $worktime)
+                {
+                    if(count($worktime->items))
+                    {
+                        $active_worktime = $worktime->items[0];
+                        break;
+                    }
+                }
+            }        
+
+            if(empty($active_worktime))
+            {
+                $worktime = Worktime::whereid(1)->with(['items' => function($q){
+                    $q->where('start_time','<=',date('H:i'));
+                    $q->where('end_time','>=',date('H:i'));
+                }])->first();
+                if(count($worktime->items))
+                {
+                    $active_worktime = $worktime->items[0];
+                }
             }
+            
+            $employee->active_worktime = $active_worktime;
         }
-        
-        $employee->active_worktime = $active_worktime;
 
         return $employee;
     }
@@ -375,6 +377,7 @@ class EmployeeApiRepository
         $pic_url = $pic ? $pic->store('presences') : null;
 
         $status = 'diajukan';
+        $in_location = false;
         if(
             $input['type'] == 'hadir' && 
             (
@@ -384,6 +387,7 @@ class EmployeeApiRepository
             )
         )
         {
+            $in_location = true;
             $status = 'disetujui';
         }
 
@@ -396,6 +400,7 @@ class EmployeeApiRepository
             'pic_url'=>$pic_url,
             'lat' => $input->lat??null,
             'lng' => $input->lng??null,
+            'in_location' => $in_location,
             'started_at' => $input->started_at??null,
             'finished_at' => $input->finished_at??null,
         ]);
