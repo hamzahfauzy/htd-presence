@@ -25,6 +25,7 @@ class CreateEmployeesTable extends Migration
             $table->string('head_name')->nullable();
             $table->string('phone')->nullable();
             $table->integer('is_free_place')->nullable()->default(0);
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

@@ -27,7 +27,6 @@ class CreateUsersTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
             $table->string('device_number')->nullable();
-            $table->integer('status')->default(1);
             $table->rememberToken();
             $table->timestamps();
         });
