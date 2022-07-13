@@ -74,10 +74,6 @@ class User extends Authenticatable
         'api_token'
     ];
 
-    protected $appends = [
-        'name'
-    ];
-
     /**
      * The attributes that should be cast.
      *
@@ -86,12 +82,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    function getNameAttribute()
-    {
-        return $this->employee ? $this->employee->name : $this->name;
-    }
-
+    
     function employee()
     {
         return $this->hasOne(Employee::class,'user_id');
