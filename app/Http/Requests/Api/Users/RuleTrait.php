@@ -26,7 +26,7 @@ trait RuleTrait
     function getWorkunitIdRules()
     {
         return [
-            'required',
+            'nullable',
             'exists:'.Workunit::class.',id'
         ];
     }
