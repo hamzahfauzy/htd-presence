@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\ApiController as Controller;
 use App\Repositories\Api\Users\UserApiRepository;
+use App\Http\Controllers\ApiController as Controller;
 use App\Http\Requests\Api\Users\UserApiCreateRequest;
 use App\Http\Requests\Api\Users\UserApiDeleteRequest;
 use App\Http\Requests\Api\Users\UserApiDetailRequest;
 use App\Http\Requests\Api\Users\UserApiUpdateRequest;
+use App\Http\Requests\Api\Users\UserApiChangePasswordRequest;
 
 class UserApiController extends Controller
 {
@@ -182,5 +183,48 @@ class UserApiController extends Controller
     {
         $data = $UserApiRepository->delete($UserApiDeleteRequest->id);
         return $this->sendResponse([], __('messages.user.delete'));
+    }
+
+    /**
+     * Change Password users
+     *
+     * @param int $id
+     * @param UserApiChangePasswordRequest $request
+     * @param UserApiRepository $UserApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Post(
+     *   path="/users/{id}/change-password",
+     *   summary="Change Password users",
+     *   tags={"Users"},
+     *   security={{"Bearer":{}}},
+     * 
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *   @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/UserPassword")
+     *   ),
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="User updated",
+     *   ),
+     *   @OA\Response(
+     *     response=400,
+     *     description="Invalid input",
+     *   )
+     * )
+     */
+    function changePassword($id, UserApiChangePasswordRequest $UserApiChangePasswordRequest, UserApiRepository $UserApiRepository)
+    {
+        $data = $UserApiRepository->changePassword($UserApiChangePasswordRequest);
+        return $this->sendResponse($data, __('messages.user.update'));
     }
 }

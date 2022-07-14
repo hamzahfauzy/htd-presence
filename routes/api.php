@@ -116,6 +116,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::get('{id}',[UserApiController::class,'detail']);
         Route::put('{id}',[UserApiController::class,'update']);
         Route::delete('{id}',[UserApiController::class,'destroy']);
+        Route::post('{id}/change-password',[UserApiController::class,'changePassword']);
     });
     
     Route::prefix('paid_leaves')->group(function(){

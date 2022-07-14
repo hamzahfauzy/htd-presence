@@ -84,4 +84,13 @@ class UserApiRepository
                 ->execute();
     }
 
+    public function changePassword($input)
+    {
+        $user = User::find($input['id'])->update([
+            'password'=>\bcrypt($input['password'])
+        ]); 
+
+        return $user;
+    }
+
 }
