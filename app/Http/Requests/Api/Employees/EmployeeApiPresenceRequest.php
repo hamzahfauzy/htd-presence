@@ -93,7 +93,6 @@ class EmployeeApiPresenceRequest extends APIRequest
         return [
             'required',
             'string',
-            'in:'.implode(',',$types)
         ];
     }
 }
