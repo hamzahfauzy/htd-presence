@@ -2,6 +2,7 @@
 namespace App\Repositories\Api\Workunits;
 
 use App\Models\Workunit;
+use App\Models\PaidLeave;
 use App\Models\EmployeePresence;
 use App\Repositories\Api\Workunits\AdderPlace;
 
@@ -65,6 +66,15 @@ class WorkunitApiRepository
             else
             {
                 $presences->where('created_at',$dateStart);
+            }
+        }
+
+        if(isset($input['type'])){
+            if($input['type'] == 1){
+                $presences = $presences->where('type','hadir');
+            }else{
+                $types = PaidLeave::get()->pluck('name')->toArray();
+                $presences = $presences->whereIn('type',$types);
             }
         }
     
