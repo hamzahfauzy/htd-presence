@@ -193,9 +193,23 @@ class EmployeeApiRepository
                     $q->where('name','LIKE','%'.$input['keyword'].'%');    
                 }
             }
-        )->where('workunit_id',$workunit_id)->with('employee','worktime_item','workunit');
+        )->where('workunit_id',$workunit_id);
 
-        return $data->orderBy($sortBy, $orderBy)->paginate($perPage);
+        if(isset($input['date_start']) && isset($input['date_end'])){
+            $dateStart = date($input['date_start']).' 00:00:00';
+            $dateEnd = date($input['date_end']).' 23:59:59';
+
+            if($dateStart != $dateEnd)
+            {
+                $data->whereBetween('created_at',[$dateStart,$dateEnd]);
+            }
+            else
+            {
+                $data->where('created_at',$dateStart);
+            }
+        }
+
+        return $data->with('employee','worktime_item','workunit')->orderBy($sortBy, $orderBy)->paginate($perPage);
     }
 
     public function create($input)
