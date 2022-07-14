@@ -29,7 +29,7 @@ class EmployeeApiPresenceRequest extends APIRequest
         if($this->type == 'hadir')
         {
             $rules['date'] = $this->getPresenceDateRules();
-            $rules['time'] = $this->getTimeRules();
+            // $rules['time'] = $this->getTimeRules();
             Log::info($this->time);
             $rules['worktime_item_id'] = $this->getWorktimeItemRules();
         }
@@ -93,6 +93,7 @@ class EmployeeApiPresenceRequest extends APIRequest
         return [
             'required',
             'string',
+            'in:'.implode(',',$types)
         ];
     }
 }
