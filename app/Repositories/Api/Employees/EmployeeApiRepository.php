@@ -183,9 +183,12 @@ class EmployeeApiRepository
 
     public function reportDetails($workunit_id,$input)
     {
+
+        $presences = Presence::get();
+
         $sortBy = $input['sort_by'] ?? 'id';
         $orderBy = $input['order_by'] ?? 'asc';
-        $perPage = $input['per_page'] ?? 10;
+        $perPage = ($input['per_page'] ?? 10) * $presences->count();
 
         $data = EmployeePresence::whereHas(
             'employee', function($q) use ($input){
@@ -213,7 +216,6 @@ class EmployeeApiRepository
         $data = $data->with('employee','worktime_item','workunit')->orderBy($sortBy, $orderBy)->paginate($perPage);
         $data = $data->toArray();
 
-        $presences = Presence::get();
         $filtered = [];
         
         foreach ($data['data'] as $ep) {
