@@ -221,6 +221,7 @@ class EmployeeApiRepository
         foreach ($data['data'] as $ep) {
 
             $date = date("Y-m-d",strtotime($ep['created_at']));
+            $time = date("H:i:s",strtotime($ep['created_at']));
             $filtered[$ep['employee']['nip']."-".$date]['id'] = $ep['id'];
             $filtered[$ep['employee']['nip']."-".$date]['nip'] = $ep['employee']['nip'];
             $filtered[$ep['employee']['nip']."-".$date]['name'] = $ep['employee']['name'];
@@ -234,14 +235,14 @@ class EmployeeApiRepository
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['pic_url'] = $ep['pic_url'];
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['lat'] = $ep['lat'];
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['lng'] = $ep['lng'];
-                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['created_at'] = $ep['created_at'];
+                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['time'] = $time;
                 }else{
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['type'] = $presence['name'];
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['attachment_url'] = null;
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['pic_url'] = null;
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['lat'] = null;
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['lng'] = null;
-                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['created_at'] = null;
+                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['time'] = null;
                 }
             }
         }
