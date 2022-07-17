@@ -97,7 +97,7 @@ class EmployeeApiPresenceRequest extends APIRequest
         ];
     }
 
-    function messages(){
+    public function messages(){
         return [
             'date.unique'=>'Maaf! Sekarang Sedang Libur.'
         ];

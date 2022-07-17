@@ -2,6 +2,7 @@
 namespace App\Repositories\Api\Employees;
 
 use Response;
+use App\Models\Holiday;
 use App\Models\Employee;
 use App\Models\Presence;
 use App\Models\Worktime;
@@ -89,6 +90,7 @@ class EmployeeApiRepository
 
         $active_worktime = null;
         if($employee){
+            $employee->is_holiday = Holiday::where('date',date("Y-m-d"))->exists();
             foreach($employee->worktimes as $worktime)
             {
                 if(count($worktime->items))
