@@ -286,7 +286,7 @@ class EmployeeApiController extends Controller
     {
         $data = $EmployeeApiRepository->reports($workunit_id,$request);
         
-        return $this->sendResponse($data, __('messages.employee.lists'));
+        return $this->sendResponse($data, __('messages.employee.reports'));
     }
 
     /**
@@ -370,7 +370,7 @@ class EmployeeApiController extends Controller
     {
         $data = $EmployeeApiRepository->reportDetails($workunit_id,$request);
         
-        return $this->sendResponse($data, __('messages.employee.detail-lists'));
+        return $this->sendResponse($data, __('messages.employee.report-details'));
     }
 
     /**
@@ -443,7 +443,7 @@ class EmployeeApiController extends Controller
     function addWorktime($id,EmployeeApiAddWorktimeRequest $EmployeeApiAddWorktimeRequest, EmployeeApiRepository $EmployeeApiRepository)
     {
         $data = $EmployeeApiRepository->addWorktime($EmployeeApiAddWorktimeRequest);
-        return $this->sendResponse($data, __('messages.employee.add.worktime'));
+        return $this->sendResponse($data, __('messages.employee.worktime.add'));
     }
 
     /**
@@ -482,7 +482,7 @@ class EmployeeApiController extends Controller
     function deleteWorktime($id,EmployeeApiDeleteWorktimeRequest $EmployeeApiDeleteWorktimeRequest, EmployeeApiRepository $EmployeeApiRepository)
     {
         $data = $EmployeeApiRepository->deleteWorktime($EmployeeApiDeleteWorktimeRequest);
-        return $this->sendResponse($data, __('messages.employee.delete.worktime'));
+        return $this->sendResponse($data, __('messages.employee.worktime.delete'));
     }
 
     /**
@@ -520,7 +520,7 @@ class EmployeeApiController extends Controller
     function addPlace($id,EmployeeApiAddPlaceRequest $EmployeeApiAddPlaceRequest, EmployeeApiRepository $EmployeeApiRepository)
     {
         $data = $EmployeeApiRepository->addPlace($EmployeeApiAddPlaceRequest);
-        return $this->sendResponse($data, __('messages.employee.add.place'));
+        return $this->sendResponse($data, __('messages.place.add'));
     }
 
     /**
@@ -559,7 +559,7 @@ class EmployeeApiController extends Controller
     function deletePlace($id,EmployeeApiDeletePlaceRequest $EmployeeApiDeletePlaceRequest, EmployeeApiRepository $EmployeeApiRepository)
     {
         $data = $EmployeeApiRepository->deletePlace($EmployeeApiDeletePlaceRequest);
-        return $this->sendResponse($data, __('messages.employee.delete.place'));
+        return $this->sendResponse($data, __('messages.place.delete'));
     }
 
     /**
@@ -594,7 +594,7 @@ class EmployeeApiController extends Controller
     function freePlace($id,EmployeeApiFreePlaceRequest $EmployeeApiFreePlaceRequest, EmployeeApiRepository $EmployeeApiRepository)
     {
         $data = $EmployeeApiRepository->freePlace($EmployeeApiFreePlaceRequest);
-        return $this->sendResponse($data, __('messages.employee.free.place'));
+        return $this->sendResponse($data, __('messages.place.free'));
     }
 
     /**
@@ -745,7 +745,7 @@ class EmployeeApiController extends Controller
     function listPresence($id,EmployeeApiListPresenceRequest $EmployeeApiListPresenceRequest, EmployeeApiRepository $EmployeeApiRepository)
     {
         $data = $EmployeeApiRepository->listPresence($EmployeeApiListPresenceRequest);
-        return $this->sendResponse($data, __('messages.employee.list.presence'));
+        return $this->sendResponse($data, __('messages.employee.presence.list'));
     }
 
     /**
@@ -788,7 +788,7 @@ class EmployeeApiController extends Controller
     function detailPresence($id,EmployeeApiDetailPresenceRequest $EmployeeApiDetailPresenceRequest, EmployeeApiRepository $EmployeeApiRepository)
     {
         $data = $EmployeeApiRepository->detailPresence($EmployeeApiDetailPresenceRequest);
-        return $this->sendResponse($data, __('messages.employee.detail.presence'));
+        return $this->sendResponse($data, __('messages.employee.presence.detail'));
     }
 
     /**
@@ -844,7 +844,7 @@ class EmployeeApiController extends Controller
     function updatePresence($id,EmployeeApiUpdatePresenceRequest $EmployeeApiUpdatePresenceRequest, EmployeeApiRepository $EmployeeApiRepository)
     {
         $data = $EmployeeApiRepository->updatePresence($EmployeeApiUpdatePresenceRequest);
-        return $this->sendResponse($data, __('messages.employee.update.presence'));
+        return $this->sendResponse($data, __('messages.employee.presence.update'));
     }
 
     /**

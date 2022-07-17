@@ -19,8 +19,10 @@ return [
         'create' => 'Buat jam kerja berhasil.',
         'update' => 'Update jam kerja berhasil.',
         'delete' => 'Hapus jam kerja berhasil.',
+        'assign' => 'Berhasil Memberi jam kerja.',
     ],
     'worktime_item' => [
+        'detail' => 'Detail item jam kerja.',
         'create' => 'Buat item jam kerja berhasil.',
         'update' => 'Update item jam kerja berhasil.',
         'delete' => 'Hapus item jam kerja berhasil.',
@@ -39,6 +41,7 @@ return [
         'update' => 'Update OPD berhasil.',
         'delete' => 'Hapus OPD berhasil.',
         'presence-list' => 'Daftar pengajuan cuti.',
+        'assign' => 'Berhasil Memberi OPD.',
     ],
     'paid_leaves' => [
         'detail' => 'Detail Cuti.',
@@ -53,6 +56,26 @@ return [
         'create' => 'Buat pegawai berhasil.',
         'update' => 'Update pegawai berhasil.',
         'delete' => 'Hapus pegawai berhasil.',
+        'reports'  => 'Daftar Laporan.',
+        'presences' => 'Absensi Berhasil.',
+        'report-details'  => 'Daftar Laporan Detail.',
+        'reset-device'  => 'Reset Device Berhasil.',
+        'precense'=>[
+            'list'=>'Daftar Absensi',
+            'detail'=>'Detail Absensi',
+            'update'=>'Update Absensi Berhasil',
+            'upload'=>'Upload Lampiran Berhasil',
+        ],
+        'worktime'=>[
+            'add'=>'Tambah Jam Kerja berhasil',
+            'delete'=>'Hapus Jam Kerja berhasil',
+        ],
+        
+    ],
+    'place'=>[
+        'add'=>'Tambah Tempat berhasil',
+        'delete'=>'Hapus Tempat berhasil',
+        'free'=>'Bebas Lokasi berhasil',
     ],
     'user' => [
         'detail' => 'Detail pengguna.',

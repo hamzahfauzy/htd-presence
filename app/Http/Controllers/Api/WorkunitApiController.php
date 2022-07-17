@@ -310,7 +310,7 @@ class WorkunitApiController extends Controller
     function deleteWorktime($id,WorkunitApiDeleteWorktimeRequest $WorkunitApiDeleteWorktimeRequest, WorkunitApiRepository $WorkunitApiRepository)
     {
         $data = $WorkunitApiRepository->deleteWorktime($WorkunitApiDeleteWorktimeRequest);
-        return $this->sendResponse($data, __('messages.workunit.delete.worktime'));
+        return $this->sendResponse($data, __('messages.worktime.delete'));
     }
 
     /**
@@ -348,7 +348,7 @@ class WorkunitApiController extends Controller
     function addPlace($id,WorkunitApiAddPlaceRequest $WorkunitApiAddPlaceRequest, WorkunitApiRepository $WorkunitApiRepository)
     {
         $data = $WorkunitApiRepository->addPlace($WorkunitApiAddPlaceRequest);
-        return $this->sendResponse($data, __('messages.workunit.add.place'));
+        return $this->sendResponse($data, __('messages.place.add'));
     }
 
     /**
@@ -382,7 +382,7 @@ class WorkunitApiController extends Controller
     function presenceList(WorkunitApiPresenceRequest $WorkunitApiPresenceRequest, WorkunitApiRepository $WorkunitApiRepository)
     {
         $data = $WorkunitApiRepository->presenceList($WorkunitApiPresenceRequest);
-        return $this->sendResponse($data, __('messages.workunit.presence-list'));
+        return $this->sendResponse($data, __('messages.presence.lists'));
     }
 
 }
