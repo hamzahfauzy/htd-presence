@@ -5,6 +5,7 @@ use Response;
 use App\Models\Employee;
 use App\Models\Presence;
 use App\Models\Worktime;
+use App\Models\PaidLeave;
 use App\Http\ResponseUtil;
 use App\Models\WorktimeItem;
 use App\Models\EmployeePresence;
@@ -157,7 +158,8 @@ class EmployeeApiRepository
                 $query->select(DB::raw("COUNT(*) as hadir"))->where('type', 'hadir');
             },
             'presences AS cuti' => function ($query) {
-                $query->select(DB::raw("COUNT(*) as cuti"))->where('type', 'cuti');
+                $cuti = PaidLeave::get()->pluck('name');
+                $query->select(DB::raw("COUNT(*) as cuti"))->whereIn('type', $cuti);
             },
             'presences AS sakit' => function ($query) {
                 $query->select(DB::raw("COUNT(*) as sakit"))->where('type', 'sakit');
@@ -184,7 +186,7 @@ class EmployeeApiRepository
     public function reportDetails($workunit_id,$input)
     {
 
-        $presences = Presence::get();
+        $presences = WorktimeItem::get();
 
         $sortBy = $input['sort_by'] ?? 'id';
         $orderBy = $input['order_by'] ?? 'asc';
@@ -213,7 +215,7 @@ class EmployeeApiRepository
             }
         }
 
-        $data = $data->with('employee','worktime_item','workunit')->orderBy($sortBy, $orderBy)->paginate($perPage);
+        $data = $data->where('presence_id','!=',null)->with('employee','worktime_item','workunit')->orderBy($sortBy, $orderBy)->paginate($perPage);
         $data = $data->toArray();
 
         $filtered = [];
