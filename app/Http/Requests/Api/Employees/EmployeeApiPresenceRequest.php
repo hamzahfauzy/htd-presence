@@ -96,4 +96,10 @@ class EmployeeApiPresenceRequest extends APIRequest
             'in:'.implode(',',$types)
         ];
     }
+
+    function messages(){
+        return [
+            'date.unique'=>'Maaf! Sekarang Sedang Libur.'
+        ];
+    }
 }
