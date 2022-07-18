@@ -12,6 +12,7 @@ return [
         'delete' => 'Hapus presensi berhasil.',
         'not-found' => 'Absen gagal karena jadwal tidak ditemukan.',
         'once-alert' => 'Absen gagal karena kamu sudah absen.',
+        'failed-upload' => 'Upload Lampiran gagal.',
     ],
     'worktime' => [
         'detail' => 'Detail jam kerja.',
@@ -60,7 +61,7 @@ return [
         'presences' => 'Absensi Berhasil.',
         'report-details'  => 'Daftar Laporan Detail.',
         'reset-device'  => 'Reset Device Berhasil.',
-        'precense'=>[
+        'presence'=>[
             'list'=>'Daftar Absensi',
             'detail'=>'Detail Absensi',
             'update'=>'Update Absensi Berhasil',

@@ -395,10 +395,13 @@ class EmployeeApiRepository
         $Employee = Employee::whereId($input['id'])->first();
         $employee_presence = $Employee->presences()->with('worktime_item','workunit')->whereId($input['employee_presence_id'])->first();
         $attachment = $input->file('attachment');
-        $attachment_url = $attachment ? $attachment->store('attachments') : null;
-        $employee_presence->attachment_url = $attachment_url;
-        $employee_presence->save();
-        return $employee_presence;
+        if($attachment_url = $attachment->store('attachments')){
+            $employee_presence->attachment_url = $attachment_url;
+            $employee_presence->save();
+            return $employee_presence;
+        }else{
+            throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('messages.presence.failed-upload')), 400));
+        }
     }
 
     public function presences($input)
