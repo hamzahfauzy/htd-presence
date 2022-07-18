@@ -15,7 +15,7 @@ class Updater
         $this->input = $input;
         return $this;
     }
-
+ 
     public function execute()
     {
         $input   = $this->input;
