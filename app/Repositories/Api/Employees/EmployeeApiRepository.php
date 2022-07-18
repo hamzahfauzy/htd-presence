@@ -240,13 +240,6 @@ class EmployeeApiRepository
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['lat'] = $ep['lat'];
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['lng'] = $ep['lng'];
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['time'] = $time;
-                }else{
-                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['type'] = $presence['name'];
-                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['attachment_url'] = null;
-                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['pic_url'] = null;
-                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['lat'] = null;
-                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['lng'] = null;
-                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['time'] = null;
                 }
             }
         }
