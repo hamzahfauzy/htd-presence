@@ -944,4 +944,89 @@ class EmployeeApiController extends Controller
         $data = $EmployeeApiRepository->uploadAttachment($requst);
         return $this->sendResponse($data, __('messages.employee.presence.upload'));
     }
+
+    function reportPdf($workunit_id,Request $request, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->reports($workunit_id,$request);
+
+        $html = "<html><head><title>Laporan Rekapitulasi</title></head><body>";
+
+        $html .= "<h2>Laporan Rekapitulasi</h2>";
+        $html .= "<table border=1>";
+        $html .= "<tr>";
+        $html .= "<th style='padding:12px'>Nama</th>";
+        $html .= "<th style='padding:12px'>NIP</th>";
+        $html .= "<th style='padding:12px'>Golongan</th>";
+        $html .= "<th style='padding:12px'>Jabatan</th>";
+        $html .= "<th style='padding:12px'>Hadir</th>";
+        $html .= "<th style='padding:12px'>Izin</th>";
+        $html .= "<th style='padding:12px'>Cuti</th>";
+        $html .= "<th style='padding:12px'>Sakit</th>";
+        $html .= "<th style='padding:12px'>Tugas Luar</th>";
+        $html .= "<th style='padding:12px'>Keigatan</th>";
+        $html .= "<th style='padding:12px'>Alfa</th>";
+        $html .= "</tr>";
+
+        foreach($data->items() as $dt){
+            $html .= "<tr>";
+            $html .= "<td style='padding:12px'>$dt[name]</td>";
+            $html .= "<td style='padding:12px'>$dt[nip]</td>";
+            $html .= "<td style='padding:12px'>$dt[group]</td>";
+            $html .= "<td style='padding:12px'>$dt[position]</td>";
+            $html .= "<td style='padding:12px'>$dt[hadir]</td>";
+            $html .= "<td style='padding:12px'>$dt[izin]</td>";
+            $html .= "<td style='padding:12px'>$dt[cuti]</td>";
+            $html .= "<td style='padding:12px'>$dt[sakit]</td>";
+            $html .= "<td style='padding:12px'>$dt[tugasluar]</td>";
+            $html .= "<td style='padding:12px'>$dt[kegiatan]</td>";
+            $html .= "<td style='padding:12px'>$dt[alfa]</td>";
+            $html .= "</tr>";
+        }
+
+        $html .= "</table></body></html>";
+
+        $mpdf = new \Mpdf\Mpdf(['orientation' => 'L']);
+        $mpdf->WriteHTML($html);
+        $mpdf->Output();
+    }
+
+    function reportDetailPdf($workunit_id,Request $request, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->reportDetails($workunit_id,$request);
+
+        $html = "<html><head><title>Laporan Detail</title></head><body>";
+
+        $html .= "<h2>Laporan Detail</h2>";
+        $html .= "<table border=1>";
+        $html .= "<tr>";
+        $html .= "<th style='padding:12px'>NIP</th>";
+        $html .= "<th style='padding:12px'>Nama</th>";
+        $html .= "<th style='padding:12px'>OPD</th>";
+        $html .= "<th style='padding:12px'>Tanggal</th>";
+        $html .= "<th style='padding:12px' colspan='2'>Keterangan</th>";
+        $html .= "</tr>";
+
+        $i = 1;
+        foreach($data['data'] as $dt){
+            $html .= "<tr>";
+            $html .= "<td style='padding:12px'>$dt[nip]</td>";
+            $html .= "<td style='padding:12px'>$dt[name]</td>";
+            $html .= "<td style='padding:12px'>$dt[workunit]</td>";
+            $html .= "<td style='padding:12px'>$dt[date]</td>";
+            $html .= "<td style='padding:12px' colspan='2'>";
+
+            foreach($dt['types'] as $type){
+                $html .= "<p style='padding:12px'><b>$type[type] : </b>$type[time]</p>";
+            }
+
+            $html .= "</td></tr>";
+            $i++;
+        }
+
+        $html .= "</table></body></html>";
+
+        $mpdf = new \Mpdf\Mpdf(['orientation' => 'L']);
+        $mpdf->WriteHTML($html);
+        $mpdf->Output();
+    }
 }

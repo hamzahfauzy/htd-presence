@@ -36,6 +36,9 @@ Route::get('times',function(){
     return response()->json(['data'=>$data],200);
 });
 
+Route::get('employees/report-pdf/{workunit_id}',[EmployeeApiController::class,'reportPdf']);
+Route::get('employees/report-detail-pdf/{workunit_id}',[EmployeeApiController::class,'reportDetailPdf']);
+
 Route::middleware('auth:sanctum')->group(function(){
 
     Route::get('user', function(Request $request){
