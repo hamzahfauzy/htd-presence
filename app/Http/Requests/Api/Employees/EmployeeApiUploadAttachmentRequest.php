@@ -17,7 +17,15 @@ class EmployeeApiUploadAttachmentRequest extends APIRequest
     public function rules()
     {
         return [
+            'id' => 'required',
             'attachment' => 'required|file|max:1024'
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'id' => $this->route('id'),
+        ]);
     }
 }
