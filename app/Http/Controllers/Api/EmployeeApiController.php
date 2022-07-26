@@ -18,6 +18,7 @@ use App\Http\Requests\Api\Employees\EmployeeApiListPresenceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDeleteWorktimeRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDetailPresenceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiUpdatePresenceRequest;
+use App\Http\Requests\Api\Employees\EmployeeApiUploadAttachmentRequest;
 
 class EmployeeApiController extends Controller
 {
@@ -939,11 +940,8 @@ class EmployeeApiController extends Controller
      *   )
      * )
      */
-    function uploadAttachment($id,Request $requst, EmployeeApiRepository $EmployeeApiRepository)
+    function uploadAttachment($id,EmployeeApiUploadAttachmentRequest $requst, EmployeeApiRepository $EmployeeApiRepository)
     {
-        $requst->validate([
-            'attachment' => 'required|file|max:1024'
-        ]);
         $data = $EmployeeApiRepository->uploadAttachment($requst);
         return $this->sendResponse($data, __('messages.employee.presence.upload'));
     }
