@@ -941,6 +941,9 @@ class EmployeeApiController extends Controller
      */
     function uploadAttachment($id,Request $requst, EmployeeApiRepository $EmployeeApiRepository)
     {
+        $requst->validate([
+            'attachment' => 'required|file|max:1024'
+        ]);
         $data = $EmployeeApiRepository->uploadAttachment($requst);
         return $this->sendResponse($data, __('messages.employee.presence.upload'));
     }
