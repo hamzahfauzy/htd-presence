@@ -182,7 +182,28 @@ class EmployeeApiRepository
             $data = $data->where('name','LIKE','%'.$input['keyword'].'%');    
         }
 
-        return $data->orderBy($sortBy, $orderBy)->paginate($perPage);
+        $data = $data->orderBy($sortBy, $orderBy)->paginate($perPage);
+
+        $data->transform(function($p){
+            $times = 0;
+            foreach($p->presences as $presence){
+                if(!$presence->worktime_item){
+                    continue;
+                }
+                $on_time_end = strtotime($presence->worktime_item->on_time_end);
+                $on_time_end = strtotime(date('H:i:s', $on_time_end));
+                $act = strtotime($presence->created_at);
+                $act = strtotime(date('H:i:s', $act));
+                $time_left = ($act-$on_time_end)/60;
+                if($time_left > 0){
+                    $times += $time_left;
+                }
+            }
+            $p->time_left = $times;
+            return $p;
+        });
+        
+        return $data;
     }
 
     public function reportDetails($workunit_id,$input)

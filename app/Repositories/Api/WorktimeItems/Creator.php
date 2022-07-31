@@ -24,6 +24,7 @@ class Creator
         $WorktimeItem->end_time = $input['end_time'];
         $WorktimeItem->on_time_start = $input['on_time_start'];
         $WorktimeItem->on_time_end = $input['on_time_end'];
+        $WorktimeItem->days = $input['days'] ?? '';
 
         $WorktimeItem->save();
 

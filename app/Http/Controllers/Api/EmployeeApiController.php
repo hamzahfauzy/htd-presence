@@ -960,12 +960,7 @@ class EmployeeApiController extends Controller
         $html .= "<th style='padding:12px'>Golongan</th>";
         $html .= "<th style='padding:12px'>Jabatan</th>";
         $html .= "<th style='padding:12px'>Hadir</th>";
-        $html .= "<th style='padding:12px'>Izin</th>";
         $html .= "<th style='padding:12px'>Cuti</th>";
-        $html .= "<th style='padding:12px'>Sakit</th>";
-        $html .= "<th style='padding:12px'>Tugas Luar</th>";
-        $html .= "<th style='padding:12px'>Keigatan</th>";
-        $html .= "<th style='padding:12px'>Alfa</th>";
         $html .= "</tr>";
 
         foreach($data->items() as $dt){
@@ -975,12 +970,7 @@ class EmployeeApiController extends Controller
             $html .= "<td style='padding:12px'>$dt[group]</td>";
             $html .= "<td style='padding:12px'>$dt[position]</td>";
             $html .= "<td style='padding:12px'>$dt[hadir]</td>";
-            $html .= "<td style='padding:12px'>$dt[izin]</td>";
             $html .= "<td style='padding:12px'>$dt[cuti]</td>";
-            $html .= "<td style='padding:12px'>$dt[sakit]</td>";
-            $html .= "<td style='padding:12px'>$dt[tugasluar]</td>";
-            $html .= "<td style='padding:12px'>$dt[kegiatan]</td>";
-            $html .= "<td style='padding:12px'>$dt[alfa]</td>";
             $html .= "</tr>";
         }
 
