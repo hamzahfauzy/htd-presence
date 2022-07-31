@@ -123,11 +123,51 @@ class EmployeeApiRepository
                     $active_worktime = $worktime->items[0];
                 }
             }
-            
-            $employee->active_worktime = $active_worktime;
+            if($active_worktime->days){
+                $days = explode(",",$active_worktime->days);
+
+                if(!in_array($this->today(),$days)){
+                    $employee->active_worktime = null;
+                }else{
+                    $employee->active_worktime = $active_worktime;
+                }
+            }else{
+                $employee->active_worktime = $active_worktime;
+            }
         }
 
         return $employee;
+    }
+
+    function today(){
+        $day = date("D");
+        switch($day){
+            case 'Sun':
+                $today = "Minggu";
+            break;
+            case 'Mon':			
+                $today = "Senin";
+            break;
+            case 'Tue':
+                $today = "Selasa";
+            break;
+            case 'Wed':
+                $today = "Rabu";
+            break;
+            case 'Thu':
+                $today = "Kamis";
+            break;
+            case 'Fri':
+                $today = "Jumat";
+            break;
+            case 'Sat':
+                $today = "Sabtu";
+            break;
+            default:
+                $today = null;		
+            break;
+        }
+        return $today;
     }
 
     public function reports($workunit_id,$input)
@@ -202,7 +242,7 @@ class EmployeeApiRepository
             $p->time_left = $times;
             return $p;
         });
-        
+
         return $data;
     }
 
