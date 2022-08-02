@@ -961,6 +961,7 @@ class EmployeeApiController extends Controller
         $html .= "<th style='padding:12px'>Jabatan</th>";
         $html .= "<th style='padding:12px'>Hadir</th>";
         $html .= "<th style='padding:12px'>Cuti</th>";
+        $html .= "<th style='padding:12px'>Waktu Telat (Menit)</th>";
         $html .= "</tr>";
 
         foreach($data->items() as $dt){
@@ -971,6 +972,7 @@ class EmployeeApiController extends Controller
             $html .= "<td style='padding:12px'>$dt[position]</td>";
             $html .= "<td style='padding:12px'>$dt[hadir]</td>";
             $html .= "<td style='padding:12px'>$dt[cuti]</td>";
+            $html .= "<td style='padding:12px'>$dt[time_left]</td>";
             $html .= "</tr>";
         }
 
