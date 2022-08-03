@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController as Controller;
 use App\Repositories\Api\Employees\EmployeeApiRepository;
+use App\Repositories\Api\Workunits\WorkunitApiRepository;
 use App\Http\Requests\Api\Employees\EmployeeApiCreateRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDeleteRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDetailRequest;
@@ -949,10 +950,15 @@ class EmployeeApiController extends Controller
     function reportPdf($workunit_id,Request $request, EmployeeApiRepository $EmployeeApiRepository)
     {
         $data = $EmployeeApiRepository->reports($workunit_id,$request);
+        $workunit = Workunit::whereId($workunit_id)->first();
 
         $html = "<html><head><title>Laporan Rekapitulasi</title></head><body>";
 
-        $html .= "<h2>Laporan Rekapitulasi</h2>";
+        $html .= "<center>";
+        $html .= "<h2>Laporan Rekapitulasi Absensi</h2>";
+        $html .= "<h2>".$workunit->name."</h2>";
+        $html .= "<p>Periode ".$request->date_start." s/d ".$request->date_end."</p>";
+        $html .= "</center>";
         $html .= "<table border=1>";
         $html .= "<tr>";
         $html .= "<th style='padding:12px'>Nama</th>";
@@ -984,17 +990,25 @@ class EmployeeApiController extends Controller
     function reportDetailPdf($workunit_id,Request $request, EmployeeApiRepository $EmployeeApiRepository)
     {
         $data = $EmployeeApiRepository->reportDetails($workunit_id,$request);
+        $workunit = Workunit::whereId($workunit_id)->first();
 
         $html = "<html><head><title>Laporan Detail</title></head><body>";
 
-        $html .= "<h2>Laporan Detail</h2>";
+        $html .= "<center>";
+        $html .= "<h2>Laporan Detail Absensi</h2>";
+        $html .= "<h2>".$workunit->name."</h2>";
+        $html .= "<p>Periode ".$request->date_start." s/d ".$request->date_end."</p>";
+        $html .= "</center>";
         $html .= "<table border=1>";
         $html .= "<tr>";
         $html .= "<th style='padding:12px'>NIP</th>";
         $html .= "<th style='padding:12px'>Nama</th>";
         $html .= "<th style='padding:12px'>OPD</th>";
         $html .= "<th style='padding:12px'>Tanggal</th>";
-        $html .= "<th style='padding:12px' colspan='2'>Keterangan</th>";
+        $html .= "<th style='padding:12px'>Masuk</th>";
+        $html .= "<th style='padding:12px'>Di Lokasi</th>";
+        $html .= "<th style='padding:12px'>Pulang</th>";
+        $html .= "<th style='padding:12px'>Di Lokasi</th>";
         $html .= "</tr>";
 
         $i = 1;
@@ -1003,14 +1017,52 @@ class EmployeeApiController extends Controller
             $html .= "<td style='padding:12px'>$dt[nip]</td>";
             $html .= "<td style='padding:12px'>$dt[name]</td>";
             $html .= "<td style='padding:12px'>$dt[workunit]</td>";
-            $html .= "<td style='padding:12px'>$dt[date]</td>";
-            $html .= "<td style='padding:12px' colspan='2'>";
-
+            $html .= "<td style='padding:12px'>".date('d-m-Y',strtotime($dt['date']))."</td>";
+            $masuk  = false;
+            $pulang = false;
+            $additional = "";
             foreach($dt['types'] as $type){
-                $html .= "<p style='padding:12px'><b>$type[type] : </b>$type[time]</p>";
+                if($type['type'] == "Masuk")
+                {
+                    $masuk = true;
+                }
+
+                if($type['type'] == "Pulang")
+                {
+                    $pulang = true;
+                }
+                
+                $additional .= "<td style='padding:12px'>";
+                $additional .= "<p style='padding:12px'>$type[time]</p>";
+                $additional .= "</td>";
+                $additional .= "<td style='padding:12px'>";
+                $additional .= "<p style='padding:12px'>$type[in_location]</p>";
+                $additional .= "</td>";
             }
 
-            $html .= "</td></tr>";
+            if(!$masuk)
+            {
+                $additional = "<td style='padding:12px'>
+                                <p style='padding:12px'>-</p>
+                               </td>
+                               <td style='padding:12px'>
+                                <p style='padding:12px'>-</p>
+                               </td>" . $additional;
+            }
+
+            if(!$pulang)
+            {
+                $additional .= "<td style='padding:12px'>
+                                <p style='padding:12px'>-</p>
+                               </td>
+                               <td style='padding:12px'>
+                                <p style='padding:12px'>-</p>
+                               </td>";
+            }
+
+            $html .= $additional;
+
+            $html .= "</tr>";
             $i++;
         }
 
