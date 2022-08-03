@@ -170,7 +170,7 @@ class EmployeeApiRepository
         return $today;
     }
 
-    public function reports($workunit_id,$input)
+    public function reports($workunit_id,$input,$type = false)
     {
         $sortBy = $input['sort_by'] ?? 'id';
         $orderBy = $input['order_by'] ?? 'asc';
@@ -222,7 +222,9 @@ class EmployeeApiRepository
             $data = $data->where('name','LIKE','%'.$input['keyword'].'%');    
         }
 
-        $data = $data->orderBy($sortBy, $orderBy)->paginate($perPage);
+        $data = $data->orderBy($sortBy, $orderBy);
+
+        $data = $type ? $data->get() : $data->paginate($perPage);
 
         $data->transform(function($p){
             $times = 0;
@@ -246,7 +248,7 @@ class EmployeeApiRepository
         return $data;
     }
 
-    public function reportDetails($workunit_id,$input)
+    public function reportDetails($workunit_id,$input,$type = false)
     {
 
         $presences = WorktimeItem::get();
@@ -278,12 +280,15 @@ class EmployeeApiRepository
             }
         }
 
-        $data = $data->where('presence_id','!=',null)->with('employee','worktime_item','workunit')->orderBy($sortBy, $orderBy)->paginate($perPage);
+        $data = $data->where('presence_id','!=',null)->with('employee','worktime_item','workunit')->orderBy($sortBy, $orderBy);
+        
+        $data = $type ? $data->get() : $data->paginate($perPage);
+        
         $data = $data->toArray();
 
         $filtered = [];
         
-        foreach ($data['data'] as $ep) {
+        foreach ($type ? $data : $data['data'] as $ep) {
 
             $date = date("Y-m-d",strtotime($ep['created_at']));
             $time = date("H:i:s",strtotime($ep['created_at']));

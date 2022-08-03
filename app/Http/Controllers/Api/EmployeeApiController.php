@@ -949,7 +949,7 @@ class EmployeeApiController extends Controller
 
     function reportPdf($workunit_id,Request $request, EmployeeApiRepository $EmployeeApiRepository)
     {
-        $data = $EmployeeApiRepository->reports($workunit_id,$request);
+        $data = $EmployeeApiRepository->reports($workunit_id,$request,true);
         $workunit = Workunit::whereId($workunit_id)->first();
 
         $html = "<html><head><title>Laporan Rekapitulasi</title></head><body>";
@@ -968,7 +968,7 @@ class EmployeeApiController extends Controller
         $html .= "<th style='padding:12px'>Waktu Telat (Menit)</th>";
         $html .= "</tr>";
 
-        foreach($data->items() as $dt){
+        foreach($data as $dt){
             $html .= "<tr>";
             $html .= "<td style='padding:12px'>$dt[name]</td>";
             $html .= "<td style='padding:12px'>$dt[nip]</td>";
@@ -989,7 +989,7 @@ class EmployeeApiController extends Controller
 
     function reportDetailPdf($workunit_id,Request $request, EmployeeApiRepository $EmployeeApiRepository)
     {
-        $data = $EmployeeApiRepository->reportDetails($workunit_id,$request);
+        $data = $EmployeeApiRepository->reportDetails($workunit_id,$request,true);
         $workunit = Workunit::whereId($workunit_id)->first();
 
         $html = "<html><head><title>Laporan Detail</title></head><body>";
@@ -1034,7 +1034,7 @@ class EmployeeApiController extends Controller
                 $additional .= "<p style='padding:12px'>$type[time]</p>";
                 $additional .= "</td>";
                 $additional .= "<td style='padding:12px'>";
-                $additional .= "<p style='padding:12px'>$type[in_location]</p>";
+                $additional .= "<p style='padding:12px'>".$type['in_location'] ? "Ya" : "Tidak"."</p>";
                 $additional .= "</td>";
             }
 
