@@ -241,7 +241,7 @@ class EmployeeApiRepository
                     $times += $time_left;
                 }
             }
-            $p->time_left = $times;
+            $p->time_left = ceil($times);
             return $p;
         });
 
