@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Workunit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController as Controller;
 use App\Repositories\Api\Employees\EmployeeApiRepository;
-use App\Repositories\Api\Workunits\WorkunitApiRepository;
 use App\Http\Requests\Api\Employees\EmployeeApiCreateRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDeleteRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDetailRequest;
