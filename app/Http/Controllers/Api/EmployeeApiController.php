@@ -1032,7 +1032,7 @@ class EmployeeApiController extends Controller
                 $additional .= "<p style='padding:12px'>$type[time]</p>";
                 $additional .= "</td>";
                 $additional .= "<td style='padding:12px'>";
-                $additional .= "<p style='padding:12px'>$type[in_location]</p>";
+                $additional .= "<p style='padding:12px'>".$type['in_location']?'Ya':'Tidak'."</p>";
                 $additional .= "</td>";
             }
 
