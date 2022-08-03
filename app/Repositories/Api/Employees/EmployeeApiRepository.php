@@ -301,6 +301,7 @@ class EmployeeApiRepository
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['lat'] = $ep['lat'];
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['lng'] = $ep['lng'];
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['time'] = $time;
+                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['in_location'] = $ep['in_location'];
                 }
             }
         }
