@@ -3,7 +3,6 @@ namespace App\Repositories\Api\Auth;
 
 use Response;
 use App\Http\ResponseUtil;
-use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;

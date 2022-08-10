@@ -2,7 +2,7 @@
 
 return [
     'auth' => [
-        'login' => 'Authentication berhasil.'
+        'login' => 'Authentication berhasil.',
     ],
     'presence' => [
         'detail' => 'Detail presensi.',
