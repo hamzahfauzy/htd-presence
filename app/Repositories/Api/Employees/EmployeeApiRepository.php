@@ -122,17 +122,18 @@ class EmployeeApiRepository
                 {
                     $active_worktime = $worktime->items[0];
                 }
-            }
-            if($active_worktime->days){
-                $days = explode(",",$active_worktime->days);
-
-                if(!in_array($this->today(),$days)){
-                    $employee->active_worktime = null;
+            }else{
+                if($active_worktime->days){
+                    $days = explode(",",$active_worktime->days);
+    
+                    if(!in_array($this->today(),$days)){
+                        $employee->active_worktime = null;
+                    }else{
+                        $employee->active_worktime = $active_worktime;
+                    }
                 }else{
                     $employee->active_worktime = $active_worktime;
                 }
-            }else{
-                $employee->active_worktime = $active_worktime;
             }
         }
 

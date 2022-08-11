@@ -43,6 +43,8 @@ Route::get('employees/report-detail-pdf/{workunit_id}',[EmployeeApiController::c
 
 Route::middleware('auth:sanctum')->group(function(){
 
+    Route::post('auth/change-password',[AuthController::class, 'changePassword']);
+
     Route::get('user', function(Request $request){
         $user = $request->user();
         $user->employee;
