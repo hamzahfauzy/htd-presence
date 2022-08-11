@@ -135,8 +135,8 @@ class EmployeeApiRepository
                     $employee->active_worktime = $active_worktime;
                 }
             }
+            $employee->email = $employee->user->email;
         }
-
         return $employee;
     }
 
@@ -332,7 +332,7 @@ class EmployeeApiRepository
             //code...
             $user = $this->UserApiRepository->create([
                 'name'  => $input['name'],
-                'email' => $input['nip'],
+                'email' => $input['email'] ?? $input['nip'],
                 'role'  => 'pegawai',
                 'workunit_id'=>null,
                 'password' => 12345678
