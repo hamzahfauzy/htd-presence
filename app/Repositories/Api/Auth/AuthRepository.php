@@ -2,6 +2,7 @@
 namespace App\Repositories\Api\Auth;
 
 use Response;
+use App\Models\User;
 use App\Http\ResponseUtil;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
