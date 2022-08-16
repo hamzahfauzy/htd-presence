@@ -3,6 +3,7 @@ namespace App\Repositories\Api\Auth;
 
 use Response;
 use App\Models\User;
+use App\Models\Employee;
 use App\Http\ResponseUtil;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -14,10 +15,20 @@ class AuthRepository
 
     public function login($input)
     {
-        $credentials = [
-            'email'    => $input['email'],
-            'password' => $input['password']
-        ];
+        $employee = Employee::where('nip',$input['email'])->first();
+
+        if($employee){
+            $credentials = [
+                'email'    => $employee->user->email,
+                'password' => $input['password']
+            ];
+        }else{
+            $credentials = [
+                'email'    => $input['email'],
+                'password' => $input['password']
+            ];
+
+        }
 
         $login = Auth::attempt($credentials);
         
@@ -29,7 +40,7 @@ class AuthRepository
         // sampai di sini login sukses
         // tinggal cek apakah device number dan user nya valid
 
-        $user = User::where('email', $input['email'])->first();
+        $user = User::where('email', $credentials['email'])->first();
 
         if($user->role == "pegawai"){
             // get user by device

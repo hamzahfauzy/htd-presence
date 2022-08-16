@@ -23,7 +23,7 @@ class AuthLoginRequest extends APIRequest
 
     function getEmailRules()
     {
-        return ['required','exists:users'];
+        return ['required'];
     }
 
     function getPasswordRules()

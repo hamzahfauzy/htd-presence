@@ -122,6 +122,40 @@ class AuthController extends Controller
         return $this->sendResponse($user, __('ganti password success'));
     }
 
+    /**
+     * Change email
+     *
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Post(
+     *   path="/auth/change-email",
+     *   summary="change email",
+     *   tags={"Authentication"},
+     *
+     *   @OA\RequestBody(
+     *     @OA\JsonContent(ref="#/components/schemas/AuthChangeEmail")
+     *   ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="change email",
+     *   )
+     * )
+     */
+    public function changeEmail(Request $request, AuthRepository $AuthRepository)
+    {
+        $request->validate([
+            'email' => ['required','email','unique:users'],
+        ]);
+        
+        $user = User::whereId(auth()->user()->id)->update([
+            'email' => $request->email
+        ]);
+        return $this->sendResponse($user, __('ganti email success'));
+    }
+
     public function reset(Request $request)
     {
         $request->validate([
