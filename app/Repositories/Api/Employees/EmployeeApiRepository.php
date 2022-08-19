@@ -1,7 +1,10 @@
 <?php
 namespace App\Repositories\Api\Employees;
 
+use DateTime;
 use Response;
+use DatePeriod;
+use DateInterval;
 use App\Models\Holiday;
 use App\Models\Employee;
 use App\Models\Presence;
@@ -225,9 +228,11 @@ class EmployeeApiRepository
 
         $data = $data->orderBy($sortBy, $orderBy);
 
+        
+
         $data = $type ? $data->get() : $data->paginate($perPage);
 
-        $data->transform(function($p){
+        $data->transform(function($p) use($input){
             $times = 0;
             foreach($p->presences as $presence){
                 if(!$presence->worktime_item){
@@ -242,7 +247,28 @@ class EmployeeApiRepository
                     $times += $time_left;
                 }
             }
-            $p->time_left = ceil($times);
+
+            $dates = $p->presences->pluck('created_at');
+
+            $formattedDates = $dates->map(function ($date) {
+                return $date->format('Y-m-d');
+            })->toArray();
+
+            $start = new DateTime($input['date_start']);
+            $end = new DateTime($input['date_end']);
+            $oneday = new DateInterval("P1D");
+
+            $days = array();
+
+            foreach(new DatePeriod($start, $oneday, $end->add($oneday)) as $day) {
+                $day_num = $day->format("N");
+                if($day_num < 6 && $day_num > 0 && !in_array($day->format('Y-m-d'),$formattedDates)) {
+                    $days[] = $day->format("Y-m-d");
+                }
+            }
+
+            $p->time_left = ceil($times) + (count($days)*510);
+
             return $p;
         });
 
