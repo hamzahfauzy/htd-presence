@@ -508,7 +508,6 @@ class EmployeeApiRepository
         $filtered = [];
         
         foreach ($type ? $data : $data['data'] as $ep) {
-
             $date = date("Y-m-d",strtotime($ep['created_at']));
             $time = date("H:i:s",strtotime($ep['created_at']));
             $filtered[$ep['employee']['nip']."-".$date]['id'] = $ep['id'];
@@ -517,8 +516,67 @@ class EmployeeApiRepository
             $filtered[$ep['employee']['nip']."-".$date]['workunit'] = $ep['workunit']['name'];
             $filtered[$ep['employee']['nip']."-".$date]['date'] = $date;
 
+            $presentase = 0;
+            $times = 0;
+
+            $masuk = false;
+            $pulang = false;
+
             foreach ($presences as $presence) {
-                if($ep['presence_id'] == $presence['id']){
+                if($ep['presence_id'] == $presence['id']){   
+
+                    if($presence['name'] == "Masuk")
+                    {
+                        $masuk = true;
+                    }
+
+                    if($presence['name'] == "Pulang")
+                    {
+                        $pulang = true;
+                    }
+                    
+                    $on_time_start = strtotime($presence->on_time_start);
+                    $on_time_end = strtotime($presence->on_time_end);
+                    $presence_time = strtotime(date('H:i',strtotime($ep['created_at'])));
+
+                    $time_left = 0;
+                    // terlalu cepat
+                    if($presence_time < $on_time_start)
+                    {
+                        $time_left = ($on_time_start-$presence_time)/60;
+                        Log::info($presence->name . ' Cepat ' . $time_left);
+                    }
+                    
+                    // terlalu lambat
+                    if($presence_time > $on_time_end)
+                    {
+                        $time_left = ($presence_time-$on_time_end)/60;
+                        Log::info($presence->name . ' Lambat ' . $time_left);
+                    }
+
+                    if($time_left > 0){
+                        $times += $time_left;
+                        if($time_left >= 1 && $time_left < 31)
+                        {
+                            $presentase += 0.5;
+                        }
+
+                        if($time_left >= 31 && $time_left < 61)
+                        {
+                            $presentase += 1;
+                        }
+                        
+                        if($time_left >= 61 && $time_left < 91)
+                        {
+                            $presentase += 1.25;
+                        }
+                        
+                        if($time_left >= 91)
+                        {
+                            $presentase += 1.5;
+                        }
+                    }
+
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['type'] = $presence['name'];
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['attachment_url'] = $ep['attachment_url'];
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['pic_url'] = $ep['pic_url'];
@@ -528,6 +586,12 @@ class EmployeeApiRepository
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['in_location'] = $ep['in_location'];
                 }
             }
+
+            $not_check_in = $masuk ? 0 : 1;
+            $not_check_out = $pulang ? 0 : 1;
+
+            $filtered[$ep['employee']['nip']."-".$date]['time_left'] = ceil($times) + ($not_check_in*270) + ($not_check_out*240);
+            $filtered[$ep['employee']['nip']."-".$date]['presentase'] = $presentase . '%';
         }
         
         $newData = [];

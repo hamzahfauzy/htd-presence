@@ -1016,6 +1016,8 @@ class EmployeeApiController extends Controller
         $html .= "<th style='padding:12px'>Di Lokasi</th>";
         $html .= "<th style='padding:12px'>Pulang</th>";
         $html .= "<th style='padding:12px'>Di Lokasi</th>";
+        $html .= "<th style='padding:12px'>Waktu Telat (Menit)</th>";
+        $html .= "<th style='padding:12px'>Persentase</th>";
         $html .= "</tr>";
 
         $i = 1;
@@ -1068,6 +1070,9 @@ class EmployeeApiController extends Controller
             }
 
             $html .= $additional;
+
+            $html .= "<td style='padding:12px'>$dt[time_left]</td>";
+            $html .= "<td style='padding:12px'>$dt[presentase]</td>";
 
             $html .= "</tr>";
             $i++;
