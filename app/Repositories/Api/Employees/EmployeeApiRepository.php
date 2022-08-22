@@ -228,8 +228,6 @@ class EmployeeApiRepository
 
         $data = $data->orderBy($sortBy, $orderBy);
 
-        
-
         $data = $type ? $data->get() : $data->paginate($perPage);
 
         $data->transform(function($p) use($input){
@@ -237,12 +235,38 @@ class EmployeeApiRepository
             foreach($p->presences as $presence){
                 if(!$presence->worktime_item){
                     continue;
-                }
+                }                
+
+                $on_time_start = strtotime($presence->worktime_item->on_time_start);
                 $on_time_end = strtotime($presence->worktime_item->on_time_end);
-                $on_time_end = strtotime(date('H:i:s', $on_time_end));
-                $act = strtotime($presence->created_at);
-                $act = strtotime(date('H:i:s', $act));
-                $time_left = ($act-$on_time_end)/60;
+                $presence_time = strtotime(date('H:i',strtotime($presence->created_at)));
+
+                if($presence_time >= $on_time_start && $presence_time <= $on_time_end)
+                {
+                    // on time
+                    Log::info($presence->worktime_item->name . ' On Time');
+                    continue;
+                }
+
+                // $on_time_end = strtotime(date('H:i:s', $on_time_end));
+                // $act = strtotime($presence->created_at);
+                // $act = strtotime(date('H:i:s', $act));
+
+                $time_left = 0;
+                // terlalu cepat
+                if($presence_time < $on_time_start)
+                {
+                    $time_left = ($on_time_start-$presence_time)/60;
+                    Log::info($presence->worktime_item->name . ' Cepat ' . $time_left);
+                }
+                
+                // terlalu lambat
+                if($presence_time > $on_time_end)
+                {
+                    $time_left = ($presence_time-$on_time_end)/60;
+                    Log::info($presence->worktime_item->name . ' Lambat ' . $time_left);
+                }
+
                 if($time_left > 0){
                     $times += $time_left;
                 }
@@ -259,15 +283,42 @@ class EmployeeApiRepository
             $oneday = new DateInterval("P1D");
 
             $days = array();
+            $not_check_in = 0;
+            $not_check_out = 0;
 
             foreach(new DatePeriod($start, $oneday, $end->add($oneday)) as $day) {
                 $day_num = $day->format("N");
-                if($day_num < 6 && $day_num > 0 && !in_array($day->format('Y-m-d'),$formattedDates)) {
-                    $days[] = $day->format("Y-m-d");
+                if($day_num < 6 && $day_num > 0) {
+                    if(!in_array($day->format('Y-m-d'),$formattedDates))
+                    {
+                        $days[] = $day->format("Y-m-d");
+                    }
+                    else
+                    {
+                        $absen = $p->presences()->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
+                        $jumlah = $absen->count();
+                        Log::info('Jumlah '.$jumlah);
+                        if($jumlah < 2)
+                        {
+                            $absen = $absen->first();
+                            if($absen->worktime_item->id == 1)
+                            {
+                                Log::info('Gak Absen Masuk');
+                                $not_check_in++;
+                            }
+                            else
+                            {
+                                Log::info('Gak Absen Pulang');
+                                $not_check_out++;
+                            }
+                        }
+                    }
                 }
             }
 
-            $p->time_left = ceil($times) + (count($days)*510);
+            Log::info('Days Off ' . count($days));
+
+            $p->time_left = ceil($times) + (count($days)*510) + ($not_check_in*270) + ($not_check_out*240);
 
             return $p;
         });
