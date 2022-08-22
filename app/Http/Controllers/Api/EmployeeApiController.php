@@ -1060,7 +1060,7 @@ class EmployeeApiController extends Controller
                 $additional .= "<p style='padding:12px'>$type[time_left]</p>";
                 $additional .= "</td>";
                 $additional .= "<td style='padding:12px'>";
-                $additional .= "<p style='padding:12px'>$type[presentase]</p>";
+                $additional .= "<p style='padding:12px'>$type[presentase]%</p>";
                 $additional .= "</td>";
             }
 
@@ -1073,11 +1073,15 @@ class EmployeeApiController extends Controller
                                 <p style='padding:12px'>-</p>
                                </td>
                                <td style='padding:12px'>
-                                <p style='padding:12px'>-</p>
+                                <p style='padding:12px'>270</p>
                                </td>
                                <td style='padding:12px'>
-                                <p style='padding:12px'>-</p>
+                                <p style='padding:12px'>1.5%</p>
                                </td>" . $additional;
+
+
+                $dt['time_left']+=270;
+                $dt['presentase']+=1.5;
             }
 
             if(!$pulang)
@@ -1089,17 +1093,20 @@ class EmployeeApiController extends Controller
                                 <p style='padding:12px'>-</p>
                                </td>
                                <td style='padding:12px'>
-                                <p style='padding:12px'>-</p>
+                                <p style='padding:12px'>240</p>
                                </td>
                                <td style='padding:12px'>
-                                <p style='padding:12px'>-</p>
+                                <p style='padding:12px'>1.5%</p>
                                </td>";
+
+                $dt['time_left']+=240;
+                $dt['presentase']+=1.5;
             }
 
             $html .= $additional;
 
             $html .= "<td style='padding:12px'>$dt[time_left]</td>";
-            $html .= "<td style='padding:12px'>$dt[presentase]</td>";
+            $html .= "<td style='padding:12px'>$dt[presentase]%</td>";
 
             $html .= "</tr>";
             $i++;

@@ -591,12 +591,12 @@ class EmployeeApiRepository
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['in_location'] = $ep['in_location'];
 
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['time_left'] = ceil($time_left) + (($presence['name'] == "Masuk" ? 0 : 1 )*270) + (($presence['name'] == "Pulang" ? 0 : 1)*240);
-                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['presentase'] = $presentase2 . '%';
+                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['presentase'] = $presentase2;
                 }
             }
 
             $filtered[$ep['employee']['nip']."-".$date]['time_left'] = ceil($times) + (($masuk ? 0 : 1 )*270) + (($pulang ? 0 : 1)*240);
-            $filtered[$ep['employee']['nip']."-".$date]['presentase'] = $presentase . '%';
+            $filtered[$ep['employee']['nip']."-".$date]['presentase'] = $presentase;
         }
         
         $newData = [];
