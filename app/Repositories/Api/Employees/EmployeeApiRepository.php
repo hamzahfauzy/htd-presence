@@ -214,23 +214,23 @@ class EmployeeApiRepository
                     }
                 }
             },
-            'presences AS hadir' => function ($query) use ($input) {
-                $query->select(DB::raw("COUNT(*) as hadir"))->where('type', 'hadir');
+            // 'presences AS hadir' => function ($query) use ($input) {
+            //     $query->select(DB::raw("COUNT(*) as hadir"))->where('type', 'hadir');
 
-                if(isset($input['date_start']) && isset($input['date_end'])){
-                    $dateStart = date($input['date_start']).' 00:00:00';
-                    $dateEnd = date($input['date_end']).' 23:59:59';
+            //     if(isset($input['date_start']) && isset($input['date_end'])){
+            //         $dateStart = date($input['date_start']).' 00:00:00';
+            //         $dateEnd = date($input['date_end']).' 23:59:59';
     
-                    if($dateStart != $dateEnd)
-                    {
-                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
-                    }
-                    else
-                    {
-                        $query->where('created_at',$dateStart);
-                    }
-                }
-            },
+            //         if($dateStart != $dateEnd)
+            //         {
+            //             $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+            //         }
+            //         else
+            //         {
+            //             $query->where('created_at',$dateStart);
+            //         }
+            //     }
+            // },
             'presences AS cuti' => function ($query) use ($input) {
                 $cuti = PaidLeave::get()->pluck('name');
                 $query->select(DB::raw("COUNT(*) as cuti"))->whereIn('type', $cuti);
@@ -417,16 +417,21 @@ class EmployeeApiRepository
             $days = array();
             $not_check_in = 0;
             $not_check_out = 0;
+            $hari_kerja = 0;
+            $hadir = 0;
 
             foreach(new DatePeriod($start, $oneday, $end->add($oneday)) as $day) {
                 $day_num = $day->format("N");
-                if($day_num < 6 && $day_num > 0) {
+                $holiday = Holiday::where('date',$day->format('Y-m-d'))->exists();
+                if($day_num < 6 && $day_num > 0 && !$holiday) {
+                    $hari_kerja++;
                     if(!in_array($day->format('Y-m-d'),$formattedDates))
                     {
                         $days[] = $day->format("Y-m-d");
                     }
                     else
                     {
+                        $hadir++;
                         $absen = $p->presences()->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
                         $jumlah = $absen->count();
                         Log::info('Jumlah '.$jumlah);
@@ -452,6 +457,9 @@ class EmployeeApiRepository
 
             $p->time_left = ceil($times) + (count($days)*510) + ($not_check_in*270) + ($not_check_out*240);
             $p->presentase = $presentase . '%';
+            $p->hadir = $hadir;
+            $p->alfa = count($days);
+            $p->hari_kerja = $hari_kerja;
 
             return $p;
         });
