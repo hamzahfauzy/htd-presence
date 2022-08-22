@@ -540,6 +540,7 @@ class EmployeeApiRepository
                     $presence_time = strtotime(date('H:i',strtotime($ep['created_at'])));
 
                     $time_left = 0;
+                    $presentase2 = 0;
                     // terlalu cepat
                     if($presence_time < $on_time_start)
                     {
@@ -559,21 +560,25 @@ class EmployeeApiRepository
                         if($time_left >= 1 && $time_left < 31)
                         {
                             $presentase += 0.5;
+                            $presentase2 += 0.5;
                         }
 
                         if($time_left >= 31 && $time_left < 61)
                         {
                             $presentase += 1;
+                            $presentase2 += 1;
                         }
                         
                         if($time_left >= 61 && $time_left < 91)
                         {
                             $presentase += 1.25;
+                            $presentase2 += 1.25;
                         }
                         
                         if($time_left >= 91)
                         {
                             $presentase += 1.5;
+                            $presentase2 += 1.5;
                         }
                     }
 
@@ -584,13 +589,13 @@ class EmployeeApiRepository
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['lng'] = $ep['lng'];
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['time'] = $time;
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['in_location'] = $ep['in_location'];
+
+                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['time_left'] = ceil($time_left) + (($presence['name'] == "Masuk" ? 0 : 1 )*270) + (($presence['name'] == "Pulang" ? 0 : 1)*240);
+                    $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['presentase'] = $presentase2 . '%';
                 }
             }
 
-            $not_check_in = $masuk ? 0 : 1;
-            $not_check_out = $pulang ? 0 : 1;
-
-            $filtered[$ep['employee']['nip']."-".$date]['time_left'] = ceil($times) + ($not_check_in*270) + ($not_check_out*240);
+            $filtered[$ep['employee']['nip']."-".$date]['time_left'] = ceil($times) + (($masuk ? 0 : 1 )*270) + (($pulang ? 0 : 1)*240);
             $filtered[$ep['employee']['nip']."-".$date]['presentase'] = $presentase . '%';
         }
         
