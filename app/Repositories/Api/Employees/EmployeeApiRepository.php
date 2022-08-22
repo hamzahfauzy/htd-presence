@@ -231,6 +231,7 @@ class EmployeeApiRepository
         $data = $type ? $data->get() : $data->paginate($perPage);
 
         $data->transform(function($p) use($input){
+            $presentase = 0;
             $times = 0;
             foreach($p->presences as $presence){
                 if(!$presence->worktime_item){
@@ -269,6 +270,25 @@ class EmployeeApiRepository
 
                 if($time_left > 0){
                     $times += $time_left;
+                    if($time_left >= 1 && $time_left < 31)
+                    {
+                        $presentase += 0.5;
+                    }
+
+                    if($time_left >= 31 && $time_left < 61)
+                    {
+                        $presentase += 1;
+                    }
+                    
+                    if($time_left >= 61 && $time_left < 91)
+                    {
+                        $presentase += 1.25;
+                    }
+                    
+                    if($time_left >= 91)
+                    {
+                        $presentase += 1.5;
+                    }
                 }
             }
 
@@ -319,6 +339,7 @@ class EmployeeApiRepository
             Log::info('Days Off ' . count($days));
 
             $p->time_left = ceil($times) + (count($days)*510) + ($not_check_in*270) + ($not_check_out*240);
+            $p->presentase = $presentase . '%';
 
             return $p;
         });
