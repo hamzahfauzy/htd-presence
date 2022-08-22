@@ -197,27 +197,125 @@ class EmployeeApiRepository
                 }
             }
         })->withCount([
-            'presences AS izin' => function ($query) {
+            'presences AS izin' => function ($query) use ($input) {
                 $query->select(DB::raw("COUNT(*) as izin"))->where('type', 'izin');
+
+                if(isset($input['date_start']) && isset($input['date_end'])){
+                    $dateStart = date($input['date_start']).' 00:00:00';
+                    $dateEnd = date($input['date_end']).' 23:59:59';
+    
+                    if($dateStart != $dateEnd)
+                    {
+                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                    }
+                    else
+                    {
+                        $query->where('created_at',$dateStart);
+                    }
+                }
             },
-            'presences AS hadir' => function ($query) {
+            'presences AS hadir' => function ($query) use ($input) {
                 $query->select(DB::raw("COUNT(*) as hadir"))->where('type', 'hadir');
+
+                if(isset($input['date_start']) && isset($input['date_end'])){
+                    $dateStart = date($input['date_start']).' 00:00:00';
+                    $dateEnd = date($input['date_end']).' 23:59:59';
+    
+                    if($dateStart != $dateEnd)
+                    {
+                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                    }
+                    else
+                    {
+                        $query->where('created_at',$dateStart);
+                    }
+                }
             },
-            'presences AS cuti' => function ($query) {
+            'presences AS cuti' => function ($query) use ($input) {
                 $cuti = PaidLeave::get()->pluck('name');
                 $query->select(DB::raw("COUNT(*) as cuti"))->whereIn('type', $cuti);
+
+                if(isset($input['date_start']) && isset($input['date_end'])){
+                    $dateStart = date($input['date_start']).' 00:00:00';
+                    $dateEnd = date($input['date_end']).' 23:59:59';
+    
+                    if($dateStart != $dateEnd)
+                    {
+                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                    }
+                    else
+                    {
+                        $query->where('created_at',$dateStart);
+                    }
+                }
             },
-            'presences AS sakit' => function ($query) {
+            'presences AS sakit' => function ($query) use ($input) {
                 $query->select(DB::raw("COUNT(*) as sakit"))->where('type', 'sakit');
+
+                if(isset($input['date_start']) && isset($input['date_end'])){
+                    $dateStart = date($input['date_start']).' 00:00:00';
+                    $dateEnd = date($input['date_end']).' 23:59:59';
+    
+                    if($dateStart != $dateEnd)
+                    {
+                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                    }
+                    else
+                    {
+                        $query->where('created_at',$dateStart);
+                    }
+                }
             },
-            'presences AS tugasluar' => function ($query) {
+            'presences AS tugasluar' => function ($query) use ($input) {
                 $query->select(DB::raw("COUNT(*) as tugasluar"))->where('type', 'tugasluar');
+
+                if(isset($input['date_start']) && isset($input['date_end'])){
+                    $dateStart = date($input['date_start']).' 00:00:00';
+                    $dateEnd = date($input['date_end']).' 23:59:59';
+    
+                    if($dateStart != $dateEnd)
+                    {
+                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                    }
+                    else
+                    {
+                        $query->where('created_at',$dateStart);
+                    }
+                }
             },
-            'presences AS kegiatan' => function ($query) {
+            'presences AS kegiatan' => function ($query) use ($input) {
                 $query->select(DB::raw("COUNT(*) as kegiatan"))->where('type', 'kegiatan');
+
+                if(isset($input['date_start']) && isset($input['date_end'])){
+                    $dateStart = date($input['date_start']).' 00:00:00';
+                    $dateEnd = date($input['date_end']).' 23:59:59';
+    
+                    if($dateStart != $dateEnd)
+                    {
+                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                    }
+                    else
+                    {
+                        $query->where('created_at',$dateStart);
+                    }
+                }
             },
-            'presences AS alfa' => function ($query) {
+            'presences AS alfa' => function ($query) use ($input) {
                 $query->select(DB::raw("COUNT(*) as alfa"))->where('type', 'alfa');
+
+                if(isset($input['date_start']) && isset($input['date_end'])){
+                    $dateStart = date($input['date_start']).' 00:00:00';
+                    $dateEnd = date($input['date_end']).' 23:59:59';
+    
+                    if($dateStart != $dateEnd)
+                    {
+                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                    }
+                    else
+                    {
+                        $query->where('created_at',$dateStart);
+                    }
+                }
             },
         ])->with('presences');
 
