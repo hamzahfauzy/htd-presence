@@ -24,6 +24,7 @@ class WorktimeItemApiUpdateRequest extends APIRequest
             'end_time' => $this->getStringRules(),
             'on_time_start' => $this->getStringRules(),
             'on_time_end' => $this->getStringRules(),
+            'penalty' => 'required|integer',
         ];
     }
 

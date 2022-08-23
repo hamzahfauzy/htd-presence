@@ -143,8 +143,8 @@ class EmployeeApiRepository
         return $employee;
     }
 
-    function today(){
-        $day = date("D");
+    function today($d = null){
+        $day = $d == null ? date("D") : $d;
         switch($day){
             case 'Sun':
                 $today = "Minggu";
@@ -197,111 +197,9 @@ class EmployeeApiRepository
                 }
             }
         })->withCount([
-            'presences AS izin' => function ($query) use ($input) {
-                $query->select(DB::raw("COUNT(*) as izin"))->where('type', 'izin');
-
-                if(isset($input['date_start']) && isset($input['date_end'])){
-                    $dateStart = date($input['date_start']).' 00:00:00';
-                    $dateEnd = date($input['date_end']).' 23:59:59';
-    
-                    if($dateStart != $dateEnd)
-                    {
-                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
-                    }
-                    else
-                    {
-                        $query->where('created_at',$dateStart);
-                    }
-                }
-            },
-            // 'presences AS hadir' => function ($query) use ($input) {
-            //     $query->select(DB::raw("COUNT(*) as hadir"))->where('type', 'hadir');
-
-            //     if(isset($input['date_start']) && isset($input['date_end'])){
-            //         $dateStart = date($input['date_start']).' 00:00:00';
-            //         $dateEnd = date($input['date_end']).' 23:59:59';
-    
-            //         if($dateStart != $dateEnd)
-            //         {
-            //             $query->whereBetween('created_at',[$dateStart,$dateEnd]);
-            //         }
-            //         else
-            //         {
-            //             $query->where('created_at',$dateStart);
-            //         }
-            //     }
-            // },
             'presences AS cuti' => function ($query) use ($input) {
                 $cuti = PaidLeave::get()->pluck('name');
                 $query->select(DB::raw("COUNT(*) as cuti"))->whereIn('type', $cuti);
-
-                if(isset($input['date_start']) && isset($input['date_end'])){
-                    $dateStart = date($input['date_start']).' 00:00:00';
-                    $dateEnd = date($input['date_end']).' 23:59:59';
-    
-                    if($dateStart != $dateEnd)
-                    {
-                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
-                    }
-                    else
-                    {
-                        $query->where('created_at',$dateStart);
-                    }
-                }
-            },
-            'presences AS sakit' => function ($query) use ($input) {
-                $query->select(DB::raw("COUNT(*) as sakit"))->where('type', 'sakit');
-
-                if(isset($input['date_start']) && isset($input['date_end'])){
-                    $dateStart = date($input['date_start']).' 00:00:00';
-                    $dateEnd = date($input['date_end']).' 23:59:59';
-    
-                    if($dateStart != $dateEnd)
-                    {
-                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
-                    }
-                    else
-                    {
-                        $query->where('created_at',$dateStart);
-                    }
-                }
-            },
-            'presences AS tugasluar' => function ($query) use ($input) {
-                $query->select(DB::raw("COUNT(*) as tugasluar"))->where('type', 'tugasluar');
-
-                if(isset($input['date_start']) && isset($input['date_end'])){
-                    $dateStart = date($input['date_start']).' 00:00:00';
-                    $dateEnd = date($input['date_end']).' 23:59:59';
-    
-                    if($dateStart != $dateEnd)
-                    {
-                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
-                    }
-                    else
-                    {
-                        $query->where('created_at',$dateStart);
-                    }
-                }
-            },
-            'presences AS kegiatan' => function ($query) use ($input) {
-                $query->select(DB::raw("COUNT(*) as kegiatan"))->where('type', 'kegiatan');
-
-                if(isset($input['date_start']) && isset($input['date_end'])){
-                    $dateStart = date($input['date_start']).' 00:00:00';
-                    $dateEnd = date($input['date_end']).' 23:59:59';
-    
-                    if($dateStart != $dateEnd)
-                    {
-                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
-                    }
-                    else
-                    {
-                        $query->where('created_at',$dateStart);
-                    }
-                }
-            },
-            'presences AS alfa' => function ($query) use ($input) {
-                $query->select(DB::raw("COUNT(*) as alfa"))->where('type', 'alfa');
 
                 if(isset($input['date_start']) && isset($input['date_end'])){
                     $dateStart = date($input['date_start']).' 00:00:00';
@@ -342,127 +240,20 @@ class EmployeeApiRepository
 
         $data = $type ? $data->get() : $data->paginate($perPage);
 
-        $data->transform(function($p) use($input){
-            $presentase = 0;
-            $times = 0;
-            foreach($p->presences as $presence){
-                if(!$presence->worktime_item){
-                    continue;
-                }                
-
-                $on_time_start = strtotime($presence->worktime_item->on_time_start);
-                $on_time_end = strtotime($presence->worktime_item->on_time_end);
-                $presence_time = strtotime(date('H:i',strtotime($presence->created_at)));
-
-                if($presence_time >= $on_time_start && $presence_time <= $on_time_end)
-                {
-                    // on time
-                    Log::info($presence->worktime_item->name . ' On Time');
-                    continue;
-                }
-
-                // $on_time_end = strtotime(date('H:i:s', $on_time_end));
-                // $act = strtotime($presence->created_at);
-                // $act = strtotime(date('H:i:s', $act));
-
-                $time_left = 0;
-                // terlalu cepat
-                if($presence_time < $on_time_start)
-                {
-                    $time_left = ($on_time_start-$presence_time)/60;
-                    Log::info($presence->worktime_item->name . ' Cepat ' . $time_left);
-                }
-                
-                // terlalu lambat
-                if($presence_time > $on_time_end)
-                {
-                    $time_left = ($presence_time-$on_time_end)/60;
-                    Log::info($presence->worktime_item->name . ' Lambat ' . $time_left);
-                }
-
-                if($time_left > 0){
-                    $times += $time_left;
-                    if($time_left >= 1 && $time_left < 31)
-                    {
-                        $presentase += 0.5;
-                    }
-
-                    if($time_left >= 31 && $time_left < 61)
-                    {
-                        $presentase += 1;
-                    }
-                    
-                    if($time_left >= 61 && $time_left < 91)
-                    {
-                        $presentase += 1.25;
-                    }
-                    
-                    if($time_left >= 91)
-                    {
-                        $presentase += 1.5;
-                    }
-                }
-            }
-
-            $dates = $p->presences->pluck('created_at');
-
-            $formattedDates = $dates->map(function ($date) {
-                return $date->format('Y-m-d');
-            })->toArray();
-
+        foreach($data as $p)
+        {
             $start = new DateTime($input['date_start']);
             $end = new DateTime($input['date_end']);
             $oneday = new DateInterval("P1D");
 
-            $days = array();
-            $not_check_in = 0;
-            $not_check_out = 0;
-            $hari_kerja = 0;
-            $hadir = 0;
+            extract($this->presenceCalculation($start,$oneday,$end,$p));
 
-            foreach(new DatePeriod($start, $oneday, $end->add($oneday)) as $day) {
-                $day_num = $day->format("N");
-                $holiday = Holiday::where('date',$day->format('Y-m-d'))->exists();
-                if($day_num < 6 && $day_num > 0 && !$holiday) {
-                    $hari_kerja++;
-                    if(!in_array($day->format('Y-m-d'),$formattedDates))
-                    {
-                        $days[] = $day->format("Y-m-d");
-                    }
-                    else
-                    {
-                        $hadir++;
-                        $absen = $p->presences()->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
-                        $jumlah = $absen->count();
-                        Log::info('Jumlah '.$jumlah);
-                        if($jumlah < 2)
-                        {
-                            $absen = $absen->first();
-                            if($absen->worktime_item->id == 1)
-                            {
-                                Log::info('Gak Absen Masuk');
-                                $not_check_in++;
-                            }
-                            else
-                            {
-                                Log::info('Gak Absen Pulang');
-                                $not_check_out++;
-                            }
-                        }
-                    }
-                }
-            }
-
-            Log::info('Days Off ' . count($days));
-
-            $p->time_left = ceil($times) + (count($days)*510) + ($not_check_in*270) + ($not_check_out*240);
+            $p->time_left  = ceil($times);
             $p->presentase = $presentase . '%';
             $p->hadir = $hadir;
-            $p->alfa = count($days);
+            $p->alfa  = $alfa;
             $p->hari_kerja = $hari_kerja;
-
-            return $p;
-        });
+        }
 
         return $data;
     }
@@ -906,5 +697,168 @@ class EmployeeApiRepository
 
         // throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('messages.presence.not-found')), 400));
         return null;
+    }
+
+    public function presenceCalculation($start, $oneday, $end, $p)
+    {
+        $hari_kerja = 0;
+        $hadir = 0;
+        $alfa  = 0;
+        $presentase = 0;
+        $times = 0;
+
+        $dates = $p->presences->pluck('created_at');
+
+        $formattedDates = $dates->map(function ($date) {
+            return $date->format('Y-m-d');
+        })->toArray();
+
+        foreach(new DatePeriod($start, $oneday, $end->add($oneday)) as $day) {
+            $day_num = $day->format("N");
+            $holiday = Holiday::where('date',$day->format('Y-m-d'))->exists();
+            if($day_num < 6 && $day_num > 0 && !$holiday) {
+                $hari_kerja++;
+
+                $worktime_items = count($p->worktimes) ? $p->worktimes[0]->items : null;
+                    
+                if((empty($worktime_items) || !count($worktime_items)) && $p->workunit->worktimes && count($p->workunit->worktimes))
+                {
+                    $worktime_items = $p->workunit->worktimes[0]->items;
+                }        
+
+                if((empty($worktime_items) || !count($worktime_items)))
+                {
+                    $worktime_items = Worktime::whereid(1)->first()->items;
+                }
+
+                foreach($worktime_items as $index => $worktime_item)
+                {
+                    if($worktime_item->days){
+                        $days = explode(",",$worktime_item->days);
+        
+                        if(!in_array($this->today($day->format('D')),$days)){
+                            unset($worktime_items[$index]);
+                        }
+                    }
+                }
+                
+                if(!in_array($day->format('Y-m-d'),$formattedDates))
+                {
+                    $alfa++;
+                    foreach($worktime_items as $item)
+                    {
+                        $times += $item->penalty;
+                    }
+                    $presentase += 3;
+                }
+                else
+                {
+
+                    if(empty($worktime_items) || count($worktime_items) == 0) continue;
+
+                    $worktime_items = $worktime_items->toArray();
+                    
+                    $workime_item_ids = array_map(function($worktime_item){
+                        return $worktime_item['id'];
+                    }, $worktime_items);
+
+                    $hadir++;
+                    $absen = $p->presences()->with('worktime_item')->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
+                    $absences = $absen->get();
+                    $absence_ids = array_map(function($absence){
+                        return $absence['worktime_item']['id'];
+                    }, $absences->toArray());
+
+                    // get the different
+                    $diff = array_diff($workime_item_ids, $absence_ids);
+
+                    if($diff)
+                    {
+                        foreach($diff as $worktime_item_id)
+                        {
+                            $worktime_item = WorktimeItem::find($worktime_item_id);
+                            Log::info('Tidak Absen '.$worktime_item->name.' '.$day->format('Y-m-d'));
+
+                            Log::info($worktime_item->penalty);
+
+                            $times += $worktime_item->penalty;
+                            $presentase += 1.5;
+                        }
+                    }
+                    else
+                    {
+                        $day_time_left = 0;
+                        foreach($absences as $presence)
+                        {
+                            if(!$presence->worktime_item){
+                                continue;
+                            }
+                            
+                            $time_left = 0;
+            
+                            $on_time_start = strtotime($presence->worktime_item->on_time_start);
+                            $on_time_end = strtotime($presence->worktime_item->on_time_end);
+                            $presence_time = strtotime(date('H:i',strtotime($presence->created_at)));
+            
+                            if($presence_time >= $on_time_start && $presence_time <= $on_time_end)
+                            {
+                                // on time
+                                Log::info('On Time '.$day->format('Y-m-d'));
+                                continue;
+                            }
+            
+                            // terlalu cepat
+                            if($presence_time < $on_time_start)
+                            {
+                                $time_left = ($on_time_start-$presence_time)/60;
+                                Log::info('Cepat '.$time_left.' '.$day->format('Y-m-d'));
+                            }
+                            
+                            // terlalu lambat
+                            if($presence_time > $on_time_end)
+                            {
+                                $time_left = ($presence_time-$on_time_end)/60;
+                                Log::info('Lambat '.$time_left.' '.$day->format('Y-m-d'));
+                            }
+            
+                            if($time_left > 0){
+                                $day_time_left += $time_left;
+                            }
+                        }
+    
+                        $times += $day_time_left;
+    
+                        if($day_time_left >= 1 && $day_time_left < 31)
+                        {
+                            $presentase += 0.5;
+                        }
+    
+                        if($day_time_left >= 31 && $day_time_left < 61)
+                        {
+                            $presentase += 1;
+                        }
+                        
+                        if($day_time_left >= 61 && $day_time_left < 91)
+                        {
+                            $presentase += 1.25;
+                        }
+                        
+                        if($day_time_left >= 91)
+                        {
+                            $presentase += 1.5;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        return compact(
+            'hari_kerja',
+            'hadir',
+            'alfa',
+            'presentase',
+            'times'
+        );
     }
 }

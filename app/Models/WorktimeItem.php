@@ -33,6 +33,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *     type="string",
  *     example="00:00"
  *   ),
+ * @OA\Property(
+ *     property="penalty",
+ *     type="integer",
+ *     example="510"
+ *   ),
  *   
  * )
  */
