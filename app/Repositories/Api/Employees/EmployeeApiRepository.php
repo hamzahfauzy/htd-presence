@@ -353,7 +353,6 @@ class EmployeeApiRepository
                                 $time_left = $worktime_item->penalty;
                                 $times += $time_left;
                                 $presentase += 1.5;
-                                $presentase2 += 1.5;
                             }
                         }
                     }
