@@ -828,31 +828,33 @@ class EmployeeApiRepository
                             }
             
                             if($time_left > 0){
-                                $day_time_left += $time_left;
+                                $times += $time_left;
+
+                                if($time_left >= 1 && $time_left < 31)
+                                {
+                                    $presentase += 0.5;
+                                }
+            
+                                if($time_left >= 31 && $time_left < 61)
+                                {
+                                    $presentase += 1;
+                                }
+                                
+                                if($time_left >= 61 && $time_left < 91)
+                                {
+                                    $presentase += 1.25;
+                                }
+                                
+                                if($time_left >= 91)
+                                {
+                                    $presentase += 1.5;
+                                }
                             }
                         }
     
-                        $times += $day_time_left;
+                        // $times += $day_time_left;
     
-                        if($day_time_left >= 1 && $day_time_left < 31)
-                        {
-                            $presentase += 0.5;
-                        }
-    
-                        if($day_time_left >= 31 && $day_time_left < 61)
-                        {
-                            $presentase += 1;
-                        }
                         
-                        if($day_time_left >= 61 && $day_time_left < 91)
-                        {
-                            $presentase += 1.25;
-                        }
-                        
-                        if($day_time_left >= 91)
-                        {
-                            $presentase += 1.5;
-                        }
                     }
 
                 }
