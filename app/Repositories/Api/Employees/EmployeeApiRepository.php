@@ -310,73 +310,100 @@ class EmployeeApiRepository
             $presentase = 0;
             $times = 0;
 
+            $p = Employee::find($ep['employee']['id']);
             $masuk = false;
             $pulang = false;
 
             foreach ($presences as $presence) {
                 if($ep['presence_id'] == $presence['id']){   
 
-                    if($presence['name'] == "Masuk")
-                    {
-                        $masuk = true;
-                    }
-
-                    if($presence['name'] == "Pulang")
-                    {
-                        $pulang = true;
-                    }
-                    
-                    $on_time_start = strtotime($presence->on_time_start);
-                    $on_time_end = strtotime($presence->on_time_end);
-                    $presence_time = strtotime(date('H:i',strtotime($ep['created_at'])));
+                    $worktime_items = count($p->worktimes) ? $p->worktimes[0]->items : null;
 
                     $time_left = 0;
                     $presentase2 = 0;
-                    $isOnTime = false;
-                    if($presence_time >= $on_time_start && $presence_time <= $on_time_end)
-                    {
-                        // on time
-                        $isOnTime=true;
-                    }
-                    // terlalu cepat
-                    if($presence_time < $on_time_start)
-                    {
-                        $time_left = ($on_time_start-$presence_time)/60;
-                        Log::info($presence->name . ' Cepat ' . $time_left);
+
+                    $isDiff = false;
+
+                    if($worktime_items != null){
+                        $worktime_items = $worktime_items->toArray();
+                        
+                        $workime_item_ids = array_map(function($worktime_item){
+                            return $worktime_item['id'];
+                        }, $worktime_items);
+    
+                        $absen = $p->presences()->with('worktime_item')->where('created_at','LIKE','%'.$date.'%');
+                        $absences = $absen->get();
+                        $absence_ids = array_map(function($absence){
+                            return $absence['worktime_item']['id'];
+                        }, $absences->toArray());
+    
+                        // get the different
+                        $diff = array_diff($workime_item_ids, $absence_ids);
+
+                        if($diff)
+                        {
+                            $isDiff = true;
+                            foreach($diff as $worktime_item_id)
+                            {
+                                $worktime_item = WorktimeItem::find($worktime_item_id);
+                                Log::info('Tidak Absen '.$worktime_item->name.' '.$date);
+
+                                Log::info($worktime_item->penalty);
+                                
+                                $time_left = $worktime_item->penalty;
+                                $times += $time_left;
+                                $presentase += 1.5;
+                                $presentase2 += 1.5;
+                            }
+                        }
                     }
                     
-                    // terlalu lambat
-                    if($presence_time > $on_time_end)
-                    {
-                        $time_left = ($presence_time-$on_time_end)/60;
-                        Log::info($presence->name . ' Lambat ' . $time_left);
-                    }
-
-                    if($time_left > 0){
-                        $times += $time_left;
-                        if($time_left >= 1 && $time_left < 31)
+                    if(!$isDiff){
+                        $on_time_start = strtotime($presence->on_time_start);
+                        $on_time_end = strtotime($presence->on_time_end);
+                        $presence_time = strtotime(date('H:i',strtotime($ep['created_at'])));
+                        
+                        // terlalu cepat
+                        if($presence_time < $on_time_start)
                         {
-                            $presentase += 0.5;
-                            $presentase2 += 0.5;
-                        }
-
-                        if($time_left >= 31 && $time_left < 61)
-                        {
-                            $presentase += 1;
-                            $presentase2 += 1;
+                            $time_left = ($on_time_start-$presence_time)/60;
+                            Log::info($presence->name . ' Cepat ' . $time_left);
                         }
                         
-                        if($time_left >= 61 && $time_left < 91)
+                        // terlalu lambat
+                        if($presence_time > $on_time_end)
                         {
-                            $presentase += 1.25;
-                            $presentase2 += 1.25;
+                            $time_left = ($presence_time-$on_time_end)/60;
+                            Log::info($presence->name . ' Lambat ' . $time_left);
                         }
-                        
-                        if($time_left >= 91)
-                        {
-                            $presentase += 1.5;
-                            $presentase2 += 1.5;
+    
+                        if($time_left > 0){
+                            $times += $time_left;
+                            if($time_left >= 1 && $time_left < 31)
+                            {
+                                $presentase += 0.5;
+                                $presentase2 += 0.5;
+                            }
+    
+                            if($time_left >= 31 && $time_left < 61)
+                            {
+                                $presentase += 1;
+                                $presentase2 += 1;
+                            }
+                            
+                            if($time_left >= 61 && $time_left < 91)
+                            {
+                                $presentase += 1.25;
+                                $presentase2 += 1.25;
+                            }
+                            
+                            if($time_left >= 91)
+                            {
+                                $presentase += 1.5;
+                                $presentase2 += 1.5;
+                            }
                         }
+    
                     }
 
                     $filtered[$ep['employee']['nip']."-".$date]['types'][$presence['name']]['type'] = $presence['name'];
@@ -392,7 +419,7 @@ class EmployeeApiRepository
                 }
             }
 
-            $filtered[$ep['employee']['nip']."-".$date]['time_left'] = ceil($times) + (($masuk && !$pulang ? 0 : 1 )*270) + (($pulang && !$masuk ? 0 : 1)*240);
+            $filtered[$ep['employee']['nip']."-".$date]['time_left'] = ceil($times);
             $filtered[$ep['employee']['nip']."-".$date]['presentase'] = $presentase;
         }
         
