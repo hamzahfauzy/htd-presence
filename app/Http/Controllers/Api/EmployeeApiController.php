@@ -1080,8 +1080,8 @@ class EmployeeApiController extends Controller
                                </td>" . $additional;
 
 
-                // $dt['time_left']+=270;
-                // $dt['presentase']+=1.5;
+                $dt['time_left']+=270;
+                $dt['presentase']+=1.5;
             }
 
             if(!$pulang)
@@ -1099,8 +1099,8 @@ class EmployeeApiController extends Controller
                                 <p style='padding:12px'>1.5%</p>
                                </td>";
 
-                // $dt['time_left']+=240;
-                // $dt['presentase']+=1.5;
+                $dt['time_left']+=240;
+                $dt['presentase']+=1.5;
             }
 
             $html .= $additional;
