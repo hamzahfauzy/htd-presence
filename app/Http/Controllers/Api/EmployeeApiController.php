@@ -957,9 +957,9 @@ class EmployeeApiController extends Controller
 
         $html = "<html><head><title>Laporan Rekapitulasi</title></head><body>";
 
-        $html .= "<h2 align='center'>Laporan Rekapitulasi Absensi</h2>";
-        $html .= "<h2 align='center'>".$workunit->name."</h2>";
-        $html .= "<p align='center'>Periode ".date('d-m-Y',strtotime($request->date_start))." s/d ".date('d-m-Y',strtotime($request->date_end))."</p>";
+        $html .= "<h2 align='center' style='margin:6px'>Laporan Rekapitulasi Absensi</h2>";
+        $html .= "<h2 align='center' style='margin:6px'>".$workunit->name."</h2>";
+        $html .= "<p align='center' style='margin:6px'>Periode ".date('d-m-Y',strtotime($request->date_start))." s/d ".date('d-m-Y',strtotime($request->date_end))."</p>";
         $html .= "<table border=1 cellpaddong=5 cellspacing=0>";
         $html .= "<tr>";
         $html .= "<th style='padding:12px'>Nama</th>";
@@ -1003,9 +1003,9 @@ class EmployeeApiController extends Controller
 
         $html = "<html><head><title>Laporan Detail</title></head><body>";
 
-        $html .= "<h2 align='center' style='margin:0'>Laporan Detail Absensi</h2>";
-        $html .= "<h2 align='center' style='margin:0'>".$workunit->name."</h2>";
-        $html .= "<p align='center'>Periode ".date('d-m-Y',strtotime($request->date_start))." s/d ".date('d-m-Y',strtotime($request->date_end))."</p>";
+        $html .= "<h2 align='center' style='margin:6px'>Laporan Detail Absensi</h2>";
+        $html .= "<h2 align='center' style='margin:6px'>".$workunit->name."</h2>";
+        $html .= "<p align='center' style='margin:6px'>Periode ".date('d-m-Y',strtotime($request->date_start))." s/d ".date('d-m-Y',strtotime($request->date_end))."</p>";
         $html .= "<table border=1 cellpaddong=5 cellspacing=0>";
         $html .= "<tr>";
         $html .= "<th style='padding:12px;text-align:center' rowspan='2'>Tanggal</th>";
