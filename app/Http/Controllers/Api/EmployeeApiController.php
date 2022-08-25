@@ -1003,41 +1003,41 @@ class EmployeeApiController extends Controller
 
         $html = "<html><head><title>Laporan Detail</title></head><body>";
 
-        $html .= "<h2 align='center'>Laporan Detail Absensi</h2>";
-        $html .= "<h2 align='center'>".$workunit->name."</h2>";
+        $html .= "<h2 align='center' style='margin:0'>Laporan Detail Absensi</h2>";
+        $html .= "<h2 align='center' style='margin:0'>".$workunit->name."</h2>";
         $html .= "<p align='center'>Periode ".date('d-m-Y',strtotime($request->date_start))." s/d ".date('d-m-Y',strtotime($request->date_end))."</p>";
         $html .= "<table border=1 cellpaddong=5 cellspacing=0>";
         $html .= "<tr>";
-        $html .= "<th style='padding:12px' rowspan='2'>Tanggal</th>";
-        $html .= "<th style='padding:12px' rowspan='2'>Nama</th>";
-        $html .= "<th style='padding:12px' rowspan='2'>NIP</th>";
-        $html .= "<th style='padding:12px' rowspan='2'>Pangkat</th>";
-        $html .= "<th style='padding:12px' rowspan='2'>Jabatan</th>";
-        $html .= "<th style='padding:12px' colspan='4'>Masuk</th>";
-        $html .= "<th style='padding:12px' colspan='4'>Pulang</th>";
-        $html .= "<th style='padding:12px' colspan='2'>Total</th>";
+        $html .= "<th style='padding:12px;text-align:center' rowspan='2'>Tanggal</th>";
+        $html .= "<th style='padding:12px;text-align:center' rowspan='2'>Nama</th>";
+        $html .= "<th style='padding:12px;text-align:center' rowspan='2'>NIP</th>";
+        $html .= "<th style='padding:12px;text-align:center' rowspan='2'>Pangkat</th>";
+        $html .= "<th style='padding:12px;text-align:center' rowspan='2'>Jabatan</th>";
+        $html .= "<th style='padding:12px;text-align:center' colspan='4'>Masuk</th>";
+        $html .= "<th style='padding:12px;text-align:center' colspan='4'>Pulang</th>";
+        $html .= "<th style='padding:12px;text-align:center' colspan='2'>Total</th>";
         $html .= "</tr>";
         $html .= "<tr>";
-        $html .= "<th style='padding:12px'>Di Lokasi</th>";
-        $html .= "<th style='padding:12px'>Jam</th>";
-        $html .= "<th style='padding:12px'>Keterlambatan</th>";
-        $html .= "<th style='padding:12px'>%</th>";
-        $html .= "<th style='padding:12px'>Di Lokasi</th>";
-        $html .= "<th style='padding:12px'>Jam</th>";
-        $html .= "<th style='padding:12px'>Sebelum Waktu</th>";
-        $html .= "<th style='padding:12px'>%</th>";
-        $html .= "<th style='padding:12px'>Kekurangan Waktu</th>";
-        $html .= "<th style='padding:12px'>Persentase Kekurangan</th>";
+        $html .= "<th style='padding:12px;text-align:center'>Di Lokasi</th>";
+        $html .= "<th style='padding:12px;text-align:center'>Jam</th>";
+        $html .= "<th style='padding:12px;text-align:center'>Keterlambatan</th>";
+        $html .= "<th style='padding:12px;text-align:center'>%</th>";
+        $html .= "<th style='padding:12px;text-align:center'>Di Lokasi</th>";
+        $html .= "<th style='padding:12px;text-align:center'>Jam</th>";
+        $html .= "<th style='padding:12px;text-align:center'>Sebelum Waktu</th>";
+        $html .= "<th style='padding:12px;text-align:center'>%</th>";
+        $html .= "<th style='padding:12px;text-align:center'>Kekurangan Waktu</th>";
+        $html .= "<th style='padding:12px;text-align:center'>Persentase Kekurangan</th>";
         $html .= "</tr>";
 
         $i = 1;
         foreach($data['data'] as $dt){
             $html .= "<tr>";
-            $html .= "<td style='padding:12px'>".date('d-m-Y',strtotime($dt['date']))."</td>";
-            $html .= "<td style='padding:12px'>$dt[name]</td>";
-            $html .= "<td style='padding:12px'>$dt[nip]</td>";
-            $html .= "<td style='padding:12px'>$dt[group]</td>";
-            $html .= "<td style='padding:12px'>$dt[position]</td>";
+            $html .= "<td style='padding:12px;text-align:center'>".date('d-m-Y',strtotime($dt['date']))."</td>";
+            $html .= "<td style='padding:12px;text-align:center'>$dt[name]</td>";
+            $html .= "<td style='padding:12px;text-align:center'>$dt[nip]</td>";
+            $html .= "<td style='padding:12px;text-align:center'>$dt[group]</td>";
+            $html .= "<td style='padding:12px;text-align:center'>$dt[position]</td>";
             $masuk  = false;
             $pulang = false;
             $additional = "";
@@ -1052,33 +1052,33 @@ class EmployeeApiController extends Controller
                     $pulang = true;
                 }
                 
-                $additional .= "<td style='padding:12px'>";
-                $additional .= "<p style='padding:12px'>".$type['in_location'] ? "Ya" : "Tidak"."</p>";
+                $additional .= "<td style='padding:12px;text-align:center'>";
+                $additional .= "<p style='padding:12px;text-align:center'>".$type['in_location'] ? "Ya" : "Tidak"."</p>";
                 $additional .= "</td>";
-                $additional .= "<td style='padding:12px'>";
-                $additional .= "<p style='padding:12px'>$type[time]</p>";
+                $additional .= "<td style='padding:12px;text-align:center'>";
+                $additional .= "<p style='padding:12px;text-align:center'>$type[time]</p>";
                 $additional .= "</td>";
-                $additional .= "<td style='padding:12px'>";
-                $additional .= "<p style='padding:12px'>$type[time_left]</p>";
+                $additional .= "<td style='padding:12px;text-align:center'>";
+                $additional .= "<p style='padding:12px;text-align:center'>$type[time_left]</p>";
                 $additional .= "</td>";
-                $additional .= "<td style='padding:12px'>";
-                $additional .= "<p style='padding:12px'>$type[presentase]%</p>";
+                $additional .= "<td style='padding:12px;text-align:center'>";
+                $additional .= "<p style='padding:12px;text-align:center'>$type[presentase]%</p>";
                 $additional .= "</td>";
             }
 
             if(!$masuk)
             {
-                $additional = "<td style='padding:12px'>
-                                <p style='padding:12px'>-</p>
+                $additional = "<td style='padding:12px;text-align:center'>
+                                <p style='padding:12px;text-align:center'>-</p>
                                </td>
-                               <td style='padding:12px'>
-                                <p style='padding:12px'>-</p>
+                               <td style='padding:12px;text-align:center'>
+                                <p style='padding:12px;text-align:center'>-</p>
                                </td>
-                               <td style='padding:12px'>
-                                <p style='padding:12px'>270</p>
+                               <td style='padding:12px;text-align:center'>
+                                <p style='padding:12px;text-align:center'>270</p>
                                </td>
-                               <td style='padding:12px'>
-                                <p style='padding:12px'>1.5%</p>
+                               <td style='padding:12px;text-align:center'>
+                                <p style='padding:12px;text-align:center'>1.5%</p>
                                </td>" . $additional;
 
 
@@ -1088,17 +1088,17 @@ class EmployeeApiController extends Controller
 
             if(!$pulang)
             {
-                $additional .= "<td style='padding:12px'>
-                                <p style='padding:12px'>-</p>
+                $additional .= "<td style='padding:12px;text-align:center'>
+                                <p style='padding:12px;text-align:center'>-</p>
                                </td>
-                               <td style='padding:12px'>
-                                <p style='padding:12px'>-</p>
+                               <td style='padding:12px;text-align:center'>
+                                <p style='padding:12px;text-align:center'>-</p>
                                </td>
-                               <td style='padding:12px'>
-                                <p style='padding:12px'>240</p>
+                               <td style='padding:12px;text-align:center'>
+                                <p style='padding:12px;text-align:center'>240</p>
                                </td>
-                               <td style='padding:12px'>
-                                <p style='padding:12px'>1.5%</p>
+                               <td style='padding:12px;text-align:center'>
+                                <p style='padding:12px;text-align:center'>1.5%</p>
                                </td>";
 
                 $dt['time_left']+=240;
@@ -1107,8 +1107,8 @@ class EmployeeApiController extends Controller
 
             $html .= $additional;
 
-            $html .= "<td style='padding:12px'>$dt[time_left]</td>";
-            $html .= "<td style='padding:12px'>$dt[presentase]%</td>";
+            $html .= "<td style='padding:12px;text-align:center'>$dt[time_left]</td>";
+            $html .= "<td style='padding:12px;text-align:center'>$dt[presentase]%</td>";
 
             $html .= "</tr>";
             $i++;
