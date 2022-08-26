@@ -831,6 +831,8 @@ class EmployeeApiRepository
                 $row['id']   = $p->id;
                 $row['nip']  = $p->nip;
                 $row['name'] = $p->name;
+                $row['group'] = $p->group;
+                $row['position'] = $p->position;
                 $row['workunit'] = $p->workunit->name;
                 $row['date'] = $day->format('Y-m-d');
 

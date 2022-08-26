@@ -1038,25 +1038,15 @@ class EmployeeApiController extends Controller
             $html .= "<td style='padding:12px;text-align:center'>$dt[nip]</td>";
             $html .= "<td style='padding:12px;text-align:center'>$dt[group]</td>";
             $html .= "<td style='padding:12px;text-align:center'>$dt[position]</td>";
-            $masuk  = false;
-            $pulang = false;
+            
             $additional = "";
             foreach($dt['types'] as $type){
-                if($type['type'] == "Masuk")
-                {
-                    $masuk = true;
-                }
-
-                if($type['type'] == "Pulang")
-                {
-                    $pulang = true;
-                }
                 
                 $additional .= "<td style='padding:12px;text-align:center'>";
                 $additional .= "<p style='padding:12px;text-align:center'>".$type['in_location'] ? "Ya" : "Tidak"."</p>";
                 $additional .= "</td>";
                 $additional .= "<td style='padding:12px;text-align:center'>";
-                $additional .= "<p style='padding:12px;text-align:center'>$type[time]</p>";
+                $additional .= "<p style='padding:12px;text-align:center'>".$type['time'] ?? "-"."</p>";
                 $additional .= "</td>";
                 $additional .= "<td style='padding:12px;text-align:center'>";
                 $additional .= "<p style='padding:12px;text-align:center'>$type[time_left]</p>";
@@ -1064,45 +1054,6 @@ class EmployeeApiController extends Controller
                 $additional .= "<td style='padding:12px;text-align:center'>";
                 $additional .= "<p style='padding:12px;text-align:center'>$type[presentase]%</p>";
                 $additional .= "</td>";
-            }
-
-            if(!$masuk)
-            {
-                $additional = "<td style='padding:12px;text-align:center'>
-                                <p style='padding:12px;text-align:center'>-</p>
-                               </td>
-                               <td style='padding:12px;text-align:center'>
-                                <p style='padding:12px;text-align:center'>-</p>
-                               </td>
-                               <td style='padding:12px;text-align:center'>
-                                <p style='padding:12px;text-align:center'>270</p>
-                               </td>
-                               <td style='padding:12px;text-align:center'>
-                                <p style='padding:12px;text-align:center'>1.5%</p>
-                               </td>" . $additional;
-
-
-                $dt['time_left']+=270;
-                $dt['presentase']+=1.5;
-            }
-
-            if(!$pulang)
-            {
-                $additional .= "<td style='padding:12px;text-align:center'>
-                                <p style='padding:12px;text-align:center'>-</p>
-                               </td>
-                               <td style='padding:12px;text-align:center'>
-                                <p style='padding:12px;text-align:center'>-</p>
-                               </td>
-                               <td style='padding:12px;text-align:center'>
-                                <p style='padding:12px;text-align:center'>240</p>
-                               </td>
-                               <td style='padding:12px;text-align:center'>
-                                <p style='padding:12px;text-align:center'>1.5%</p>
-                               </td>";
-
-                $dt['time_left']+=240;
-                $dt['presentase']+=1.5;
             }
 
             $html .= $additional;
