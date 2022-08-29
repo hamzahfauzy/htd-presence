@@ -1000,6 +1000,12 @@ class EmployeeApiRepository
                     }   
                 }
 
+                $types = $row['types'];
+
+                sort($types);
+
+                $row['types'] = $types;
+
                 $row['time_left'] = ceil($times);
                 $row['presentase'] = $presentase;
                 $rows[] = $row;

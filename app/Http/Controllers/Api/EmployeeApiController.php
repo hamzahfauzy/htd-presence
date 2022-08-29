@@ -1043,7 +1043,7 @@ class EmployeeApiController extends Controller
             foreach($dt['types'] as $type){
                 
                 $additional .= "<td style='padding:12px;text-align:center'>";
-                $additional .= "<p style='padding:12px;text-align:center'>".$type['in_location'] ? "Ya" : "Tidak"."</p>";
+                $additional .= "<p style='padding:12px;text-align:center'>".((string)$type['in_location'] === "1" ? "Ya" : "Tidak")."</p>";
                 $additional .= "</td>";
                 $additional .= "<td style='padding:12px;text-align:center'>";
                 $additional .= "<p style='padding:12px;text-align:center'>".$type['time'] ?? "-"."</p>";
