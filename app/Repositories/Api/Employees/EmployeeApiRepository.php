@@ -249,9 +249,24 @@ class EmployeeApiRepository
             $end = new DateTime($input['date_end']);
             $oneday = new DateInterval("P1D");
 
-            extract($this->presenceCalculation($start,$oneday,$end,$p));
+            // extract($this->presenceCalculation($start,$oneday,$end,$p));
+            $calc = $this->presenceCalculationDetail($start,$oneday,$end,$p);
 
-            $p->time_left  = ceil($times);
+            $time_left = 0;
+            $presentase = 0;
+            $hadir = 0;
+            $alfa = 0;
+            $hari_kerja = 0;
+            foreach($calc as $c)
+            {
+                $time_left += $c['time_left'];
+                $presentase += $c['presentase']; 
+                $hadir += $c['hadir']; 
+                $alfa += $c['alfa']; 
+                $hari_kerja += $c['hari_kerja']; 
+            }
+
+            $p->time_left  = $time_left;
             $p->presentase = $presentase . '%';
             $p->hadir = $hadir;
             $p->alfa  = $alfa;
@@ -329,15 +344,15 @@ class EmployeeApiRepository
 
         $rows = [];
 
-        // foreach ($type ? $data : $data['data'] as $p) 
-        // {
         foreach($data as $p)
         {
             $start = new DateTime($input['date_start']);
             $end = new DateTime($input['date_end']);
             $oneday = new DateInterval("P1D");
 
-            $rows += $this->presenceCalculationDetail($start,$oneday,$end,$p);
+            $row = $this->presenceCalculationDetail($start,$oneday,$end,$p);
+            Log::info($row);
+            $rows += $row;
         }
 
         $data = $data->toArray();
@@ -808,10 +823,6 @@ class EmployeeApiRepository
 
     public function presenceCalculationDetail($start, $oneday, $end, $p)
     {
-        $hari_kerja = 0;
-        $hadir = 0;
-        $alfa  = 0;
-
         $dates = $p->presences->pluck('created_at');
 
         $formattedDates = $dates->map(function ($date) {
@@ -824,6 +835,9 @@ class EmployeeApiRepository
             $day_num = $day->format("N");
             $holiday = Holiday::where('date',$day->format('Y-m-d'))->exists();
 
+            $hari_kerja = 0;
+            $hadir = 0;
+            $alfa  = 0;
             $presentase = 0;
             $times = 0;
             
@@ -1008,6 +1022,9 @@ class EmployeeApiRepository
 
                 $row['time_left'] = ceil($times);
                 $row['presentase'] = $presentase;
+                $row['hari_kerja'] = $hari_kerja;
+                $row['hadir'] = $hadir;
+                $row['alfa'] = $alfa;
                 $rows[] = $row;
             }
 

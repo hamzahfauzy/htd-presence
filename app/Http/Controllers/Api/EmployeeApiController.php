@@ -970,7 +970,7 @@ class EmployeeApiController extends Controller
         $html .= "<th style='padding:12px'>Alfa</th>";
         $html .= "<th style='padding:12px'>Cuti</th>";
         $html .= "<th style='padding:12px'>Hari Kerja</th>";
-        $html .= "<th style='padding:12px'>Waktu Telat (Menit)</th>";
+        $html .= "<th style='padding:12px'>Kekurangan Waktu (Menit)</th>";
         $html .= "<th style='padding:12px'>Persentase</th>";
         $html .= "</tr>";
 
