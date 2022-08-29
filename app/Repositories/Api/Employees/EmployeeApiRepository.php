@@ -113,7 +113,7 @@ class EmployeeApiRepository
                         break;
                     }
                 }
-            }        
+            }    
 
             if(empty($active_worktime))
             {
@@ -125,6 +125,9 @@ class EmployeeApiRepository
                 {
                     $active_worktime = $worktime->items[0];
                 }
+
+                $employee->active_worktime = $active_worktime;
+
             }else{
                 if($active_worktime->days){
                     $days = explode(",",$active_worktime->days);
