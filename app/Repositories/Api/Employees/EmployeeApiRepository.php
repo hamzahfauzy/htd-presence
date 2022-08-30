@@ -357,10 +357,12 @@ class EmployeeApiRepository
             $rows += $row;
         }
 
-        $data = $data->toArray();
-        $data['data'] = $rows;
+        // $data = $data->toArray();
+        // $data['data'] = $rows;
 
-        return $data;
+        return [
+            'data' => $data
+        ];
     }
 
     public function create($input)
