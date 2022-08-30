@@ -184,7 +184,7 @@ class EmployeeApiRepository
         $orderBy = $input['order_by'] ?? 'asc';
         $perPage = $input['per_page'] ?? 10;
 
-        $data = Employee::withCount([
+        $data = Employee::where('workunit_id',$workunit_id)->withCount([
             'presences AS cuti' => function ($query) use ($input) {
                 $cuti = PaidLeave::get()->pluck('name');
                 $query->select(DB::raw("COUNT(*) as cuti"))->whereIn('type', $cuti);
@@ -254,7 +254,7 @@ class EmployeeApiRepository
         $orderBy = $input['order_by'] ?? 'asc';
         $perPage = $input['per_page'] ?? 10;
 
-        $data = Employee::withCount([
+        $data = Employee::where('workunit_id',$workunit_id)->withCount([
             'presences AS cuti' => function ($query) use ($input) {
                 $cuti = PaidLeave::get()->pluck('name');
                 $query->select(DB::raw("COUNT(*) as cuti"))->whereIn('type', $cuti);
