@@ -183,23 +183,7 @@ class EmployeeApiRepository
         $orderBy = $input['order_by'] ?? 'asc';
         $perPage = $input['per_page'] ?? 10;
 
-        $data = Employee::whereHas('presences', function($query) use ($workunit_id, $input){
-            $query->where('workunit_id',$workunit_id);
-
-            if(isset($input['date_start']) && isset($input['date_end'])){
-                $dateStart = date($input['date_start']).' 00:00:00';
-                $dateEnd = date($input['date_end']).' 23:59:59';
-
-                if($dateStart != $dateEnd)
-                {
-                    $query->whereBetween('created_at',[$dateStart,$dateEnd]);
-                }
-                else
-                {
-                    $query->where('created_at',$dateStart);
-                }
-            }
-        })->withCount([
+        $data = Employee::withCount([
             'presences AS cuti' => function ($query) use ($input) {
                 $cuti = PaidLeave::get()->pluck('name');
                 $query->select(DB::raw("COUNT(*) as cuti"))->whereIn('type', $cuti);
@@ -218,21 +202,7 @@ class EmployeeApiRepository
                     }
                 }
             },
-        ])->with(['presences' => function($query) use ($input){
-            if(isset($input['date_start']) && isset($input['date_end'])){
-                $dateStart = date($input['date_start']).' 00:00:00';
-                $dateEnd = date($input['date_end']).' 23:59:59';
-
-                if($dateStart != $dateEnd)
-                {
-                    $query->whereBetween('created_at',[$dateStart,$dateEnd]);
-                }
-                else
-                {
-                    $query->where('created_at',$dateStart);
-                }
-            }
-        }]);
+        ]);
 
         if(isset($input['keyword']) && !empty($input['keyword']))
         {
@@ -283,23 +253,7 @@ class EmployeeApiRepository
         $orderBy = $input['order_by'] ?? 'asc';
         $perPage = $input['per_page'] ?? 10;
 
-        $data = Employee::whereHas('presences', function($query) use ($workunit_id, $input){
-            $query->where('workunit_id',$workunit_id);
-
-            if(isset($input['date_start']) && isset($input['date_end'])){
-                $dateStart = date($input['date_start']).' 00:00:00';
-                $dateEnd = date($input['date_end']).' 23:59:59';
-
-                if($dateStart != $dateEnd)
-                {
-                    $query->whereBetween('created_at',[$dateStart,$dateEnd]);
-                }
-                else
-                {
-                    $query->where('created_at',$dateStart);
-                }
-            }
-        })->withCount([
+        $data = Employee::withCount([
             'presences AS cuti' => function ($query) use ($input) {
                 $cuti = PaidLeave::get()->pluck('name');
                 $query->select(DB::raw("COUNT(*) as cuti"))->whereIn('type', $cuti);
@@ -318,21 +272,7 @@ class EmployeeApiRepository
                     }
                 }
             },
-        ])->with(['presences' => function($query) use ($input){
-            if(isset($input['date_start']) && isset($input['date_end'])){
-                $dateStart = date($input['date_start']).' 00:00:00';
-                $dateEnd = date($input['date_end']).' 23:59:59';
-
-                if($dateStart != $dateEnd)
-                {
-                    $query->whereBetween('created_at',[$dateStart,$dateEnd]);
-                }
-                else
-                {
-                    $query->where('created_at',$dateStart);
-                }
-            }
-        }]);
+        ]);
 
         if(isset($input['keyword']) && !empty($input['keyword']))
         {
@@ -356,9 +296,6 @@ class EmployeeApiRepository
             Log::info($row);
             $rows += $row;
         }
-
-        // $data = $data->toArray();
-        // $data['data'] = $rows;
 
         return [
             'data' => $rows
