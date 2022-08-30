@@ -257,26 +257,7 @@ class EmployeeApiRepository
         $orderBy = $input['order_by'] ?? 'asc';
         $perPage = $input['per_page'] ?? 10;
 
-        $data = Employee::where('workunit_id',$workunit_id)->withCount([
-            'presences AS cuti' => function ($query) use ($input) {
-                $cuti = PaidLeave::get()->pluck('name');
-                $query->select(DB::raw("COUNT(*) as cuti"))->whereIn('type', $cuti);
-
-                if(isset($input['date_start']) && isset($input['date_end'])){
-                    $dateStart = date($input['date_start']).' 00:00:00';
-                    $dateEnd = date($input['date_end']).' 23:59:59';
-    
-                    if($dateStart != $dateEnd)
-                    {
-                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
-                    }
-                    else
-                    {
-                        $query->where('created_at',$dateStart);
-                    }
-                }
-            },
-        ]);
+        $data = Employee::where('workunit_id',$workunit_id);
 
         if(isset($input['keyword']) && !empty($input['keyword']))
         {
@@ -297,7 +278,7 @@ class EmployeeApiRepository
             $oneday = new DateInterval("P1D");
 
             $row = $this->presenceCalculationDetail($start,$oneday,$end,$p);
-            $rows += $row;
+            $rows[] = $row;
         }
 
         return [
