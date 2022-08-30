@@ -245,7 +245,10 @@ class EmployeeApiRepository
             $p->hari_kerja = $hari_kerja;
         }
 
-        return $data;
+        return [
+            'data' => $data,
+            'length' => count($data)
+        ];
     }
 
     public function reportDetails($workunit_id,$input,$type = false)
@@ -298,7 +301,8 @@ class EmployeeApiRepository
         }
 
         return [
-            'data' => $rows
+            'data' => $rows,
+            'length' => count($data)
         ];
         // return (new Collection($rows))->paginate($perPage);;
     }
