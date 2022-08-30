@@ -211,8 +211,8 @@ class EmployeeApiRepository
 
         $data = $data->orderBy($sortBy, $orderBy);
 
-        // $data = $type ? $data->get() : $data->paginate($perPage);
-        $data = $data->get();
+        $data = $type ? $data->get() : $data->paginate($perPage);
+        // $data = $data->get();
 
         foreach($data as $p)
         {
