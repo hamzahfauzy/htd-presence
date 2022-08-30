@@ -212,8 +212,8 @@ class EmployeeApiRepository
 
         $data = $data->orderBy($sortBy, $orderBy);
 
-        $data = $type ? $data->get() : $data->paginate($perPage);
-        // $data = $data->get();
+        // $data = $type ? $data->get() : $data->paginate($perPage);
+        $data = $data->get();
 
         foreach($data as $p)
         {
@@ -297,7 +297,10 @@ class EmployeeApiRepository
             $rows += $row;
         }
 
-        return (new Collection($rows))->paginate($perPage);;
+        return [
+            'data' => $rows
+        ];
+        // return (new Collection($rows))->paginate($perPage);;
     }
 
     public function create($input)
