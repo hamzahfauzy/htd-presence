@@ -361,7 +361,7 @@ class EmployeeApiRepository
         // $data['data'] = $rows;
 
         return [
-            'data' => $data
+            'data' => $rows
         ];
     }
 
