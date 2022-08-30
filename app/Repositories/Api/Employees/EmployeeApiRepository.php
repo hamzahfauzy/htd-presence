@@ -278,7 +278,7 @@ class EmployeeApiRepository
             $oneday = new DateInterval("P1D");
 
             $row = $this->presenceCalculationDetail($start,$oneday,$end,$p);
-            $rows[] = $row;
+            $rows = array_merge($rows, $row);
         }
 
         return [
