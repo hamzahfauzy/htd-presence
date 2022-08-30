@@ -12,6 +12,7 @@ use App\Models\Worktime;
 use App\Models\PaidLeave;
 use App\Http\ResponseUtil;
 use App\Models\WorktimeItem;
+use App\Services\Collection;
 use App\Models\EmployeePresence;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -293,13 +294,10 @@ class EmployeeApiRepository
             $oneday = new DateInterval("P1D");
 
             $row = $this->presenceCalculationDetail($start,$oneday,$end,$p);
-            Log::info($row);
             $rows += $row;
         }
 
-        return [
-            'data' => $rows
-        ];
+        return (new Collection($rows))->paginate($perPage);;
     }
 
     public function create($input)
