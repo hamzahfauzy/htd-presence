@@ -895,7 +895,7 @@ class EmployeeApiRepository
                         $row['types'][$presence->worktime_item->name]['time_left'] = 0;
                         $row['types'][$presence->worktime_item->name]['presentase'] = 0;
                         $row['types'][$presence->worktime_item->name]['worktime_item'] = $presence->worktime_item;
-                        $row['types'][$presence->worktime_item->name]['date'] = $presence->created_at;
+                        $row['types'][$presence->worktime_item->name]['date'] = $presence->created_at->format('Y-m-d H:i:s');
         
                         $on_time_start = strtotime($presence->worktime_item->on_time_start);
                         $on_time_end   = strtotime($presence->worktime_item->on_time_end);
