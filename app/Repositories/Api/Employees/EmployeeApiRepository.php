@@ -503,31 +503,51 @@ class EmployeeApiRepository
 
     public function listPresence($input)
     {
-        $Employee = Employee::whereId($input['id'])->first();
+        // $Employee = Employee::whereId($input['id'])->first();
 
-        $start = new DateTime($input['date_from']);
-        $end = new DateTime($input['date_to']);
-        $oneday = new DateInterval("P1D");
+        // $start = new DateTime($input['date_from']);
+        // $end = new DateTime($input['date_to']);
+        // $oneday = new DateInterval("P1D");
 
-        $detail = $this->presenceCalculationDetail($start, $oneday, $end, $Employee);
+        // $detail = $this->presenceCalculationDetail($start, $oneday, $end, $Employee);
         
-        $presences = [];
-        foreach($detail as $d)
-        {
-            $types = $d['types'];
-            foreach($types as $key => $type)
-            {
-                $types[$key]['type'] = "Hadir";
-                if($type['time_left'] == $type['worktime_item']->penalty)
-                {
-                    $types[$key]['type'] = "Tidak Hadir";
-                }
-            }
-            $presences = array_merge($presences, $types);
-        }
+        // $presences = [];
+        // foreach($detail as $d)
+        // {
+        //     $types = $d['types'];
+        //     foreach($types as $key => $type)
+        //     {
+        //         $types[$key]['type'] = "Hadir";
+        //         if($type['time_left'] == $type['worktime_item']->penalty)
+        //         {
+        //             $types[$key]['type'] = "Tidak Hadir";
+        //         }
+        //     }
+        //     $presences = array_merge($presences, $types);
+        // }
 
-        $Employee = $Employee->toArray();
-        $Employee['presences'] = $presences;
+        // $Employee = $Employee->toArray();
+        // $Employee['presences'] = $presences;
+
+        $Employee = Employee::whereId($input['id'])->with(
+        [
+            'presences'=>function($query) use ($input){
+                $sortBy = $input['sort_by'] ?? 'id';
+                $orderBy = $input['order_by'] ?? 'desc';
+
+                if($input['type']){
+                    $query->where('type',$input['type']);
+                }
+                if($input['status']){
+                    $query->where('status',$input['status']);
+                }
+                if($input['date_from'] && $input['date_to']){
+                    $query->whereBetween('created_at',[$input['date_from'],$input['date_to']]);
+                }
+                $query->orderby($sortBy, $orderBy);
+            },
+            'presences.worktime_item'
+        ])->first();
 
         return $Employee;
     }
