@@ -866,6 +866,7 @@ class EmployeeApiRepository
                         $row['types'][$item->name]['pic_url'] = false;
                         $row['types'][$item->name]['lat'] = false;
                         $row['types'][$item->name]['lng'] = false;
+                        $row['types'][$item->name]['status'] = false;
                         $row['types'][$item->name]['time'] = false;
                         $row['types'][$item->name]['in_location'] = false;
                         $row['types'][$item->name]['time_left'] = $item->penalty;
@@ -914,6 +915,7 @@ class EmployeeApiRepository
                             $row['types'][$worktime_item->name]['pic_url'] = false;
                             $row['types'][$worktime_item->name]['lat'] = false;
                             $row['types'][$worktime_item->name]['lng'] = false;
+                            $row['types'][$worktime_item->name]['status'] = false;
                             $row['types'][$worktime_item->name]['time'] = false;
                             $row['types'][$worktime_item->name]['in_location'] = false;
                             $row['types'][$worktime_item->name]['time_left'] = $worktime_item->penalty;
@@ -944,6 +946,7 @@ class EmployeeApiRepository
                         $row['types'][$presence->worktime_item->name]['presentase'] = 0;
                         $row['types'][$presence->worktime_item->name]['worktime_item'] = $presence->worktime_item;
                         $row['types'][$presence->worktime_item->name]['date'] = $presence->created_at->format('Y-m-d H:i:s');
+                        $row['types'][$presence->worktime_item->name]['status'] = $presence->status;
         
                         $on_time_start = strtotime($presence->worktime_item->on_time_start);
                         $on_time_end   = strtotime($presence->worktime_item->on_time_end);
