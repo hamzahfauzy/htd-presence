@@ -514,7 +514,16 @@ class EmployeeApiRepository
         $presences = [];
         foreach($detail as $d)
         {
-            $presences = array_merge($presences, $d['types']);
+            $types = $d['types'];
+            foreach($types as $key => $type)
+            {
+                $types[$key]['type'] = "Hadir";
+                if($type['time_left'] == $type['worktime_item']->penalty)
+                {
+                    $types[$key]['type'] = "Tidak Hadir";
+                }
+            }
+            $presences = array_merge($presences, $types);
         }
 
         $Employee = $Employee->toArray();
@@ -815,6 +824,7 @@ class EmployeeApiRepository
                         $row['types'][$item->name]['in_location'] = false;
                         $row['types'][$item->name]['time_left'] = $item->penalty;
                         $row['types'][$item->name]['presentase'] = 1.5;
+                        $row['types'][$item->name]['worktime_item'] = $item;
                     }
                     $presentase += 3;
                 }
@@ -860,6 +870,7 @@ class EmployeeApiRepository
                             $row['types'][$worktime_item->name]['in_location'] = false;
                             $row['types'][$worktime_item->name]['time_left'] = $worktime_item->penalty;
                             $row['types'][$worktime_item->name]['presentase'] = 1.5;
+                            $row['types'][$worktime_item->name]['worktime_item'] = $worktime_item;
                         }
                     }
 
@@ -881,6 +892,7 @@ class EmployeeApiRepository
                         $row['types'][$presence->worktime_item->name]['in_location'] = $presence->in_location;
                         $row['types'][$presence->worktime_item->name]['time_left'] = 0;
                         $row['types'][$presence->worktime_item->name]['presentase'] = 0;
+                        $row['types'][$presence->worktime_item->name]['worktime_item'] = $presence->worktime_item;
         
                         $on_time_start = strtotime($presence->worktime_item->on_time_start);
                         $on_time_end   = strtotime($presence->worktime_item->on_time_end);
