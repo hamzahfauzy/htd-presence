@@ -518,6 +518,9 @@ class EmployeeApiRepository
             foreach($types as $key => $type)
             {
                 $types[$key]['type'] = "Hadir";
+                $types[$key]['created_at'] = $types[$key]['time_left'];
+                $types[$key]['worktime_item']->on_time_start = 0;
+                $types[$key]['worktime_item']->on_time_end = 0;
                 if($type['time_left'] == $type['worktime_item']->penalty)
                 {
                     $types[$key]['type'] = "Tidak Hadir";
