@@ -825,6 +825,7 @@ class EmployeeApiRepository
                         $row['types'][$item->name]['time_left'] = $item->penalty;
                         $row['types'][$item->name]['presentase'] = 1.5;
                         $row['types'][$item->name]['worktime_item'] = $item;
+                        $row['types'][$item->name]['date'] = $day->format('Y-m-d');
                     }
                     $presentase += 3;
                 }
@@ -871,6 +872,7 @@ class EmployeeApiRepository
                             $row['types'][$worktime_item->name]['time_left'] = $worktime_item->penalty;
                             $row['types'][$worktime_item->name]['presentase'] = 1.5;
                             $row['types'][$worktime_item->name]['worktime_item'] = $worktime_item;
+                            $row['types'][$worktime_item->name]['date'] = $day->format('Y-m-d');
                         }
                     }
 
@@ -893,6 +895,7 @@ class EmployeeApiRepository
                         $row['types'][$presence->worktime_item->name]['time_left'] = 0;
                         $row['types'][$presence->worktime_item->name]['presentase'] = 0;
                         $row['types'][$presence->worktime_item->name]['worktime_item'] = $presence->worktime_item;
+                        $row['types'][$presence->worktime_item->name]['date'] = $presence->created_at;
         
                         $on_time_start = strtotime($presence->worktime_item->on_time_start);
                         $on_time_end   = strtotime($presence->worktime_item->on_time_end);
