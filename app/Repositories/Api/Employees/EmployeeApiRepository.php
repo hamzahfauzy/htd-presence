@@ -503,25 +503,22 @@ class EmployeeApiRepository
 
     public function listPresence($input)
     {
-        $Employee = Employee::whereId($input['id'])->with(
-        [
-            'presences'=>function($query) use ($input){
-                $sortBy = $input['sort_by'] ?? 'id';
-                $orderBy = $input['order_by'] ?? 'desc';
+        $Employee = Employee::whereId($input['id'])->first();
 
-                if($input['type']){
-                    $query->where('type',$input['type']);
-                }
-                if($input['status']){
-                    $query->where('status',$input['status']);
-                }
-                if($input['date_from'] && $input['date_to']){
-                    $query->whereBetween('created_at',[$input['date_from'],$input['date_to']]);
-                }
-                $query->orderby($sortBy, $orderBy);
-            },
-            'presences.worktime_item'
-        ])->first();
+        $start = new DateTime($input['date_from']);
+        $end = new DateTime($input['date_to']);
+        $oneday = new DateInterval("P1D");
+
+        $detail = $this->presenceCalculationDetail($start, $oneday, $end, $Employee);
+        
+        $presences = [];
+        foreach($detail as $d)
+        {
+            $presences = array_merge($presences, $d['types']);
+        }
+
+        $Employee = $Employee->toArray();
+        $Employee['presences'] = $presences;
 
         return $Employee;
     }
