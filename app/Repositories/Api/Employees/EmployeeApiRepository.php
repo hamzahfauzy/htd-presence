@@ -538,6 +538,51 @@ class EmployeeApiRepository
         $Employee = Employee::whereId($input['id'])->first();
 
         $employe_presence = $Employee->presences()->with('worktime_item','workunit')->whereId($input['employee_presence_id'])->first();
+
+        $on_time_start = strtotime($employe_presence->worktime_item->on_time_start);
+        $on_time_end   = strtotime($employe_presence->worktime_item->on_time_end);
+        $presence_time = strtotime(date('H:i',strtotime($employe_presence->created_at)));
+
+        $time_left = 0;
+        $presentase = 0;
+
+        // terlalu cepat
+        if($presence_time < $on_time_start)
+        {
+            $time_left = ($on_time_start-$presence_time)/60;
+        }
+        
+        // terlalu lambat
+        if($presence_time > $on_time_end)
+        {
+            $time_left = ($presence_time-$on_time_end)/60;
+        }
+
+        if($time_left > 0){
+
+            if($time_left >= 1 && $time_left < 31)
+            {
+                $presentase = 0.5;
+            }
+
+            if($time_left >= 31 && $time_left < 61)
+            {
+                $presentase = 1;
+            }
+            
+            if($time_left >= 61 && $time_left < 91)
+            {
+                $presentase = 1.25;
+            }
+            
+            if($time_left >= 91)
+            {
+                $presentase = 1.5;
+            }
+        }
+        
+        $employe_presence->time_left = $time_left;
+        $employe_presence->presentase = $presentase .'%';
         $employe_presence->employee;
         return $employe_presence;
     }
