@@ -815,6 +815,7 @@ class EmployeeApiRepository
                     foreach($worktime_items as $item)
                     {
                         $times += $item->penalty;
+                        $row['types'][$item->name]['id'] = 0;
                         $row['types'][$item->name]['type'] = $item->name;
                         $row['types'][$item->name]['attachment_url'] = false;
                         $row['types'][$item->name]['pic_url'] = false;
@@ -862,6 +863,7 @@ class EmployeeApiRepository
                             $times += $worktime_item->penalty;
                             $presentase += 1.5;
 
+                            $row['types'][$worktime_item->name]['id'] = 0;
                             $row['types'][$worktime_item->name]['type'] = $worktime_item->name;
                             $row['types'][$worktime_item->name]['attachment_url'] = false;
                             $row['types'][$worktime_item->name]['pic_url'] = false;
@@ -885,6 +887,7 @@ class EmployeeApiRepository
                         
                         $time_left = 0;
 
+                        $row['types'][$presence->worktime_item->name]['id'] = $presence->id;
                         $row['types'][$presence->worktime_item->name]['type'] = $presence->worktime_item->name;
                         $row['types'][$presence->worktime_item->name]['attachment_url'] = $presence->attachment_url;
                         $row['types'][$presence->worktime_item->name]['pic_url'] = $presence->pic_url;
