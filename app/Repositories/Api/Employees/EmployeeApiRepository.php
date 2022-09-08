@@ -224,7 +224,7 @@ class EmployeeApiRepository
             $oneday = new DateInterval("P1D");
 
             // extract($this->presenceCalculation($start,$oneday,$end,$p));
-            $calc = $this->presenceCalculationDetail($end,$oneday,$start,$p);
+            $calc = $this->presenceCalculationDetail($start,$oneday,$end,$p);
 
             $time_left = 0;
             $presentase = 0;
@@ -279,7 +279,7 @@ class EmployeeApiRepository
             $end = new DateTime($input['date_end']);
             $oneday = new DateInterval("P1D");
 
-            $row = $this->presenceCalculationDetail($end,$oneday,$start,$p);
+            $row = $this->presenceCalculationDetail($start,$oneday,$end,$p);
             $rows = array_merge($rows, $row);
         }
 
@@ -1021,6 +1021,10 @@ class EmployeeApiRepository
             }
 
         }
+
+        usort($rows, function($a, $b) {
+            return strtotime($b['date']) - strtotime($a['date']);
+        });
 
         return $rows;
     }
