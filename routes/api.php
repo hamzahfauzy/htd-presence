@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\EmployeeApiController;
 use App\Http\Controllers\Api\PresenceApiController;
 use App\Http\Controllers\Api\WorktimeApiController;
 use App\Http\Controllers\Api\WorkunitApiController;
+use App\Http\Controllers\Api\DashboardApiController;
 use App\Http\Controllers\Api\PaidLeaveApiController;
 use App\Http\Controllers\Api\WorktimeItemApiController;
 
