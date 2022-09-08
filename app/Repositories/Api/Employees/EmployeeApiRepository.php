@@ -212,7 +212,7 @@ class EmployeeApiRepository
             $data = $data->where('name','LIKE','%'.$input['keyword'].'%');    
         }
 
-        $data = $data->orderBy($sortBy, $orderBy);
+        $data = $data->where('status',1)->orderBy($sortBy, $orderBy);
 
         // $data = $type ? $data->get() : $data->paginate($perPage);
         $data = $data->get();
@@ -266,7 +266,7 @@ class EmployeeApiRepository
             $data = $data->where('name','LIKE','%'.$input['keyword'].'%');    
         }
 
-        $data = $data->orderBy($sortBy, $orderBy);
+        $data = $data->where('status',1)->orderBy($sortBy, $orderBy);
 
         // $data = $type ? $data->get() : $data->paginate($perPage);
         $data = $data->get();
