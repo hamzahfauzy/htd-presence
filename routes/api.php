@@ -51,6 +51,10 @@ Route::middleware('auth:sanctum')->group(function(){
         $user->employee;
         return $user;
     });
+
+    Route::prefix('dashboards')->group(function(){
+        Route::get('index',[DashboardApiController::class,'index']);
+    });
     
     Route::prefix('holidays')->group(function(){
         Route::get('/',[HolidayApiController::class,'lists']);
