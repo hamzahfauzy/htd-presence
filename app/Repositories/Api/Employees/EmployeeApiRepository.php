@@ -75,6 +75,8 @@ class EmployeeApiRepository
         {
             $employees = $employees->where('workunit_id',$input['workunit_id']);
         }
+
+        $employees = $employees->where('status',1);
         
 
         return $employees->orderBy($sortBy, $orderBy)->paginate($perPage);
@@ -217,12 +219,12 @@ class EmployeeApiRepository
 
         foreach($data as $p)
         {
-            $start = new DateTime($input['date_start']);
-            $end = new DateTime($input['date_end']);
+            $start  = new DateTime($input['date_start']);
+            $end    = new DateTime($input['date_end']);
             $oneday = new DateInterval("P1D");
 
             // extract($this->presenceCalculation($start,$oneday,$end,$p));
-            $calc = $this->presenceCalculationDetail($start,$oneday,$end,$p);
+            $calc = $this->presenceCalculationDetail($end,$oneday,$start,$p);
 
             $time_left = 0;
             $presentase = 0;
@@ -277,7 +279,7 @@ class EmployeeApiRepository
             $end = new DateTime($input['date_end']);
             $oneday = new DateInterval("P1D");
 
-            $row = $this->presenceCalculationDetail($start,$oneday,$end,$p);
+            $row = $this->presenceCalculationDetail($end,$oneday,$start,$p);
             $rows = array_merge($rows, $row);
         }
 
