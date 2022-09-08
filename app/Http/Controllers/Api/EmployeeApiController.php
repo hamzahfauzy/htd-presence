@@ -954,6 +954,7 @@ class EmployeeApiController extends Controller
     function reportPdf($workunit_id,Request $request, EmployeeApiRepository $EmployeeApiRepository)
     {
         $data = $EmployeeApiRepository->reports($workunit_id,$request,true);
+        $data = $data['data'];
         Log::info($data);
         $workunit = Workunit::whereId($workunit_id)->first();
 
