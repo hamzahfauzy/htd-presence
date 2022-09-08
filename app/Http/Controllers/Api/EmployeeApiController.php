@@ -7,6 +7,7 @@ use DatePeriod;
 use DateInterval;
 use App\Models\Workunit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\ApiController as Controller;
 use App\Repositories\Api\Employees\EmployeeApiRepository;
 use App\Http\Requests\Api\Employees\EmployeeApiCreateRequest;
@@ -660,12 +661,12 @@ class EmployeeApiController extends Controller
      *     )
      *   ),
      * 
-    * @OA\RequestBody(
-    *     @OA\MediaType(
-    *       mediaType="multipart/form-data",
-    *       @OA\Schema(ref="#/components/schemas/EmployeePresence")
-    *     )
-    *  ),
+     * @OA\RequestBody(
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(ref="#/components/schemas/EmployeePresence")
+     *     )
+     *  ),
      * 
      *   @OA\Response(
      *     response=200,
@@ -932,11 +933,11 @@ class EmployeeApiController extends Controller
      *   ),
      * 
      *  @OA\RequestBody(
-    *     @OA\MediaType(
-    *       mediaType="multipart/form-data",
-    *       @OA\Schema(ref="#/components/schemas/EmployeePresenceUpload")
-    *     )
-    *  ),
+     *     @OA\MediaType(
+     *       mediaType="multipart/form-data",
+     *       @OA\Schema(ref="#/components/schemas/EmployeePresenceUpload")
+     *     )
+     *  ),
      * 
      *   @OA\Response(
      *     response=200,
@@ -953,6 +954,7 @@ class EmployeeApiController extends Controller
     function reportPdf($workunit_id,Request $request, EmployeeApiRepository $EmployeeApiRepository)
     {
         $data = $EmployeeApiRepository->reports($workunit_id,$request,true);
+        Log::info($data);
         $workunit = Workunit::whereId($workunit_id)->first();
 
         $html = "<html><head><title>Laporan Rekapitulasi</title></head><body>";
