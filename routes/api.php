@@ -42,6 +42,10 @@ Route::get('times',function(){
 Route::get('employees/report-pdf/{workunit_id}',[EmployeeApiController::class,'reportPdf']);
 Route::get('employees/report-detail-pdf/{workunit_id}',[EmployeeApiController::class,'reportDetailPdf']);
 
+Route::prefix('dashboards')->group(function(){
+    Route::get('index',[DashboardApiController::class,'index']);
+});
+
 Route::middleware('auth:sanctum')->group(function(){
 
     Route::post('auth/change-password',[AuthController::class, 'changePassword']);
@@ -51,10 +55,6 @@ Route::middleware('auth:sanctum')->group(function(){
         $user = $request->user();
         $user->employee;
         return $user;
-    });
-
-    Route::prefix('dashboards')->group(function(){
-        Route::get('index',[DashboardApiController::class,'index']);
     });
     
     Route::prefix('holidays')->group(function(){
