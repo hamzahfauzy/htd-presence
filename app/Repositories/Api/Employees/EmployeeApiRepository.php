@@ -144,7 +144,7 @@ class EmployeeApiRepository
                     $employee->active_worktime = $active_worktime;
                 }
             }
-            $employee->email = $employee->user->email;
+            $employee->email = $employee->user?$employee->user->email:$employee->nip;
         }
         return $employee;
     }
