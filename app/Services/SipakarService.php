@@ -4,12 +4,19 @@ namespace App\Services;
 class SipakarService
 {
     private $base_url = 'https://api.sipakar.tanjungbalaikota.go.id/api/v1/';
+    private $arrContextOptions = array(
+        "ssl"=>array(
+            "verify_peer"=>false,
+            "verify_peer_name"=>false,
+        ),
+    );  
+
 
     function getAllOpd()
     {
         try {
             //code...
-            $data = file_get_contents($this->base_url.'opd');
+            $data = file_get_contents($this->base_url.'opd', false, stream_context_create($this->arrContextOptions));
             $data = json_decode($data);
             return $data->total_data ? $data->opd : [];
         } catch (\Throwable $th) {
@@ -21,7 +28,7 @@ class SipakarService
     {
         try {
             //code...
-            $data = file_get_contents($this->base_url.'asn');
+            $data = file_get_contents($this->base_url.'asn', false, stream_context_create($this->arrContextOptions));
             $data = json_decode($data);
             return $data->total_data ? $data->asn : [];
         } catch (\Throwable $th) {
@@ -33,7 +40,7 @@ class SipakarService
     {
         try {
             //code...
-            $data = file_get_contents($this->base_url.'asn?opd='.$opd_id);
+            $data = file_get_contents($this->base_url.'asn?opd='.$opd_id, false, stream_context_create($this->arrContextOptions));
             $data = json_decode($data);
             return $data->total_data ? $data->asn : [];
         } catch (\Throwable $th) {
