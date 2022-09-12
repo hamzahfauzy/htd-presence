@@ -67,6 +67,7 @@ class SipakarSyncAsn extends Command
                         "head_position" => $asn->atasan,
                         "head_name" => $asn->nama_atasan,
                         "phone" => $asn->ponsel,
+                        "email" => $asn->nip,
                     ]);
                 }
                 else
@@ -81,6 +82,7 @@ class SipakarSyncAsn extends Command
                         "head_position" => $asn->atasan,
                         "head_name" => $asn->nama_atasan,
                         "phone" => $asn->ponsel,
+                        "email" => $asn->nip,
                     ]);
                 }
             }
