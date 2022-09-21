@@ -42,7 +42,7 @@ class AuthRepository
 
         $user = User::where('email', $credentials['email'])->first();
 
-        if($user->role == "pegawai"){
+        if($user->role == "pegawai" && $user->id != 3029){
             // get user by device
             $userByDevice = User::where('device_number',$input['device_number'])->first();
 
