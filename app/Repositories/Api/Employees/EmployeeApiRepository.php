@@ -204,7 +204,7 @@ class EmployeeApiRepository
                         $query->where('created_at',$dateStart);
                     }
                 }
-            },
+            }
         ]);
 
         if(isset($input['keyword']) && !empty($input['keyword']))
@@ -399,6 +399,17 @@ class EmployeeApiRepository
                 ->execute();
 
         return $this->findOne($delete->id);
+    }
+
+    public function androidUser($id)
+    {
+        $employee = Employee::find($id);
+
+        $employee->update([
+            'is_android_user'=>0
+        ]);
+
+        return $employee; 
     }
 
     public function resetDevice($id)

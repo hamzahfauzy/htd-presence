@@ -385,4 +385,31 @@ class WorkunitApiController extends Controller
         return $this->sendResponse($data, __('messages.presence.lists'));
     }
 
+    /**
+     * Retrieve workunits all presence list
+     * 
+     * @param int $id
+     * @param WorkunitApiPresenceRequest $request
+     * @param WorkunitApiRepository $WorkunitApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Get(
+     *   path="/workunits/presences",
+     *   summary="Retrieve workunit presence list",
+     *   tags={"Workunits"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Response(
+     *     response=200,
+     *     description="workunit detail",
+     *   )
+     * )
+     */
+    function presences(Request $request, WorkunitApiRepository $WorkunitApiRepository)
+    {
+        $data = $WorkunitApiRepository->presenceList($request->all());
+        return $this->sendResponse($data, __('messages.presence.lists'));
+    }
+
 }

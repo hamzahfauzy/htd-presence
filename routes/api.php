@@ -90,6 +90,7 @@ Route::middleware('auth:sanctum')->group(function(){
     
     Route::prefix('workunits')->group(function(){
         Route::get('/',[WorkunitApiController::class,'lists']);
+        Route::get('presences',[WorkunitApiController::class,'presences']);
         Route::get('{id}',[WorkunitApiController::class,'detail']);
         Route::get('{id}/presences',[WorkunitApiController::class,'presenceList']);
         Route::post('/',[WorkunitApiController::class,'create']);
@@ -114,6 +115,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::post('{id}/place',[EmployeeApiController::class,'addPlace']);
         Route::delete('{id}/place',[EmployeeApiController::class,'deletePlace']);
         Route::patch('{id}/place',[EmployeeApiController::class,'freePlace']);
+        Route::patch('{id}/android-user',[EmployeeApiController::class,'androidUser']);
         Route::post('{id}/reset-device',[EmployeeApiController::class,'resetDevice']);
         Route::post('{id}/presences',[EmployeeApiController::class,'presences']);
         Route::get('{id}/presences/check_if_exists/{worktime_item_id}',[EmployeeApiController::class,'checkIfExists']);

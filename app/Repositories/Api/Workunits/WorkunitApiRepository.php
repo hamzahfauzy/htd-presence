@@ -51,8 +51,17 @@ class WorkunitApiRepository
         $orderBy = $input['order_by'] ?? 'desc';
         $perPage = $input['per_page'] ?? 10;
 
-        $presences = EmployeePresence::where('workunit_id',$input['id'])
-                        ->with(['workunit','employee','worktime_item'])
+        $presences = (new EmployeePresence);
+        
+        if(isset($input['id'])){
+            $presences = $presences->where('workunit_id',$input['id']);
+        }
+        else
+        {
+            $presences = $presences->where('status','diajukan');
+        }
+
+        $presences = $presences->with(['workunit','employee','worktime_item'])
                         ->orderBy($sortBy, $orderBy);
 
         if(isset($input['date_start']) && isset($input['date_end'])){
@@ -72,9 +81,11 @@ class WorkunitApiRepository
         if(isset($input['type'])){
             if($input['type'] == 1){
                 $presences = $presences->where('type','hadir');
-            }else{
+            }else if($input['type'] == 2){
                 $types = PaidLeave::get()->pluck('name')->toArray();
                 $presences = $presences->whereIn('type',$types);
+            }else{
+                $presences = $presences->where('type','tugas luar');
             }
         }
     

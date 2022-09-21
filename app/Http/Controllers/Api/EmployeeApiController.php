@@ -604,6 +604,41 @@ class EmployeeApiController extends Controller
     }
 
     /**
+     * Employee Android user
+     * 
+     * @param int $id
+     * @param EmployeeApiFreePlaceRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Patch(
+     *   path="/employees/{id}/android-user",
+     *   summary="android user",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="delete place",
+     *   )
+     * )
+     */
+    function androidUser($id, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->androidUser($id);
+        return $this->sendResponse($data, 'Sukses mengubah data');
+    }
+
+    /**
      * Employee Reset Device
      * 
      * @param int $id
