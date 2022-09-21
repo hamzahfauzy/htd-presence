@@ -413,6 +413,40 @@ class EmployeeApiController extends Controller
         return $this->sendResponse($data, __('messages.employee.detail'));
     }
 
+    /**
+     * Retrieve employees detail
+     * 
+     * @param string $nip
+     * @param EmployeeApiDetailRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Get(
+     *   path="/employees/detail-by-nip/{nip}",
+     *   summary="Retrieve employee list",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="string",
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="employee detail",
+     *   )
+     * )
+     */
+    function detailByNip(Request $request, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->findByNip($request->nip);
+        return $this->sendResponse($data, __('messages.employee.detail'));
+    }
+
     
     /**
      * Employee add worktime

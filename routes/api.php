@@ -109,6 +109,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::delete('{id}',[EmployeeApiController::class,'destroy']);
         Route::get('reports/{workunit_id}',[EmployeeApiController::class,'reports']);
         Route::get('report-details/{workunit_id}',[EmployeeApiController::class,'reportDetails']);
+        Route::get('detail-by-nip/{nip}',[EmployeeApiController::class,'detailByNip']);
         Route::get('{id}',[EmployeeApiController::class,'detail']);
         Route::post('{id}/worktime',[EmployeeApiController::class,'addWorktime']);
         Route::delete('{id}/worktime',[EmployeeApiController::class,'deleteWorktime']);

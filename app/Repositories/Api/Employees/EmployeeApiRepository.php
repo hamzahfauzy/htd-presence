@@ -149,6 +149,12 @@ class EmployeeApiRepository
         return $employee;
     }
 
+    public function findByNip($nip)
+    {
+        $employee = Employee::where('nip',$nip)->first();
+        return $employee;
+    }
+
     function today($d = null){
         $day = $d == null ? date("D") : $d;
         switch($day){
