@@ -80,7 +80,7 @@ class WorkunitApiRepository
 
         if(isset($input['type'])){
             if($input['type'] == 1){
-                $presences = $presences->where('type','hadir');
+                $presences = $presences->where('type','hadir')->where('in_location',0);
             }else if($input['type'] == 2){
                 $types = PaidLeave::get()->pluck('name')->toArray();
                 $presences = $presences->whereIn('type',$types);
