@@ -56,10 +56,10 @@ class WorkunitApiRepository
         if(isset($input['id'])){
             $presences = $presences->where('workunit_id',$input['id']);
         }
-        else
-        {
-            $presences = $presences->where('status','diajukan');
-        }
+        // else
+        // {
+        //     $presences = $presences->where('status','diajukan');
+        // }
 
         $presences = $presences->with(['workunit','employee','worktime_item'])
                         ->orderBy($sortBy, $orderBy);
