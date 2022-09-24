@@ -551,6 +551,32 @@ class EmployeeApiRepository
         return $Employee;
     }
 
+    public function listPaidLeave($input)
+    {
+        $Employee = Employee::whereId($input['id'])->with([
+            'presences' => function ($query) use ($input) {
+                $cuti = PaidLeave::get()->pluck('name');
+                $query->whereIn('type', $cuti);
+
+                if(isset($input['date_start']) && isset($input['date_end'])){
+                    $dateStart = date($input['date_start']).' 00:00:00';
+                    $dateEnd = date($input['date_end']).' 23:59:59';
+    
+                    if($dateStart != $dateEnd)
+                    {
+                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                    }
+                    else
+                    {
+                        $query->where('created_at',$dateStart);
+                    }
+                }
+            }
+        ])->first();
+
+        return $Employee->toArray();
+    }
+
     
     public function detailPresence($input)
     {

@@ -123,6 +123,7 @@ Route::middleware('auth:sanctum')->group(function(){
         Route::post('{id}/presences/{employee_presence_id}/upload-attachment',[EmployeeApiController::class,'uploadAttachment']);
         Route::get('{id}/presences/{employee_presence_id}',[EmployeeApiController::class,'detailPresence']);
         Route::get('{id}/presences',[EmployeeApiController::class,'listPresence']);
+        Route::get('{id}/paid-leaves',[EmployeeApiController::class,'listPaidLeave']);
         Route::patch('{id}/presences/{employee_presence_id}',[EmployeeApiController::class,'updatePresence']);
     });
 

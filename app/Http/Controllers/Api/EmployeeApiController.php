@@ -20,6 +20,7 @@ use App\Http\Requests\Api\Employees\EmployeeApiFreePlaceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiAddWorktimeRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDeletePlaceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiListPresenceRequest;
+use App\Http\Requests\Api\Employees\EmployeeApiListPaidLeaveRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDeleteWorktimeRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiDetailPresenceRequest;
 use App\Http\Requests\Api\Employees\EmployeeApiUpdatePresenceRequest;
@@ -820,6 +821,64 @@ class EmployeeApiController extends Controller
     function listPresence($id,EmployeeApiListPresenceRequest $EmployeeApiListPresenceRequest, EmployeeApiRepository $EmployeeApiRepository)
     {
         $data = $EmployeeApiRepository->listPresence($EmployeeApiListPresenceRequest);
+        return $this->sendResponse($data, __('messages.employee.presence.list'));
+    }
+
+    /**
+     * Employee list paid leaves
+     * 
+     * @param int $id
+     * @param EmployeeApiListPresenceRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Get(
+     *   path="/employees/{id}/paid-leaves",
+     *   summary="employee list paid leaves",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     * @OA\Parameter(
+     *     name="date_from",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="date",
+     *     )
+     *   ),
+     * 
+     * @OA\Parameter(
+     *     name="date_to",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="date",
+     *     )
+     *   ),
+     * 
+     *   @OA\Parameter(
+     *     name="type",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="string",
+     *     )
+     *   ),
+     *   @OA\Response(
+     *     response=200,
+     *     description="employee precence",
+     *   )
+     * )
+     */
+    function listPaidLeave($id, EmployeeApiListPaidLeaveRequest $EmployeeApiListPaidLeaveRequest, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->listPaidLeave($EmployeeApiListPaidLeaveRequest);
         return $this->sendResponse($data, __('messages.employee.presence.list'));
     }
 
