@@ -89,7 +89,7 @@ class EmployeeApiPresenceRequest extends APIRequest
     function getTypeRules()
     {
         $types = PaidLeave::get()->pluck('name')->toArray();
-        $types = array_merge($types,['hadir']);
+        $types = array_merge($types,['hadir','tugas luar']);
         return [
             'required',
             'string',
