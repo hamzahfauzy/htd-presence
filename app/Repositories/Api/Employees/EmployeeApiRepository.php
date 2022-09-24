@@ -584,7 +584,7 @@ class EmployeeApiRepository
 
         $employe_presence = $Employee->presences()->with('worktime_item','workunit')->whereId($input['employee_presence_id'])->first();
 
-        if($employee_presence->type == 'hadir')
+        if($employe_presence->type == 'hadir')
         {
 
             $on_time_start = strtotime($employe_presence->worktime_item->on_time_start);
