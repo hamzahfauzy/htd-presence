@@ -524,6 +524,28 @@ class EmployeeApiRepository
     {
         if(isset($input['type']) && $input['type'] == 'tugas luar')
         {
+            $Employee = Employee::whereId($input['id'])->with([
+                'presences' => function ($query) use ($input) {
+                    $query->where('type', 'tugas luar');
+    
+                    if(isset($input['date_start']) && isset($input['date_end'])){
+                        $dateStart = date($input['date_start']).' 00:00:00';
+                        $dateEnd = date($input['date_end']).' 23:59:59';
+        
+                        if($dateStart != $dateEnd)
+                        {
+                            $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                        }
+                        else
+                        {
+                            $query->where('created_at',$dateStart);
+                        }
+                    }
+                }
+            ])->first()->toArray();
+        }
+        else
+        {
             $Employee = Employee::whereId($input['id'])->first();
     
             $start = new DateTime($input['date_from']);
@@ -549,28 +571,6 @@ class EmployeeApiRepository
     
             $Employee = $Employee->toArray();
             $Employee['presences'] = $presences;
-        }
-        else
-        {
-            $Employee = Employee::whereId($input['id'])->with([
-                'presences' => function ($query) use ($input) {
-                    $query->where('type', 'tugas luar');
-    
-                    if(isset($input['date_start']) && isset($input['date_end'])){
-                        $dateStart = date($input['date_start']).' 00:00:00';
-                        $dateEnd = date($input['date_end']).' 23:59:59';
-        
-                        if($dateStart != $dateEnd)
-                        {
-                            $query->whereBetween('created_at',[$dateStart,$dateEnd]);
-                        }
-                        else
-                        {
-                            $query->where('created_at',$dateStart);
-                        }
-                    }
-                }
-            ])->first()->toArray();
         }
 
         return $Employee;
