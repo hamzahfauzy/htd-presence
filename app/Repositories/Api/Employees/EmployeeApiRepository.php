@@ -554,7 +554,7 @@ class EmployeeApiRepository
         {
             $Employee = Employee::whereId($input['id'])->with([
                 'presences' => function ($query) use ($input) {
-                    $query->whereIn('type', 'tugas luar');
+                    $query->where('type', 'tugas luar');
     
                     if(isset($input['date_start']) && isset($input['date_end'])){
                         $dateStart = date($input['date_start']).' 00:00:00';
