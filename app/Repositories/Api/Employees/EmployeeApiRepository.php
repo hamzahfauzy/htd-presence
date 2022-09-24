@@ -522,31 +522,56 @@ class EmployeeApiRepository
 
     public function listPresence($input)
     {
-        $Employee = Employee::whereId($input['id'])->first();
-
-        $start = new DateTime($input['date_from']);
-        $end = new DateTime($input['date_to']);
-        $oneday = new DateInterval("P1D");
-
-        $detail = $this->presenceCalculationDetail($start, $oneday, $end, $Employee);
-        
-        $presences = [];
-        foreach($detail as $d)
+        if(isset($input['type']) && $input['type'] == 'tugas luar')
         {
-            $types = $d['types'];
-            foreach($types as $key => $type)
+            $Employee = Employee::whereId($input['id'])->first();
+    
+            $start = new DateTime($input['date_from']);
+            $end = new DateTime($input['date_to']);
+            $oneday = new DateInterval("P1D");
+    
+            $detail = $this->presenceCalculationDetail($start, $oneday, $end, $Employee);
+            
+            $presences = [];
+            foreach($detail as $d)
             {
-                $types[$key]['type'] = "Hadir";
-                if($type['time_left'] == $type['worktime_item']->penalty)
+                $types = $d['types'];
+                foreach($types as $key => $type)
                 {
-                    $types[$key]['type'] = "Tidak Hadir";
+                    $types[$key]['type'] = "Hadir";
+                    if($type['time_left'] == $type['worktime_item']->penalty)
+                    {
+                        $types[$key]['type'] = "Tidak Hadir";
+                    }
                 }
+                $presences = array_merge($presences, $types);
             }
-            $presences = array_merge($presences, $types);
+    
+            $Employee = $Employee->toArray();
+            $Employee['presences'] = $presences;
         }
-
-        $Employee = $Employee->toArray();
-        $Employee['presences'] = $presences;
+        else
+        {
+            $Employee = Employee::whereId($input['id'])->with([
+                'presences' => function ($query) use ($input) {
+                    $query->whereIn('type', 'tugas luar');
+    
+                    if(isset($input['date_start']) && isset($input['date_end'])){
+                        $dateStart = date($input['date_start']).' 00:00:00';
+                        $dateEnd = date($input['date_end']).' 23:59:59';
+        
+                        if($dateStart != $dateEnd)
+                        {
+                            $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                        }
+                        else
+                        {
+                            $query->where('created_at',$dateStart);
+                        }
+                    }
+                }
+            ])->first()->toArray();
+        }
 
         return $Employee;
     }
