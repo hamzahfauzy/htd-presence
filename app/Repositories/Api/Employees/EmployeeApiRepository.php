@@ -526,7 +526,7 @@ class EmployeeApiRepository
         {
             $Employee = Employee::whereId($input['id'])->with([
                 'presences' => function ($query) use ($input) {
-                    $query->where('type', 'tugas luar');
+                    $query->whereIn('type', ['tugas luar','tugas dalam']);
     
                     if(isset($input['date_start']) && isset($input['date_end'])){
                         $dateStart = date($input['date_start']).' 00:00:00';
@@ -876,7 +876,7 @@ class EmployeeApiRepository
 
     public function presenceCalculationDetail($start, $oneday, $end, $p)
     {
-        $dates = $p->presences->pluck('created_at');
+        $dates = $p->presences()->where('type','hadir')->pluck('created_at');
 
         $formattedDates = $dates->map(function ($date) {
             return $date->format('Y-m-d');
@@ -963,7 +963,7 @@ class EmployeeApiRepository
                     }, $worktime_items);
 
                     $hadir++;
-                    $absen = $p->presences()->with('worktime_item')->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
+                    $absen = $p->presences()->where('type','hadir')->with('worktime_item')->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
                     $absences = $absen->get();
                     $absence_ids = array_map(function($absence){
                         return $absence['worktime_item']['id'];
