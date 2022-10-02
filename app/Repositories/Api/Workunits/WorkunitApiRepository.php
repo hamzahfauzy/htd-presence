@@ -61,9 +61,6 @@ class WorkunitApiRepository
         //     $presences = $presences->where('status','diajukan');
         // }
 
-        $presences = $presences->with(['workunit','employee','worktime_item'])
-                        ->orderBy($sortBy, $orderBy);
-
         if(isset($input['date_start']) && isset($input['date_end'])){
             $dateStart = date($input['date_start']).' 00:00:00';
             $dateEnd = date($input['date_end']).' 23:59:59';
@@ -85,9 +82,12 @@ class WorkunitApiRepository
                 $types = PaidLeave::get()->pluck('name')->toArray();
                 $presences = $presences->whereIn('type',$types);
             }else{
-                $presences = $presences->where('type','tugas luar');
+                $presences = $presences->whereIn('type',['tugas luar','tugas dalam']);
             }
         }
+
+        $presences = $presences->with(['workunit','employee','worktime_item'])
+                        ->orderBy($sortBy, $orderBy);
     
         if(empty($input))
             return $presences->get();
