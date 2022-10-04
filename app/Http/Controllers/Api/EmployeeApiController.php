@@ -1100,6 +1100,7 @@ class EmployeeApiController extends Controller
         $html .= "<th style='padding:12px'>Hadir</th>";
         $html .= "<th style='padding:12px'>Alfa</th>";
         $html .= "<th style='padding:12px'>Cuti</th>";
+        $html .= "<th style='padding:12px'>Tugas</th>";
         $html .= "<th style='padding:12px'>Hari Kerja</th>";
         $html .= "<th style='padding:12px'>Kekurangan Waktu (Menit)</th>";
         $html .= "<th style='padding:12px'>Persentase</th>";
@@ -1111,9 +1112,10 @@ class EmployeeApiController extends Controller
             $html .= "<td style='padding:12px'>$dt->nip</td>";
             $html .= "<td style='padding:12px'>$dt->group</td>";
             $html .= "<td style='padding:12px'>$dt->position</td>";
-            $html .= "<td style='padding:12px'>$dt->hadir</td>";
+            $html .= "<td style='padding:12px'>$dt->_hadir</td>";
             $html .= "<td style='padding:12px'>$dt->alfa</td>";
-            $html .= "<td style='padding:12px'>$dt->cuti</td>";
+            $html .= "<td style='padding:12px'>$dt->_cuti</td>";
+            $html .= "<td style='padding:12px'>$dt->tugas</td>";
             $html .= "<td style='padding:12px'>$dt->hari_kerja</td>";
             $html .= "<td style='padding:12px'>$dt->time_left</td>";
             $html .= "<td style='padding:12px'>$dt->presentase</td>";

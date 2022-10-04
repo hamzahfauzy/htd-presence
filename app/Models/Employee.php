@@ -78,6 +78,21 @@ class Employee extends Model
         return $this->hasMany(EmployeePresence::class);
     }
 
+    function cuti()
+    {
+        return $this->presences();
+    }
+
+    function tugas()
+    {
+        return $this->presences();
+    }
+    
+    function hadir()
+    {
+        return $this->presences();
+    }
+
     /**
      * Prepare a date for array / JSON serialization.
      *
