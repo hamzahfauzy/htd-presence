@@ -1261,15 +1261,15 @@ class EmployeeApiRepository
                     }
                 }
 
-                // $hadir = $kehadiran == 'hadir' ? $hadir+1 : $hadir;
-                // $cuti  = $kehadiran == 'cuti' ? $cuti+1 : $cuti;
-                // $tugas  = $kehadiran == 'tugas' ? $tugas+1 : $tugas;
+                if(isset($row['types']))
+                {
+                    $types = $row['types'];
+    
+                    sort($types);
+    
+                    $row['types'] = $types;
+                }
 
-                $types = $row['types'];
-
-                sort($types);
-
-                $row['types'] = $types;
 
                 $row['time_left'] = ceil($times);
                 $row['presentase'] = $presentase;
