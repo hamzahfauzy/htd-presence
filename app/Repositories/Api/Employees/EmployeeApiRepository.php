@@ -294,7 +294,7 @@ class EmployeeApiRepository
             $p->_cuti = $cuti;
             $p->_tugas = $tugas;
 
-            $new_p = (array) $p;
+            $new_p = $p->toArray();
             $new_p['hadir'] = $p->_hadir;
             $new_p['cuti'] = $p->_cuti;
             $new_p['tugas'] = $p->_tugas;
