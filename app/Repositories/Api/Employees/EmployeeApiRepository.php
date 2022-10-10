@@ -257,6 +257,8 @@ class EmployeeApiRepository
         // $data = $type ? $data->get() : $data->paginate($perPage);
         $data = $data->get();
 
+        $new_data = [];
+
         foreach($data as $p)
         {
             $start  = new DateTime($input['date_start']);
@@ -291,10 +293,17 @@ class EmployeeApiRepository
             $p->hari_kerja = $hari_kerja;
             $p->_cuti = $cuti;
             $p->_tugas = $tugas;
+
+            $new_p = (array) $p;
+            $new_p['hadir'] = $p->_hadir;
+            $new_p['cuti'] = $p->_cuti;
+            $new_p['tugas'] = $p->_tugas;
+
+            $new_data[] = $new_p;
         }
 
         return [
-            'data' => $data,
+            'data' => $new_data,
             'length' => count($data)
         ];
     }
