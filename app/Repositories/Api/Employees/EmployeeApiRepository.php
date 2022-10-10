@@ -290,7 +290,7 @@ class EmployeeApiRepository
             $p->alfa  = $alfa;
             $p->hari_kerja = $hari_kerja;
             $p->_cuti = $cuti;
-            $p->tugas = $tugas;
+            $p->_tugas = $tugas;
         }
 
         return [

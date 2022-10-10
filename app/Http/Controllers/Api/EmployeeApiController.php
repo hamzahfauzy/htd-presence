@@ -1115,7 +1115,7 @@ class EmployeeApiController extends Controller
             $html .= "<td style='padding:12px'>$dt->_hadir</td>";
             $html .= "<td style='padding:12px'>$dt->alfa</td>";
             $html .= "<td style='padding:12px'>$dt->_cuti</td>";
-            $html .= "<td style='padding:12px'>$dt->tugas</td>";
+            $html .= "<td style='padding:12px'>$dt->_tugas</td>";
             $html .= "<td style='padding:12px'>$dt->hari_kerja</td>";
             $html .= "<td style='padding:12px'>$dt->time_left</td>";
             $html .= "<td style='padding:12px'>$dt->presentase</td>";
