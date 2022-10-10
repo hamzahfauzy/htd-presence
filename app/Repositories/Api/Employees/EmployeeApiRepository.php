@@ -650,16 +650,19 @@ class EmployeeApiRepository
             $presences = [];
             foreach($detail as $d)
             {
-                $types = $d['types'];
-                foreach($types as $key => $type)
+                if(isset($d['types']))
                 {
-                    $types[$key]['type'] = "Hadir";
-                    if($type['time_left'] == $type['worktime_item']->penalty)
+                    $types = $d['types'];
+                    foreach($types as $key => $type)
                     {
-                        $types[$key]['type'] = "Tidak Hadir";
+                        $types[$key]['type'] = "Hadir";
+                        if($type['time_left'] == $type['worktime_item']->penalty)
+                        {
+                            $types[$key]['type'] = "Tidak Hadir";
+                        }
                     }
+                    $presences = array_merge($presences, $types);
                 }
-                $presences = array_merge($presences, $types);
             }
     
             $Employee = $Employee->toArray();
