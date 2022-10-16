@@ -74,6 +74,10 @@ class WorkunitApiRepository
                 $presences->where('created_at',$dateStart);
             }
         }
+        else
+        {
+            $presences = $presences->where('status','diajukan');
+        }
 
         if(isset($input['type'])){
             if($input['type'] == 1){
