@@ -651,7 +651,25 @@ class EmployeeApiRepository
         }
         else
         {
-            $Employee = Employee::whereId($input['id'])->with('presences')->first();
+            $Employee = Employee::whereId($input['id'])->with([
+                'hadir' => function ($query) use ($input) {
+                    $query->where('type', 'hadir'); // ->where('status','disetujui');
+    
+                    if(isset($input['date_from']) && isset($input['date_to'])){
+                        $dateStart = date($input['date_from']).' 00:00:00';
+                        $dateEnd = date($input['date_to']).' 23:59:59';
+        
+                        if($dateStart != $dateEnd)
+                        {
+                            $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                        }
+                        else
+                        {
+                            $query->where('created_at',$dateStart);
+                        }
+                    }
+                }
+            ])->first();
     
             $start = new DateTime($input['date_from']);
             $end = new DateTime($input['date_to']);
@@ -679,7 +697,6 @@ class EmployeeApiRepository
     
             $Employee = $Employee->toArray();
             $Employee['presences'] = $presences;
-            $Employee['detail'] = $detail;
         }
 
         return $Employee;
