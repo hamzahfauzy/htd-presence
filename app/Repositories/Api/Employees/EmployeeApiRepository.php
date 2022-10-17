@@ -668,6 +668,41 @@ class EmployeeApiRepository
                             $query->where('created_at',$dateStart);
                         }
                     }
+                },
+                'cuti' => function ($query) use ($input) {
+                    $cuti = PaidLeave::get()->pluck('name');
+                    $query->whereIn('type', $cuti)->where('status','disetujui');
+    
+                    if(isset($input['date_from']) && isset($input['date_to'])){
+                        $dateStart = date($input['date_from']).' 00:00:00';
+                        $dateEnd = date($input['date_to']).' 23:59:59';
+        
+                        if($dateStart != $dateEnd)
+                        {
+                            $query->whereBetween('started_at',[$dateStart,$dateEnd]);
+                        }
+                        else
+                        {
+                            $query->where('started_at',$dateStart);
+                        }
+                    }
+                },
+                'tugas' => function ($query) use ($input) {
+                    $query->whereIn('type', ['tugas luar','tugas dalam'])->where('status','disetujui');
+    
+                    if(isset($input['date_from']) && isset($input['date_to'])){
+                        $dateStart = date($input['date_from']).' 00:00:00';
+                        $dateEnd = date($input['date_to']).' 23:59:59';
+        
+                        if($dateStart != $dateEnd)
+                        {
+                            $query->whereBetween('started_at',[$dateStart,$dateEnd]);
+                        }
+                        else
+                        {
+                            $query->where('started_at',$dateStart);
+                        }
+                    }
                 }
             ])->first();
     
