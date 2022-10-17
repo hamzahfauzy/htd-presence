@@ -633,9 +633,9 @@ class EmployeeApiRepository
                 'presences' => function ($query) use ($input) {
                     $query->whereIn('type', ['tugas luar','tugas dalam']);
     
-                    if(isset($input['date_start']) && isset($input['date_end'])){
-                        $dateStart = date($input['date_start']).' 00:00:00';
-                        $dateEnd = date($input['date_end']).' 23:59:59';
+                    if(isset($input['date_from']) && isset($input['date_to'])){
+                        $dateStart = date($input['date_from']).' 00:00:00';
+                        $dateEnd = date($input['date_to']).' 23:59:59';
         
                         if($dateStart != $dateEnd)
                         {
@@ -653,8 +653,8 @@ class EmployeeApiRepository
         {
             $Employee = Employee::whereId($input['id'])->with('presences')->first();
     
-            $start = new DateTime($input['date_start']);
-            $end = new DateTime($input['date_end']);
+            $start = new DateTime($input['date_from']);
+            $end = new DateTime($input['date_to']);
             $oneday = new DateInterval("P1D");
     
             $detail = $this->presenceCalculationDetail($start, $oneday, $end, $Employee);
@@ -679,6 +679,7 @@ class EmployeeApiRepository
     
             $Employee = $Employee->toArray();
             $Employee['presences'] = $presences;
+            $Employee['detail'] = $detail;
         }
 
         return $Employee;
