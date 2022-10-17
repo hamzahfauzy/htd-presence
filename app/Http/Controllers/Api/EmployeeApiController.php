@@ -1108,17 +1108,17 @@ class EmployeeApiController extends Controller
 
         foreach($data as $dt){
             $html .= "<tr>";
-            $html .= "<td style='padding:12px'>$dt->name</td>";
-            $html .= "<td style='padding:12px'>$dt->nip</td>";
-            $html .= "<td style='padding:12px'>$dt->group</td>";
-            $html .= "<td style='padding:12px'>$dt->position</td>";
-            $html .= "<td style='padding:12px'>$dt->_hadir</td>";
-            $html .= "<td style='padding:12px'>$dt->alfa</td>";
-            $html .= "<td style='padding:12px'>$dt->_cuti</td>";
-            $html .= "<td style='padding:12px'>$dt->_tugas</td>";
-            $html .= "<td style='padding:12px'>$dt->hari_kerja</td>";
-            $html .= "<td style='padding:12px'>$dt->time_left</td>";
-            $html .= "<td style='padding:12px'>$dt->presentase</td>";
+            $html .= "<td style='padding:12px'>$dt[name]</td>";
+            $html .= "<td style='padding:12px'>$dt[nip]</td>";
+            $html .= "<td style='padding:12px'>$dt[group]</td>";
+            $html .= "<td style='padding:12px'>$dt[position]</td>";
+            $html .= "<td style='padding:12px'>$dt[hadir]</td>";
+            $html .= "<td style='padding:12px'>$dt[alfa]</td>";
+            $html .= "<td style='padding:12px'>$dt[cuti]</td>";
+            $html .= "<td style='padding:12px'>$dt[tugas]</td>";
+            $html .= "<td style='padding:12px'>$dt[hari_kerja]</td>";
+            $html .= "<td style='padding:12px'>$dt[time_left]</td>";
+            $html .= "<td style='padding:12px'>$dt[presentase]</td>";
             $html .= "</tr>";
         }
 
