@@ -653,8 +653,8 @@ class EmployeeApiRepository
         {
             $Employee = Employee::whereId($input['id'])->with('presences')->first();
     
-            $start = new DateTime($input['date_from']);
-            $end = new DateTime($input['date_to']);
+            $start = new DateTime($input['date_start']);
+            $end = new DateTime($input['date_end']);
             $oneday = new DateInterval("P1D");
     
             $detail = $this->presenceCalculationDetail($start, $oneday, $end, $Employee);
@@ -673,7 +673,7 @@ class EmployeeApiRepository
                             $types[$key]['type'] = "Tidak Hadir";
                         }
                     }
-                    $presences[] = $types;
+                    $presences = array_merge($presences,$types);
                 }
             }
     
