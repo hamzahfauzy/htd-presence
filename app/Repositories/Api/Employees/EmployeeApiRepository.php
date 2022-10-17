@@ -712,28 +712,26 @@ class EmployeeApiRepository
     
             $detail = $this->presenceCalculationDetail($start, $oneday, $end, $Employee);
 
-            return $detail;
-            
-            // $presences = [];
-            // foreach($detail as $d)
-            // {
-            //     if(isset($d['types']))
-            //     {
-            //         $types = $d['types'];
-            //         foreach($types as $key => $type)
-            //         {
-            //             $types[$key]['type'] = "Hadir";
-            //             if($type['time_left'] == $type['worktime_item']->penalty)
-            //             {
-            //                 $types[$key]['type'] = "Tidak Hadir";
-            //             }
-            //         }
-            //         $presences = array_merge($presences,$types);
-            //     }
-            // }
+            $presences = [];
+            foreach($detail as $d)
+            {
+                if(isset($d['types']))
+                {
+                    $types = $d['types'];
+                    foreach($types as $key => $type)
+                    {
+                        $types[$key]['type'] = "Hadir";
+                        if($type['time_left'] == $type['worktime_item']->penalty)
+                        {
+                            $types[$key]['type'] = "Tidak Hadir";
+                        }
+                    }
+                    $presences = array_merge($presences,$types);
+                }
+            }
     
-            // $Employee = $Employee->toArray();
-            // $Employee['presences'] = $presences;
+            $Employee = $Employee->toArray();
+            $Employee['presences'] = $presences;
         }
 
         return $Employee;
