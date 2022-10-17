@@ -651,7 +651,7 @@ class EmployeeApiRepository
         }
         else
         {
-            $Employee = Employee::whereId($input['id'])->first();
+            $Employee = Employee::whereId($input['id'])->with('presences')->first();
     
             $start = new DateTime($input['date_from']);
             $end = new DateTime($input['date_to']);
@@ -673,7 +673,7 @@ class EmployeeApiRepository
                             $types[$key]['type'] = "Tidak Hadir";
                         }
                     }
-                    $presences = array_merge($presences, $types);
+                    $presences[] = $types;
                 }
             }
     
