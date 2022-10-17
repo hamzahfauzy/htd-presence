@@ -371,7 +371,10 @@ class EmployeeApiRepository
 
         if(isset($input['keyword']) && !empty($input['keyword']))
         {
-            $data = $data->where('name','LIKE','%'.$input['keyword'].'%');    
+            $data = $data->where(function($query) use ($input){
+                $query->where('name','LIKE','%'.$input['keyword'].'%');   
+                $query->orwhere('NIP','LIKE','%'.$input['keyword'].'%');   
+            }); 
         }
 
         $data = $data->where('status',1)->orderBy($sortBy, $orderBy);
