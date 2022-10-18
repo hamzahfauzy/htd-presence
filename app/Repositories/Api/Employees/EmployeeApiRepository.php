@@ -720,10 +720,12 @@ class EmployeeApiRepository
                     $types = $d['types'];
                     foreach($types as $key => $type)
                     {
-                        $types[$key]['type'] = "Hadir";
-                        if(!empty($type['worktime_item']) && $type['time_left'] == $type['worktime_item']->penalty)
-                        {
-                            $types[$key]['type'] = "Tidak Hadir";
+                        if($types[$key]['type'] == 'Masuk' || $types[$key]['type'] == 'Pulang'){
+                            $types[$key]['type'] = "Hadir";
+                            if($type['time_left'] == $type['worktime_item']->penalty)
+                            {
+                                $types[$key]['type'] = "Tidak Hadir";
+                            }
                         }
                     }
                     $presences = array_merge($presences,$types);
