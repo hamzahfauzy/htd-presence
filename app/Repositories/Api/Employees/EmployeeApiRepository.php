@@ -652,8 +652,8 @@ class EmployeeApiRepository
         else
         {
             $Employee = Employee::whereId($input['id'])->with([
-                'hadir' => function ($query) use ($input) {
-                    $query->where('type', 'hadir'); // ->where('status','disetujui');
+                'presences' => function ($query) use ($input) {
+                    $query->where('type','hadir');
     
                     if(isset($input['date_from']) && isset($input['date_to'])){
                         $dateStart = date($input['date_from']).' 00:00:00';
@@ -668,72 +668,8 @@ class EmployeeApiRepository
                             $query->where('created_at',$dateStart);
                         }
                     }
-                },
-                'cuti' => function ($query) use ($input) {
-                    $cuti = PaidLeave::get()->pluck('name');
-                    $query->whereIn('type', $cuti)->where('status','disetujui');
-    
-                    if(isset($input['date_from']) && isset($input['date_to'])){
-                        $dateStart = date($input['date_from']).' 00:00:00';
-                        $dateEnd = date($input['date_to']).' 23:59:59';
-        
-                        if($dateStart != $dateEnd)
-                        {
-                            $query->whereBetween('started_at',[$dateStart,$dateEnd]);
-                        }
-                        else
-                        {
-                            $query->where('started_at',$dateStart);
-                        }
-                    }
-                },
-                'tugas' => function ($query) use ($input) {
-                    $query->whereIn('type', ['tugas luar','tugas dalam'])->where('status','disetujui');
-    
-                    if(isset($input['date_from']) && isset($input['date_to'])){
-                        $dateStart = date($input['date_from']).' 00:00:00';
-                        $dateEnd = date($input['date_to']).' 23:59:59';
-        
-                        if($dateStart != $dateEnd)
-                        {
-                            $query->whereBetween('started_at',[$dateStart,$dateEnd]);
-                        }
-                        else
-                        {
-                            $query->where('started_at',$dateStart);
-                        }
-                    }
                 }
-            ])->first();
-    
-            $start = new DateTime($input['date_from']);
-            $end = new DateTime($input['date_to']);
-            $oneday = new DateInterval("P1D");
-    
-            $detail = $this->presenceCalculationDetail($start, $oneday, $end, $Employee);
-
-            $presences = [];
-            foreach($detail as $d)
-            {
-                if(isset($d['types']))
-                {
-                    $types = $d['types'];
-                    foreach($types as $key => $type)
-                    {
-                        if($types[$key]['type'] == 'Masuk' || $types[$key]['type'] == 'Pulang'){
-                            $types[$key]['type'] = "Hadir";
-                            if($type['time_left'] == $type['worktime_item']->penalty)
-                            {
-                                $types[$key]['type'] = "Tidak Hadir";
-                            }
-                        }
-                    }
-                    $presences = array_merge($presences,$types);
-                }
-            }
-    
-            $Employee = $Employee->toArray();
-            $Employee['presences'] = $presences;
+            ])->first()->toArray();
         }
 
         return $Employee;
