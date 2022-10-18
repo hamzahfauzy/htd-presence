@@ -721,7 +721,7 @@ class EmployeeApiRepository
                     foreach($types as $key => $type)
                     {
                         $types[$key]['type'] = "Hadir";
-                        if($type['time_left'] == $type['worktime_item']->penalty)
+                        if($type['time_left'] == $type['worktime_item']['penalty'])
                         {
                             $types[$key]['type'] = "Tidak Hadir";
                         }
