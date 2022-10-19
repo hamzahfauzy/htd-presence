@@ -727,6 +727,10 @@ class EmployeeApiRepository
                                 $types[$key]['type'] = "Tidak Hadir";
                             }
                         }
+                        else
+                        {
+                            unset($types[$key]);
+                        }
                     }
                     $presences = array_merge($presences,$types);
                 }
