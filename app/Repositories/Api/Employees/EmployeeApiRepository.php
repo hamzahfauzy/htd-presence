@@ -1227,7 +1227,7 @@ class EmployeeApiRepository
                             $row['types'][$presence->type]['lat'] = $presence->lat;
                             $row['types'][$presence->type]['lng'] = $presence->lng;
                             $row['types'][$presence->type]['time'] = false;
-                            $row['types'][$presence->type]['in_location'] = $presence->in_location;
+                            $row['types'][$presence->type]['in_location'] = $presence->in_location == 1;
                             $row['types'][$presence->type]['time_left'] = 0;
                             $row['types'][$presence->type]['presentase'] = 0;
                             $row['types'][$presence->type]['worktime_item'] = [];
@@ -1245,7 +1245,7 @@ class EmployeeApiRepository
                             $row['types'][$presence->type]['lat'] = $presence->lat;
                             $row['types'][$presence->type]['lng'] = $presence->lng;
                             $row['types'][$presence->type]['time'] = false;
-                            $row['types'][$presence->type]['in_location'] = $presence->in_location;
+                            $row['types'][$presence->type]['in_location'] = $presence->in_location == 1;
                             $row['types'][$presence->type]['time_left'] = 0;
                             $row['types'][$presence->type]['presentase'] = 0;
                             $row['types'][$presence->type]['worktime_item'] = [];
@@ -1271,7 +1271,7 @@ class EmployeeApiRepository
                             $row['types'][$presence->worktime_item->name]['lat'] = $presence->lat;
                             $row['types'][$presence->worktime_item->name]['lng'] = $presence->lng;
                             $row['types'][$presence->worktime_item->name]['time'] = date('H:i',strtotime($presence->created_at));
-                            $row['types'][$presence->worktime_item->name]['in_location'] = $presence->in_location;
+                            $row['types'][$presence->worktime_item->name]['in_location'] = $presence->in_location == 1;
                             $row['types'][$presence->worktime_item->name]['time_left'] = 0;
                             $row['types'][$presence->worktime_item->name]['presentase'] = 0;
                             $row['types'][$presence->worktime_item->name]['worktime_item'] = $presence->worktime_item;
