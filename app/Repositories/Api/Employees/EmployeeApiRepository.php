@@ -569,8 +569,8 @@ class EmployeeApiRepository
         if($input['type'] == 'hadir' && isset($input['worktime_item_id']))
         {
             $worktime_item = WorktimeItem::find($input['worktime_item_id']);
-            $from = date('Y-m-d').' '.$worktime_item->start_time;
-            $to = date('Y-m-d').' '.$worktime_item->end_time;
+            $from = date('Y-m-d').' '.$worktime_item->start_time.':00';
+            $to = date('Y-m-d').' '.$worktime_item->end_time.':00';
             $date = date('Y-m-d H:i:s');
             if(!$this->check_in_range($from, $to, $date)){
                 throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('messages.presence.not-found')), 400));
