@@ -1046,7 +1046,7 @@ class EmployeeApiRepository
         $cuti_name = PaidLeave::get()->pluck('name')->toArray();
         $holidays = Holiday::get()->pluck('date');
         $holidays = $holidays->map(function($date){
-            return $date->format('Y-m-d');
+            return date('Y-m-d',strtotime($date));
         })->toArray();
 
         $dates = $p->hadir()->where('type','hadir')->pluck('created_at');
