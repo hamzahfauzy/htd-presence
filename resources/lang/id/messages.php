@@ -61,6 +61,7 @@ return [
         'presences' => 'Absensi Berhasil.',
         'report-details'  => 'Daftar Laporan Detail.',
         'reset-device'  => 'Reset Device Berhasil.',
+        'reset-password'  => 'Reset Password Berhasil.',
         'presence'=>[
             'list'=>'Daftar Absensi',
             'detail'=>'Detail Absensi',

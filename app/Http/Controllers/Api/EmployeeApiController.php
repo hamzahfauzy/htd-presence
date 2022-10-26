@@ -709,6 +709,41 @@ class EmployeeApiController extends Controller
     }
 
     /**
+     * Employee Reset password
+     * 
+     * @param int $id
+     * @param EmployeeApiFreePlaceRequest $request
+     * @param EmployeeApiRepository $EmployeeApiRepository
+     *
+     * @return Response
+     *
+     * @OA\Patch(
+     *   path="/employees/{id}/reset-password",
+     *   summary="reset password",
+     *   tags={"Employees"},
+     *   security={{"Bearer":{}}},
+     *
+     *   @OA\Parameter(
+     *     name="id",
+     *     in="path",
+     *     @OA\Schema(
+     *       type="integer",
+     *     )
+     *   ),
+     * 
+     *   @OA\Response(
+     *     response=200,
+     *     description="reset password",
+     *   )
+     * )
+     */
+    function resetPassword($id,Request $request, EmployeeApiRepository $EmployeeApiRepository)
+    {
+        $data = $EmployeeApiRepository->resetPassword($id);
+        return $this->sendResponse($data, __('messages.employee.reset-password'));
+    }
+
+    /**
      * Employee presence
      * 
      * @param int $id

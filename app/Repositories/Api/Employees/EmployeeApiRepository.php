@@ -534,6 +534,17 @@ class EmployeeApiRepository
         return $employee; 
     }
 
+    public function resetPassword($id)
+    {
+        $employee = $this->findOne($id);
+
+        $employee->user()->update([
+            'password'=>bcrypt('12345678')
+        ]);
+
+        return $employee; 
+    }
+
     public function checkIfExists($input){
         $Employee = Employee::whereId($input['id'])->first();
         if(
