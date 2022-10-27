@@ -56,7 +56,7 @@ Route::middleware('auth:sanctum')->group(function(){
         $user->employee;
         return $user;
     });
-    
+
     Route::prefix('holidays')->group(function(){
         Route::get('/',[HolidayApiController::class,'lists']);
         Route::post('/',[HolidayApiController::class,'create']);
