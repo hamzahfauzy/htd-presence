@@ -619,7 +619,7 @@ class EmployeeApiRepository
             $status = 'disetujui';
         }
 
-        $Employee->presences()->create([
+        $result = $Employee->presences()->create([
             'type'=>$input['type'],
             'status'=>$status,
             'presence_id'=>$input['worktime_item_id']??null,
@@ -633,7 +633,7 @@ class EmployeeApiRepository
             'finished_at' => $input->finished_at??null,
         ]);
 
-        return $this->findOne($Employee->id);
+        return $result;
     }
 
     public function listPresence($input)
