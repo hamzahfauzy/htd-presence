@@ -22,7 +22,7 @@ class DashboardApiController extends Controller
         
         $date = $request->date ?? date('Y-m-d');
         $hari = $this->today(date('D', strtotime($date)));
-        $worktimeItems = WorktimeItem::where('worktime_id',1)->where('days','LIKE','%'.$hari.'%')->get();
+        $worktimeItems = WorktimeItem::where('worktime_id',1)->where('days','LIKE','%'.$hari.'%')->orderBy('name')->get();
 
         foreach($worktimeItems as $worktimeItem)
         {
