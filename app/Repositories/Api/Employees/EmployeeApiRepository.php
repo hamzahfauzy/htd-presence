@@ -86,12 +86,14 @@ class EmployeeApiRepository
     {
         $employee = Employee::with([
             'workunit.worktimes.items' => function($q){
-                $q->where('start_time','<=',date('H:i'));
-                $q->where('end_time','>=',date('H:i'));
+                $q->where('start_time','<=',date('H:i'))
+                        ->where('end_time','>=',date('H:i'))
+                        ->where('days','like', '%'.$this->today().'%');
             },
             'worktimes.items' => function($q){
-                $q->where('start_time','<=',date('H:i'));
-                $q->where('end_time','>=',date('H:i'));
+                $q->where('start_time','<=',date('H:i'))
+                        ->where('end_time','>=',date('H:i'))
+                        ->where('days','like', '%'.$this->today().'%');
             },'places','presences','user'])->whereId($id)->first();
 
         $active_worktime = null;
@@ -116,13 +118,14 @@ class EmployeeApiRepository
                         break;
                     }
                 }
-            }    
+            } 
 
             if(empty($active_worktime))
             {
                 $worktime = Worktime::whereid(1)->with(['items' => function($q){
-                    $q->where('start_time','<=',date('H:i'));
-                    $q->where('end_time','>=',date('H:i'));
+                    $q->where('start_time','<=',date('H:i'))
+                        ->where('end_time','>=',date('H:i'))
+                        ->where('days','like', '%'.$this->today().'%');
                 }])->first();
                 if(count($worktime->items))
                 {
