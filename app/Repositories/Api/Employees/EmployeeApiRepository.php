@@ -1353,7 +1353,10 @@ class EmployeeApiRepository
                 {
                     $types = $row['types'];
     
-                    sort($types);
+                    // sort($types);
+                    usort($types, function($a, $b) {
+                        return strcasecmp($a['type'] , $b['type']);
+                    });
     
                     $row['types'] = $types;
                 }
