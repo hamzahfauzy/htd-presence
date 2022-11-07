@@ -17,7 +17,7 @@ class VersionChecker
      */
     public function handle(Request $request, Closure $next)
     {
-        Log::info($request->header());
+        Log::info(getallheaders());
         return $next($request);
     }
 }
