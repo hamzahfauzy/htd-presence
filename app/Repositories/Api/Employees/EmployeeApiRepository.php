@@ -433,7 +433,7 @@ class EmployeeApiRepository
             return $update;
         } catch (\Throwable $th) {
             //throw $th;
-            Log::info($th);
+            // Log::info($th);
         }
 
         return $this->findOne($create->id);
@@ -942,8 +942,8 @@ class EmployeeApiRepository
                     $alfa++;
                     foreach($worktime_items as $item)
                     {
-                        Log::info('Tidak Absen '.$item->name.' '.$day->format('Y-m-d'));
-                        Log::info($item->penalty);
+                        // Log::info('Tidak Absen '.$item->name.' '.$day->format('Y-m-d'));
+                        // Log::info($item->penalty);
                         $times += $item->penalty;
                     }
                     $presentase += 3;
@@ -974,9 +974,9 @@ class EmployeeApiRepository
                         foreach($diff as $worktime_item_id)
                         {
                             $worktime_item = WorktimeItem::find($worktime_item_id);
-                            Log::info('Tidak Absen '.$worktime_item->name.' '.$day->format('Y-m-d'));
+                            // Log::info('Tidak Absen '.$worktime_item->name.' '.$day->format('Y-m-d'));
 
-                            Log::info($worktime_item->penalty);
+                            // Log::info($worktime_item->penalty);
 
                             $times += $worktime_item->penalty;
                             $presentase += 1.5;
@@ -999,7 +999,7 @@ class EmployeeApiRepository
                         if($presence_time >= $on_time_start && $presence_time <= $on_time_end)
                         {
                             // on time
-                            Log::info('On Time '.$day->format('Y-m-d'));
+                            // Log::info('On Time '.$day->format('Y-m-d'));
                             continue;
                         }
         
@@ -1007,14 +1007,14 @@ class EmployeeApiRepository
                         if($presence_time < $on_time_start)
                         {
                             $time_left = ($on_time_start-$presence_time)/60;
-                            Log::info('Cepat '.$time_left.' '.$day->format('Y-m-d'));
+                            // Log::info('Cepat '.$time_left.' '.$day->format('Y-m-d'));
                         }
                         
                         // terlalu lambat
                         if($presence_time > $on_time_end)
                         {
                             $time_left = ($presence_time-$on_time_end)/60;
-                            Log::info('Lambat '.$time_left.' '.$day->format('Y-m-d'));
+                            // Log::info('Lambat '.$time_left.' '.$day->format('Y-m-d'));
                         }
         
                         if($time_left > 0){
@@ -1191,7 +1191,7 @@ class EmployeeApiRepository
 
                     $absen = $p->hadir()->where('type','hadir')->with('worktime_item')->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
                     $absences = $absen->get();
-                    Log::info($absences);
+                    // Log::info($absences);
                     $absence_ids = array_map(function($absence){
                         return $absence['worktime_item']['id'];
                     }, $absences->toArray());
@@ -1204,9 +1204,9 @@ class EmployeeApiRepository
                         foreach($diff as $worktime_item_id)
                         {
                             $worktime_item = WorktimeItem::find($worktime_item_id);
-                            Log::info('Tidak Absen '.$worktime_item->name.' '.$day->format('Y-m-d'));
+                            // Log::info('Tidak Absen '.$worktime_item->name.' '.$day->format('Y-m-d'));
 
-                            Log::info($worktime_item->penalty);
+                            // Log::info($worktime_item->penalty);
 
                             $times += $worktime_item->penalty;
                             $presentase += 1.5;
@@ -1299,7 +1299,7 @@ class EmployeeApiRepository
                             if($presence_time >= $on_time_start && $presence_time <= $on_time_end)
                             {
                                 // on time
-                                Log::info('On Time '.$day->format('Y-m-d'));
+                                // Log::info('On Time '.$day->format('Y-m-d'));
                                 continue;
                             }
             
@@ -1307,14 +1307,14 @@ class EmployeeApiRepository
                             if($presence_time < $on_time_start)
                             {
                                 $time_left = ($on_time_start-$presence_time)/60;
-                                Log::info('Cepat '.$time_left.' '.$day->format('Y-m-d'));
+                                // Log::info('Cepat '.$time_left.' '.$day->format('Y-m-d'));
                             }
                             
                             // terlalu lambat
                             if($presence_time > $on_time_end)
                             {
                                 $time_left = ($presence_time-$on_time_end)/60;
-                                Log::info('Lambat '.$time_left.' '.$day->format('Y-m-d'));
+                                // Log::info('Lambat '.$time_left.' '.$day->format('Y-m-d'));
                             }
             
                             if($time_left > 0){
