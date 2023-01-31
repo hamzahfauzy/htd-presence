@@ -17,7 +17,13 @@ class VersionChecker
      */
     public function handle(Request $request, Closure $next)
     {
-        Log::info(getallheaders());
-        return $next($request);
+        $headers = getallheaders();
+        $versionAllowed = [10];
+        if(in_array($headers['X-App-Version'],$versionAllowed))
+        {
+            return $next($request);
+        }
+
+        throw new HttpResponseException(Response::json(ResponseUtil::makeError('Versi Aplikasi sudah tidak di dukung. Harap Update Aplikasi'), 400));
     }
 }
