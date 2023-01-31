@@ -3,8 +3,11 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use App\Http\ResponseUtil;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class VersionChecker
 {
@@ -19,7 +22,11 @@ class VersionChecker
     {
         $headers = getallheaders();
         $versionAllowed = [10];
-        if(in_array($headers['X-App-Version'],$versionAllowed))
+        if(
+            (isset($headers['X-App-Version']) && in_array($headers['X-App-Version'],$versionAllowed))
+            ||
+            (in_array($headers['Host'],['localhost:8000','sisapa.tanjungbalaikota.go.id']))
+        )
         {
             return $next($request);
         }
