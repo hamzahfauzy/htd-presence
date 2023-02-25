@@ -90,9 +90,16 @@ class WorkunitApiRepository
             }
         }
 
+        if(isset($input['keyword']) && !empty($input['keyword']))
+        {
+            $presences = $presences->whereHas('employee',function($query) use ($input){
+                return $query->where('name','LIKE','%'.$input['keyword'].'%');
+            });
+        }
+        
         $presences = $presences->with(['workunit','employee','worktime_item'])
-                        ->orderBy($sortBy, $orderBy);
-    
+        ->orderBy($sortBy, $orderBy);
+
         if(empty($input))
             return $presences->get();
         return $presences->paginate($perPage);
