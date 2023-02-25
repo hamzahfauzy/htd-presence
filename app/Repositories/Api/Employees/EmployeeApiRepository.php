@@ -63,6 +63,13 @@ class EmployeeApiRepository
         $perPage = $input['per_page'] ?? 10;
         $employees = Employee::with('workunit');
 
+        if(isset($input['workunit_id']))
+        {
+            $employees = $employees->where('workunit_id',$input['workunit_id']);
+        }
+
+        $employees = $employees->where('status',1);
+
         if(isset($input['keyword']) && !empty($input['keyword']))
         {
             $employees = $employees->where('name','LIKE','%'.$input['keyword'].'%')
@@ -70,13 +77,6 @@ class EmployeeApiRepository
                             ->orwhere('position','LIKE','%'.$input['keyword'].'%')
                             ->orwhere('phone','LIKE','%'.$input['keyword'].'%');
         }
-
-        if(isset($input['workunit_id']))
-        {
-            $employees = $employees->where('workunit_id',$input['workunit_id']);
-        }
-
-        $employees = $employees->where('status',1);
         
 
         return $employees->orderBy($sortBy, $orderBy)->paginate($perPage);

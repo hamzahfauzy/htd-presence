@@ -25,7 +25,7 @@ class Updater
         $User->role = $input['role'];
         $User->shift_management = $input['shift_management'];
         $User->workunit_id = $input['workunit_id'];
-        $User->password = bcrypt($input['password']);
+        $User->password = empty($input['password']) ?: bcrypt($input['password']);
 
         $User->save();
 
