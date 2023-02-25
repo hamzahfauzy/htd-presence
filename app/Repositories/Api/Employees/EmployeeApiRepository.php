@@ -1119,7 +1119,7 @@ class EmployeeApiRepository
 
             $kehadiran = 'hadir';
             
-            if($day_num < 6 && $day_num > 0 && !$holiday) {
+            if(!$holiday) {
                 $hari_kerja++;
 
                 $row         = [];
@@ -1363,7 +1363,7 @@ class EmployeeApiRepository
 
 
                 $row['time_left'] = ceil($times);
-                $row['presentase'] = $presentase;
+                $row['presentase'] = $presentase >= 3 ? 3 : $presentase;
                 $row['hari_kerja'] = $hari_kerja;
                 $row['hadir'] = $hadir;
                 $row['cuti'] = $cuti;
