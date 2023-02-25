@@ -20,7 +20,7 @@ class DeleterWorktime
     {
         $input   = $this->input;
         $Employee = Employee::whereId($this->id)->first();
-        $Employee->worktimes()->detach($input->worktime_id);
+        $Employee->worktimes()->wherePivot('date_start', $input->date_start)->wherePivot('date_end', $input->date_end)->detach($input->worktime_id);
         return $Employee;
     }
 }
