@@ -25,7 +25,7 @@ class VersionChecker
         if(
             (isset($headers['X-App-Version']) && in_array($headers['X-App-Version'],$versionAllowed))
             ||
-            (in_array($headers['Host'],['localhost:8000','sisapa.tanjungbalaikota.go.id']))
+            (in_array($headers['Host'],['localhost:8000','sisapa.tanjungbalaikota.go.id', '10.0.2.2:8000']))
         )
         {
             return $next($request);
