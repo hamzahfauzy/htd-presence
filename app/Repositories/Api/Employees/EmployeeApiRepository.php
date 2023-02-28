@@ -1067,7 +1067,10 @@ class EmployeeApiRepository
             return date('Y-m-d',strtotime($date));
         })->toArray();
 
-        $dates = $p->hadir()->where('type','hadir')->pluck('created_at');
+        $dates = $p->hadir()->where('type','hadir')->where('status','disetujui')->whereBetween('created_at',[
+            $start->format("Y-m-d").' 00:00:00',$end->format('Y-m-d').' 23:59:59'
+        ])->pluck('created_at');
+
         $other_absen = [];
         $tugas_dates = $p->tugas;
         $all_tugas_dates = [];
@@ -1141,19 +1144,34 @@ class EmployeeApiRepository
                 // pegawai umum
                 if(!$holiday)
                 {
-                    if((empty($worktime_items) || !count($worktime_items)) && $p->workunit->worktimes && count($p->workunit->worktimes))
+                    if($p->workunit->worktimes && count($p->workunit->worktimes))
                     {
-                        $worktime_items = $p->workunit->worktimes[0]->items;
-                    }        
-
-                    if((empty($worktime_items) || !count($worktime_items)))
+                        $worktime = $p->workunit->worktimes()->wherePivot('date_start','<=',$_date)->wherePivot('date_end','>=',$_date)->first();
+                        if($worktime)
+                        {
+                            $worktime_items = $worktime->items;
+                            // $worktime_items = $p->workunit->worktimes[0]->items;
+                        }
+                    }
+                    else
                     {
                         $worktime_items = Worktime::whereid(1)->first()->items;
                     }
                 }
             }
+            
+            foreach($worktime_items as $index => $worktime_item)
+            {
+                if($worktime_item->days){
+                    $days = explode(",",$worktime_item->days);
+    
+                    if(!in_array($this->today($day->format('D')),$days)){
+                        unset($worktime_items[$index]);
+                    }
+                }
+            }
 
-            if($worktime_items)
+            if($worktime_items && !empty($worktime_items) && count($worktime_items))
             {
                 $hari_kerja++;
 
@@ -1167,16 +1185,6 @@ class EmployeeApiRepository
                 $row['date'] = $_date;
     
                 // $worktime_items = count($p->worktimes) ? $p->worktimes[0]->items : null;
-                foreach($worktime_items as $index => $worktime_item)
-                {
-                    if($worktime_item->days){
-                        $days = explode(",",$worktime_item->days);
-        
-                        if(!in_array($this->today($day->format('D')),$days)){
-                            unset($worktime_items[$index]);
-                        }
-                    }
-                }
                 
                 if(!in_array($day->format('Y-m-d'),$formattedDates))
                 {
@@ -1202,9 +1210,6 @@ class EmployeeApiRepository
                 }
                 else
                 {
-    
-                    if(empty($worktime_items) || count($worktime_items) == 0) continue;
-    
                     $worktime_items = $worktime_items->toArray();
                     
                     $workime_item_ids = array_map(function($worktime_item){
@@ -1213,7 +1218,7 @@ class EmployeeApiRepository
     
                     // $other_absen_in = array_merge(['tugas luar','tugas dalam'], $cuti_name);
     
-                    $absen = $p->hadir()->where('type','hadir')->with('worktime_item')->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
+                    $absen = $p->hadir()->where('type','hadir')->where('status','disetujui')->with('worktime_item')->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
                     $absences = $absen->get();
                     // Log::info($absences);
                     $absence_ids = array_map(function($absence){
