@@ -1133,11 +1133,6 @@ class EmployeeApiRepository
                 if($worktime)
                 {
                     $worktime_items = $worktime->items;
-                    if($worktime_items)
-                    {
-                        // ada jadwal
-                        $hari_kerja++;
-                    }
                 }
 
             }
@@ -1146,7 +1141,6 @@ class EmployeeApiRepository
                 // pegawai umum
                 if(!$holiday)
                 {
-                    $hari_kerja++;
                     if((empty($worktime_items) || !count($worktime_items)) && $p->workunit->worktimes && count($p->workunit->worktimes))
                     {
                         $worktime_items = $p->workunit->worktimes[0]->items;
@@ -1161,6 +1155,8 @@ class EmployeeApiRepository
 
             if($worktime_items)
             {
+                $hari_kerja++;
+
                 $row         = [];
                 $row['id']   = $p->id;
                 $row['nip']  = $p->nip;
