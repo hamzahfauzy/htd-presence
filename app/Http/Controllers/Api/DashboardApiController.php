@@ -21,27 +21,55 @@ class DashboardApiController extends Controller
         }
         
         $date = $request->date ?? date('Y-m-d');
-        $hari = $this->today(date('D', strtotime($date)));
-        $worktimeItems = WorktimeItem::where('worktime_id',1)->where('days','LIKE','%'.$hari.'%')->orderBy('name')->get();
-
-        foreach($worktimeItems as $worktimeItem)
+        $employeePresences = DB::select("SELECT COUNT(*) as TOTAL, employee_presence.presence_id, type, IF(presence_id IS NULL, NULL, (SELECT worktime_items.name FROM worktime_items WHERE worktime_items.id = employee_presence.presence_id)) as name FROM employee_presence WHERE employee_presence.created_at LIKE '%$date%' GROUP BY presence_id, type");
+        $worktimeItems = [];
+        foreach($employeePresences as $presence)
         {
-            $employeePresence = EmployeePresence::where('presence_id',$worktimeItem->id)->where('created_at','LIKE','%'.$date.'%');
-    
-            if($request->workunit_id)
+            if(empty($presence->name))
             {
-                $employeePresence = $employeePresence->where('workunit_id',$request->workunit_id);
+                if(!isset($worktimeItems[$presence->type]))
+                {
+                    $worktimeItems[$presence->type] = 0;
+                }
+    
+                $worktimeItems[$presence->type] += $presence->TOTAL;
             }
-
-            $worktimeItem->counter = $employeePresence->count();
+            else
+            {
+                if(!isset($worktimeItems[$presence->name]))
+                {
+                    $worktimeItems[$presence->name] = 0;
+                }
+    
+                $worktimeItems[$presence->name] += $presence->TOTAL;
+            }
         }
+
+        $worktimeItems = array_map(function($name, $count){
+            return ['name' => ucwords($name), 'count' => $count];
+        }, array_keys($worktimeItems), $worktimeItems);
+        // $worktimeItems = WorktimeItem::where('worktime_id',1)->where('days','LIKE','%'.$hari.'%')->orderBy('name')->get('name');
+
+        // foreach($worktimeItems as $worktimeItem)
+        // {
+        //     $employeePresence = EmployeePresence::whereHas('worktime_item',function($query) use ($worktimeItem){
+        //         $query->where('name',$worktimeItem->name);
+        //     })->where('created_at','LIKE','%'.$date.'%');
+    
+        //     if($request->workunit_id)
+        //     {
+        //         $employeePresence = $employeePresence->where('workunit_id',$request->workunit_id);
+        //     }
+
+        //     $worktimeItem->counter = $employeePresence->count();
+        // }
 
         $data = [
             'employees' => $employees->count(),
             'worktimeItems' => $worktimeItems
         ];
         
-        return $this->sendResponse($data, __('messages.user.lists'));
+        return $this->sendResponse($data, 'dashboard statistic');
     }
 
     function today($d = null){

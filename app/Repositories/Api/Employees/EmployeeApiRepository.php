@@ -589,6 +589,10 @@ class EmployeeApiRepository
             $worktime_item = WorktimeItem::find($input['worktime_item_id']);
             $from = date('Y-m-d').' '.$worktime_item->start_time.':00';
             $to = date('Y-m-d').' '.$worktime_item->end_time.':00';
+            if(strtotime($from) > strtotime($to))
+            {
+                $to = date('Y-m-d H:i:s',strtotime('+1 day', strtotime($to)));
+            }
             $date = date('Y-m-d H:i:s');
             if(!$this->check_in_range($from, $to, $date)){
                 throw new HttpResponseException(Response::json(ResponseUtil::makeError(__('messages.presence.not-found')), 400));
@@ -1188,10 +1192,9 @@ class EmployeeApiRepository
                 
                 if(!in_array($day->format('Y-m-d'),$formattedDates))
                 {
-                    $alfa++;
+                    // check if the day is today
                     foreach($worktime_items as $item)
                     {
-                        $times += $item->penalty;
                         $row['types'][$item->name]['id'] = 0;
                         $row['types'][$item->name]['type'] = $item->name;
                         $row['types'][$item->name]['attachment_url'] = false;
@@ -1201,12 +1204,27 @@ class EmployeeApiRepository
                         $row['types'][$item->name]['status'] = false;
                         $row['types'][$item->name]['time'] = false;
                         $row['types'][$item->name]['in_location'] = false;
-                        $row['types'][$item->name]['time_left'] = $item->penalty;
-                        $row['types'][$item->name]['presentase'] = 1.5;
+                        $row['types'][$item->name]['time_left'] = 0;
+                        $row['types'][$item->name]['presentase'] = 0;
                         $row['types'][$item->name]['worktime_item'] = $item;
                         $row['types'][$item->name]['date'] = $day->format('Y-m-d');
+
+                        $now = strtotime('now');
+                        $compare_end = strtotime($day->format('Y-m-d').' '.$item->end_time.':00');
+
+                        if($day->format('Y-m-d') == date('Y-m-d') && $now > $compare_end)
+                        {
+                            $times += $item->penalty;
+                            $row['types'][$item->name]['time_left'] = $item->penalty;
+                            $row['types'][$item->name]['presentase'] = 1.5;
+                        }
                     }
-                    $presentase += 3;
+
+                    if($day->format('Y-m-d') != date('Y-m-d') && strtotime($day->format('Y-m-d')) < strtotime(date('Y-m-d')))
+                    {
+                        $alfa++;
+                        $presentase += 3;
+                    }
                 }
                 else
                 {
