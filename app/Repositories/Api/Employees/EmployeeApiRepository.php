@@ -99,12 +99,16 @@ class EmployeeApiRepository
         $active_worktime = null;
         if($employee){
             $employee->is_holiday = Holiday::where('date',date("Y-m-d"))->exists();
-            foreach($employee->worktimes as $worktime)
+            if(count($employee->worktimes))
             {
-                if(count($worktime->items))
+                $worktime = $employee->worktimes()->wherePivot('date_start','<=',date("Y-m-d"))->wherePivot('date_end','>=',date("Y-m-d"))->first();
+                if($worktime)
                 {
-                    $active_worktime = $worktime->items[0];
-                    break;
+                    $active_worktime = $worktime->items()->where('start_time','<=',date('H:i'))->where('end_time','>=',date('H:i'))->first();
+                    if($active_worktime)
+                    {
+                        $employee->is_holiday = false;
+                    }
                 }
             }
             
@@ -1118,10 +1122,45 @@ class EmployeeApiRepository
             $times = 0;
 
             $kehadiran = 'hadir';
-            
-            if(!$holiday) {
-                $hari_kerja++;
 
+            $_date = $day->format('Y-m-d');
+
+            $worktime_items = null;
+            if(count($p->worktimes))
+            {
+                // pegawai shift
+                $worktime = $p->worktimes()->wherePivot('date_start','<=',$_date)->wherePivot('date_end','>=',$_date)->first();
+                if($worktime)
+                {
+                    $worktime_items = $worktime->items;
+                    if($worktime_items)
+                    {
+                        // ada jadwal
+                        $hari_kerja++;
+                    }
+                }
+
+            }
+            else
+            {
+                // pegawai umum
+                if(!$holiday)
+                {
+                    $hari_kerja++;
+                    if((empty($worktime_items) || !count($worktime_items)) && $p->workunit->worktimes && count($p->workunit->worktimes))
+                    {
+                        $worktime_items = $p->workunit->worktimes[0]->items;
+                    }        
+
+                    if((empty($worktime_items) || !count($worktime_items)))
+                    {
+                        $worktime_items = Worktime::whereid(1)->first()->items;
+                    }
+                }
+            }
+
+            if($worktime_items)
+            {
                 $row         = [];
                 $row['id']   = $p->id;
                 $row['nip']  = $p->nip;
@@ -1129,20 +1168,9 @@ class EmployeeApiRepository
                 $row['group'] = $p->group;
                 $row['position'] = $p->position;
                 $row['workunit'] = $p->workunit->name;
-                $row['date'] = $day->format('Y-m-d');
-
-                $worktime_items = count($p->worktimes) ? $p->worktimes[0]->items : null;
-                    
-                if((empty($worktime_items) || !count($worktime_items)) && $p->workunit->worktimes && count($p->workunit->worktimes))
-                {
-                    $worktime_items = $p->workunit->worktimes[0]->items;
-                }        
-
-                if((empty($worktime_items) || !count($worktime_items)))
-                {
-                    $worktime_items = Worktime::whereid(1)->first()->items;
-                }
-
+                $row['date'] = $_date;
+    
+                // $worktime_items = count($p->worktimes) ? $p->worktimes[0]->items : null;
                 foreach($worktime_items as $index => $worktime_item)
                 {
                     if($worktime_item->days){
@@ -1178,39 +1206,39 @@ class EmployeeApiRepository
                 }
                 else
                 {
-
+    
                     if(empty($worktime_items) || count($worktime_items) == 0) continue;
-
+    
                     $worktime_items = $worktime_items->toArray();
                     
                     $workime_item_ids = array_map(function($worktime_item){
                         return $worktime_item['id'];
                     }, $worktime_items);
-
+    
                     // $other_absen_in = array_merge(['tugas luar','tugas dalam'], $cuti_name);
-
+    
                     $absen = $p->hadir()->where('type','hadir')->with('worktime_item')->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
                     $absences = $absen->get();
                     // Log::info($absences);
                     $absence_ids = array_map(function($absence){
                         return $absence['worktime_item']['id'];
                     }, $absences->toArray());
-
+    
                     // get the different
                     $diff = array_diff($workime_item_ids, $absence_ids);
-
+    
                     if($diff && !isset($other_absen[$day->format("Y-m-d")]))
                     {
                         foreach($diff as $worktime_item_id)
                         {
                             $worktime_item = WorktimeItem::find($worktime_item_id);
                             // Log::info('Tidak Absen '.$worktime_item->name.' '.$day->format('Y-m-d'));
-
+    
                             // Log::info($worktime_item->penalty);
-
+    
                             $times += $worktime_item->penalty;
                             $presentase += 1.5;
-
+    
                             $row['types'][$worktime_item->name]['id'] = 0;
                             $row['types'][$worktime_item->name]['type'] = $worktime_item->name;
                             $row['types'][$worktime_item->name]['attachment_url'] = false;
@@ -1226,7 +1254,7 @@ class EmployeeApiRepository
                             $row['types'][$worktime_item->name]['date'] = $day->format('Y-m-d');
                         }
                     }
-
+    
                     $day_time_left = 0;
                     if(isset($other_absen[$day->format("Y-m-d")]))
                     {
@@ -1248,7 +1276,7 @@ class EmployeeApiRepository
                             $row['types'][$presence->type]['date'] = $day->format('Y-m-d H:i:s');
                             $row['types'][$presence->type]['status'] = $presence->status;
                         }
-
+    
                         if(in_array($presence->type,$cuti_name))
                         {
                             $cuti++;
@@ -1348,7 +1376,7 @@ class EmployeeApiRepository
                         }   
                     }
                 }
-
+    
                 if(isset($row['types']))
                 {
                     $types = $row['types'];
@@ -1360,8 +1388,8 @@ class EmployeeApiRepository
     
                     $row['types'] = $types;
                 }
-
-
+    
+    
                 $row['time_left'] = ceil($times);
                 $row['presentase'] = $presentase >= 3 ? 3 : $presentase;
                 $row['hari_kerja'] = $hari_kerja;
@@ -1371,6 +1399,7 @@ class EmployeeApiRepository
                 $row['alfa'] = $alfa;
                 $rows[] = $row;
             }
+
 
         }
 
