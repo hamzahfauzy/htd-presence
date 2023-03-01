@@ -21,7 +21,7 @@ class VersionChecker
     public function handle(Request $request, Closure $next)
     {
         $headers = getallheaders();
-        $versionAllowed = [10];
+        $versionAllowed = [11];
         if(
             (isset($headers['X-App-Version']) && in_array($headers['X-App-Version'],$versionAllowed))
             ||
