@@ -1150,7 +1150,7 @@ class EmployeeApiRepository
                 {
                     if($p->workunit->worktimes && count($p->workunit->worktimes))
                     {
-                        $worktime = $p->workunit->worktimes()->wherePivot('date_start','<=',$_date)->wherePivot('date_end','>=',$_date)->first();
+                        $worktime = $p->workunit->worktimes()->first();
                         if($worktime)
                         {
                             $worktime_items = $worktime->items;
