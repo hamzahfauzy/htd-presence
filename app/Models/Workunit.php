@@ -41,7 +41,7 @@ class Workunit extends Model
     
     function worktimes()
     {
-        return $this->belongsToMany(Worktime::class,'workunit_worktime')->withPivot('date_start','date_end');;
+        return $this->belongsToMany(Worktime::class,'worktime_workunit')->withPivot('date_start','date_end');;
     }
 
     function place()
