@@ -46,7 +46,7 @@ class DashboardApiController extends Controller
         }
 
         $worktimeItems = array_map(function($name, $count){
-            return ['name' => ucwords($name), 'count' => $count];
+            return ['name' => ucwords($name), 'counter' => $count];
         }, array_keys($worktimeItems), $worktimeItems);
         // $worktimeItems = WorktimeItem::where('worktime_id',1)->where('days','LIKE','%'.$hari.'%')->orderBy('name')->get('name');
 
