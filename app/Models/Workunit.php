@@ -41,7 +41,7 @@ class Workunit extends Model
     
     function worktimes()
     {
-        return $this->belongsToMany(Worktime::class);
+        return $this->belongsToMany(Worktime::class,'worktime_workunit');
     }
 
     function place()
