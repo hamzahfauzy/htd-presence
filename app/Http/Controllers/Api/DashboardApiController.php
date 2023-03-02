@@ -20,6 +20,7 @@ class DashboardApiController extends Controller
             $employees = $employees->where('workunit_id',$request->workunit_id);
         }
         
+        $employeesCount = $employees->count();
         $date = $request->date ?? date('Y-m-d');
         $employeePresences = DB::select("SELECT COUNT(*) as TOTAL, employee_presence.presence_id, type, IF(presence_id IS NULL, NULL, (SELECT worktime_items.name FROM worktime_items WHERE worktime_items.id = employee_presence.presence_id)) as name FROM employee_presence WHERE employee_presence.created_at LIKE '%$date%' GROUP BY presence_id, type");
         $worktimeItems = [];
@@ -54,17 +55,23 @@ class DashboardApiController extends Controller
             $worktimeItems[$key] += $presence->TOTAL;
         }
 
+        $total_masuk = $worktimeItems['masuk'] + $absen_lainnya;
+        $total_pulang = $worktimeItems['pulang'] ? $worktimeItems['pulang'] + $absen_lainnya : 0;
+
         $worktimeItems = array_merge([
-            'total masuk' => $worktimeItems['masuk'] + $absen_lainnya,
-            'total pulang' => $worktimeItems['pulang'] ? $worktimeItems['pulang'] + $absen_lainnya : 0,
+            'total masuk' => $total_masuk . " (".number_format($total_masuk ? $total_masuk/$employeesCount : 0).")",
+            'total pulang' => $total_pulang . " (".number_format($total_pulang ? $total_pulang/$employeesCount : 0).")",
         ], $worktimeItems);
+
+        unset($worktimeItems['masuk']);
+        unset($worktimeItems['pulang']);
 
         $worktimeItems = array_map(function($name, $count){
             return ['name' => ucwords($name), 'counter' => $count];
         }, array_keys($worktimeItems), $worktimeItems);
 
         $data = [
-            'employees' => $employees->count(),
+            'employees' => $employeesCount,
             'worktimeItems' => $worktimeItems
         ];
         
