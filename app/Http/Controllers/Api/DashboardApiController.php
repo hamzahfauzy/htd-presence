@@ -23,6 +23,7 @@ class DashboardApiController extends Controller
         $date = $request->date ?? date('Y-m-d');
         $employeePresences = DB::select("SELECT COUNT(*) as TOTAL, employee_presence.presence_id, type, IF(presence_id IS NULL, NULL, (SELECT worktime_items.name FROM worktime_items WHERE worktime_items.id = employee_presence.presence_id)) as name FROM employee_presence WHERE employee_presence.created_at LIKE '%$date%' GROUP BY presence_id, type");
         $worktimeItems = [];
+        $total = 0;
         foreach($employeePresences as $presence)
         {
             $key = "";
@@ -42,12 +43,15 @@ class DashboardApiController extends Controller
                 $worktimeItems[$key] = 0;
             }
 
-            $worktimeItems[$key] = $presence->TOTAL;
+            $worktimeItems[$key] += $presence->TOTAL;
+            $total += $presence->TOTAL;
         }
 
         $worktimeItems = array_map(function($name, $count){
-            return ['name' => $name, 'counter' => $count];
+            return ['name' => ucwords($name), 'counter' => $count];
         }, array_keys($worktimeItems), $worktimeItems);
+
+        $worktimeItems['Total'] = $total;
 
         $data = [
             'employees' => $employees->count(),
