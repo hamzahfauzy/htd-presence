@@ -51,7 +51,7 @@ class DashboardApiController extends Controller
             return ['name' => ucwords($name), 'counter' => $count];
         }, array_keys($worktimeItems), $worktimeItems);
 
-        $worktimeItems['Total'] = $total;
+        $worktimeItems[] = ['name' => 'Total', 'counter' => $total];
 
         $data = [
             'employees' => $employees->count(),
