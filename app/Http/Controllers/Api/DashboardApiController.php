@@ -28,12 +28,14 @@ class DashboardApiController extends Controller
             $key = "";
             if(empty($presence->name))
             {
-                $key = strtolower($presence->type);
+                $key = $presence->type;
             }
             else
             {
-                $key = strtolower($presence->name);
+                $key = $presence->name;
             }
+
+            // $key = strtolower($key);
 
             if(!isset($worktimeItems[$key]))
             {
@@ -44,7 +46,7 @@ class DashboardApiController extends Controller
         }
 
         $worktimeItems = array_map(function($name, $count){
-            return ['name' => ucwords($name), 'counter' => $count];
+            return ['name' => $name, 'counter' => $count];
         }, array_keys($worktimeItems), $worktimeItems);
 
         $data = [
