@@ -59,8 +59,8 @@ class DashboardApiController extends Controller
         $total_pulang = $worktimeItems['pulang'] ? $worktimeItems['pulang'] + $absen_lainnya : 0;
 
         $worktimeItems = array_merge([
-            'total masuk' => $total_masuk . " (".number_format($total_masuk ? $total_masuk/$employeesCount : 0).")",
-            'total pulang' => $total_pulang . " (".number_format($total_pulang ? $total_pulang/$employeesCount : 0).")",
+            'total masuk' => $total_masuk . " (".number_format($total_masuk ? $total_masuk/$employeesCount*100 : 0)."%)",
+            'total pulang' => $total_pulang . " (".number_format($total_pulang ? $total_pulang/$employeesCount*100 : 0)."%)",
         ], $worktimeItems);
 
         unset($worktimeItems['masuk']);
