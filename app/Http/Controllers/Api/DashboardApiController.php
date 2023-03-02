@@ -35,7 +35,7 @@ class DashboardApiController extends Controller
                 $key = $presence->name;
             }
 
-            // $key = strtolower($key);
+            $key = strtolower($key);
 
             if(!isset($worktimeItems[$key]))
             {
