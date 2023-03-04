@@ -22,7 +22,7 @@ class DashboardApiController extends Controller
         
         $employeesCount = $employees->count();
         $date = $request->date ?? date('Y-m-d');
-        $employeePresences = DB::select("SELECT COUNT(*) as TOTAL, employee_presence.presence_id, type, IF(presence_id IS NULL, NULL, (SELECT worktime_items.name FROM worktime_items WHERE worktime_items.id = employee_presence.presence_id)) as name FROM employee_presence WHERE employee_presence.created_at LIKE '%$date%' GROUP BY presence_id, type");
+        $employeePresences = DB::select("SELECT COUNT(*) as TOTAL, employee_presence.presence_id, employee_presence.status,type, IF(presence_id IS NULL, NULL, (SELECT worktime_items.name FROM worktime_items WHERE worktime_items.id = employee_presence.presence_id)) as name FROM employee_presence WHERE employee_presence.created_at LIKE '%$date%' GROUP BY presence_id, type");
         $worktimeItems = [];
         $worktimeItems['masuk'] = 0;
         $worktimeItems['pulang'] = 0;
