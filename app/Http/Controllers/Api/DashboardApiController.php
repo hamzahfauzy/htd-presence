@@ -51,7 +51,7 @@ class DashboardApiController extends Controller
                 $worktimeItems[$key] = 0;
             }
 
-            if(!in_array($key, ['masuk','pulang']))
+            if(!in_array($key, ['masuk disetujui','pulang disetujui','masuk diajukan','pulang diajukan','masuk ditolak','pulang ditolak']))
             {
                 $absen_lainnya[$presence->status] += $presence->TOTAL;
             }
@@ -59,8 +59,8 @@ class DashboardApiController extends Controller
             $worktimeItems[$key] += $presence->TOTAL;
         }
 
-        $total_masuk = $worktimeItems['masuk disetujui'] + $absen_lainnya['disetujui'];
-        $total_pulang = $worktimeItems['pulang disetujui'] ? $worktimeItems['pulang disetujui'] + $absen_lainnya['disetujui'] : 0;
+        $total_masuk = isset($worktimeItems['masuk disetujui']) && isset($absen_lainnya['disetujui']) ? $worktimeItems['masuk disetujui'] + $absen_lainnya['disetujui'] : 0;
+        $total_pulang = isset($worktimeItems['pulang disetujui']) && isset($absen_lainnya['disetujui']) ? $worktimeItems['pulang disetujui'] + $absen_lainnya['disetujui'] : 0;
 
         $worktimeItems = array_merge([
             'total masuk' => $total_masuk . " (".number_format($total_masuk ? $total_masuk/$employeesCount*100 : 0)."%)",
