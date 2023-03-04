@@ -26,7 +26,11 @@ class DashboardApiController extends Controller
         $worktimeItems = [];
         $worktimeItems['masuk'] = 0;
         $worktimeItems['pulang'] = 0;
-        $absen_lainnya = 0;
+        $absen_lainnya = [
+            'diajukan' => 0,
+            'disetujui' => 0,
+            'ditolak' => 0,
+        ];
         $total = 0;
         foreach($employeePresences as $presence)
         {
@@ -40,7 +44,7 @@ class DashboardApiController extends Controller
                 $key = $presence->name;
             }
 
-            $key = strtolower($key);
+            $key = strtolower($key .' '. $presence->status);
 
             if(!isset($worktimeItems[$key]))
             {
@@ -49,22 +53,22 @@ class DashboardApiController extends Controller
 
             if(!in_array($key, ['masuk','pulang']))
             {
-                $absen_lainnya += $presence->TOTAL;
+                $absen_lainnya[$presence->status] += $presence->TOTAL;
             }
 
             $worktimeItems[$key] += $presence->TOTAL;
         }
 
-        $total_masuk = $worktimeItems['masuk'] + $absen_lainnya;
-        $total_pulang = $worktimeItems['pulang'] ? $worktimeItems['pulang'] + $absen_lainnya : 0;
+        $total_masuk = $worktimeItems['masuk disetujui'] + $absen_lainnya['disetujui'];
+        $total_pulang = $worktimeItems['pulang disetujui'] ? $worktimeItems['pulang disetujui'] + $absen_lainnya['disetujui'] : 0;
 
         $worktimeItems = array_merge([
             'total masuk' => $total_masuk . " (".number_format($total_masuk ? $total_masuk/$employeesCount*100 : 0)."%)",
             'total pulang' => $total_pulang . " (".number_format($total_pulang ? $total_pulang/$employeesCount*100 : 0)."%)",
         ], $worktimeItems);
 
-        unset($worktimeItems['masuk']);
-        unset($worktimeItems['pulang']);
+        // unset($worktimeItems['masuk']);
+        // unset($worktimeItems['pulang']);
 
         $worktimeItems = array_map(function($name, $count){
             return ['name' => ucwords($name), 'counter' => $count];
