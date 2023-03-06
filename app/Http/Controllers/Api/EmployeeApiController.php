@@ -1208,20 +1208,28 @@ class EmployeeApiController extends Controller
             $html .= "<td style='padding:12px;text-align:center'>$dt[position]</td>";
             
             $additional = "";
-            foreach($dt['types'] as $type){
-                
-                $additional .= "<td style='padding:12px;text-align:center'>";
-                $additional .= "<p style='padding:12px;text-align:center'>".((string)$type['in_location'] === "1" ? "Ya" : "Tidak")."</p>";
-                $additional .= "</td>";
-                $additional .= "<td style='padding:12px;text-align:center'>";
-                $additional .= "<p style='padding:12px;text-align:center'>".$type['time'] ?? "-"."</p>";
-                $additional .= "</td>";
-                $additional .= "<td style='padding:12px;text-align:center'>";
-                $additional .= "<p style='padding:12px;text-align:center'>$type[time_left]</p>";
-                $additional .= "</td>";
-                $additional .= "<td style='padding:12px;text-align:center'>";
-                $additional .= "<p style='padding:12px;text-align:center'>$type[presentase]%</p>";
-                $additional .= "</td>";
+            foreach($dt['types'] as $type_name => $type){
+                if(in_array(strtolower($type_name)))
+                {
+                    $additional .= "<td style='padding:12px;text-align:center'>";
+                    $additional .= "<p style='padding:12px;text-align:center'>".((string)$type['in_location'] === "1" ? "Ya" : "Tidak")."</p>";
+                    $additional .= "</td>";
+                    $additional .= "<td style='padding:12px;text-align:center'>";
+                    $additional .= "<p style='padding:12px;text-align:center'>".$type['time'] ?? "-"."</p>";
+                    $additional .= "</td>";
+                    $additional .= "<td style='padding:12px;text-align:center'>";
+                    $additional .= "<p style='padding:12px;text-align:center'>$type[time_left]</p>";
+                    $additional .= "</td>";
+                    $additional .= "<td style='padding:12px;text-align:center'>";
+                    $additional .= "<p style='padding:12px;text-align:center'>$type[presentase]%</p>";
+                    $additional .= "</td>";
+                }
+                else
+                {
+                    $additional .= "<td style='padding:12px;text-align:center' colspan='8'>";
+                    $additional .= "<p style='padding:12px;text-align:center'>".ucwords($type_name)."</p>";
+                    $additional .= "</td>";
+                }
             }
 
             $html .= $additional;
