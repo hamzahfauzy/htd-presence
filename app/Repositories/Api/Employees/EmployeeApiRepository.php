@@ -1164,267 +1164,268 @@ class EmployeeApiRepository
                 }
             }
             
-            foreach($worktime_items as $index => $worktime_item)
+            if(!empty($worktime_items) && count($worktime_items))
             {
-                if($worktime_item->days){
-                    $days = explode(",",$worktime_item->days);
-    
-                    if(!in_array($this->today($day->format('D')),$days)){
-                        unset($worktime_items[$index]);
-                    }
-                }
-            }
-
-            if($worktime_items && !empty($worktime_items) && count($worktime_items))
-            {
-                $hari_kerja++;
-
-                $row         = [];
-                $row['id']   = $p->id;
-                $row['nip']  = $p->nip;
-                $row['name'] = $p->name;
-                $row['group'] = $p->group;
-                $row['position'] = $p->position;
-                $row['workunit'] = $p->workunit->name;
-                $row['date'] = $_date;
-    
-                // $worktime_items = count($p->worktimes) ? $p->worktimes[0]->items : null;
-                
-                if(!in_array($day->format('Y-m-d'),$formattedDates))
+                foreach($worktime_items as $index => $worktime_item)
                 {
-                    // check if the day is today
-                    foreach($worktime_items as $item)
-                    {
-                        $row['types'][$item->name]['id'] = 0;
-                        $row['types'][$item->name]['type'] = $item->name;
-                        $row['types'][$item->name]['attachment_url'] = false;
-                        $row['types'][$item->name]['pic_url'] = false;
-                        $row['types'][$item->name]['lat'] = false;
-                        $row['types'][$item->name]['lng'] = false;
-                        $row['types'][$item->name]['status'] = false;
-                        $row['types'][$item->name]['time'] = false;
-                        $row['types'][$item->name]['in_location'] = false;
-                        $row['types'][$item->name]['time_left'] = 0;
-                        $row['types'][$item->name]['presentase'] = 0;
-                        $row['types'][$item->name]['worktime_item'] = $item;
-                        $row['types'][$item->name]['date'] = $day->format('Y-m-d');
-
-                        $now = strtotime('now');
-                        $compare_end = strtotime($day->format('Y-m-d').' '.$item->end_time.':00');
-
-                        if($day->format('Y-m-d') == date('Y-m-d') && $now > $compare_end)
-                        {
-                            $times += $item->penalty;
-                            $row['types'][$item->name]['time_left'] = $item->penalty;
-                            $row['types'][$item->name]['presentase'] = 1.5;
+                    if($worktime_item->days){
+                        $days = explode(",",$worktime_item->days);
+        
+                        if(!in_array($this->today($day->format('D')),$days)){
+                            unset($worktime_items[$index]);
                         }
                     }
-
-                    if($day->format('Y-m-d') != date('Y-m-d') && strtotime($day->format('Y-m-d')) < strtotime(date('Y-m-d')))
-                    {
-                        $alfa++;
-                        $presentase += 3;
-                    }
                 }
-                else
+                if($worktime_items && !empty($worktime_items) && count($worktime_items))
                 {
-                    $worktime_items = $worktime_items->toArray();
+                    $hari_kerja++;
+    
+                    $row         = [];
+                    $row['id']   = $p->id;
+                    $row['nip']  = $p->nip;
+                    $row['name'] = $p->name;
+                    $row['group'] = $p->group;
+                    $row['position'] = $p->position;
+                    $row['workunit'] = $p->workunit->name;
+                    $row['date'] = $_date;
+        
+                    // $worktime_items = count($p->worktimes) ? $p->worktimes[0]->items : null;
                     
-                    $workime_item_ids = array_map(function($worktime_item){
-                        return $worktime_item['id'];
-                    }, $worktime_items);
-    
-                    // $other_absen_in = array_merge(['tugas luar','tugas dalam'], $cuti_name);
-    
-                    $absen = $p->hadir()->where('type','hadir')->where('status','disetujui')->with('worktime_item')->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
-                    $absences = $absen->get();
-                    // Log::info($absences);
-                    $absence_ids = array_map(function($absence){
-                        return $absence['worktime_item']['id'];
-                    }, $absences->toArray());
-    
-                    // get the different
-                    $diff = array_diff($workime_item_ids, $absence_ids);
-    
-                    if($diff && !isset($other_absen[$day->format("Y-m-d")]))
+                    if(!in_array($day->format('Y-m-d'),$formattedDates))
                     {
-                        foreach($diff as $worktime_item_id)
+                        // check if the day is today
+                        foreach($worktime_items as $item)
                         {
-                            $worktime_item = WorktimeItem::find($worktime_item_id);
-                            // Log::info('Tidak Absen '.$worktime_item->name.' '.$day->format('Y-m-d'));
+                            $row['types'][$item->name]['id'] = 0;
+                            $row['types'][$item->name]['type'] = $item->name;
+                            $row['types'][$item->name]['attachment_url'] = false;
+                            $row['types'][$item->name]['pic_url'] = false;
+                            $row['types'][$item->name]['lat'] = false;
+                            $row['types'][$item->name]['lng'] = false;
+                            $row['types'][$item->name]['status'] = false;
+                            $row['types'][$item->name]['time'] = false;
+                            $row['types'][$item->name]['in_location'] = false;
+                            $row['types'][$item->name]['time_left'] = 0;
+                            $row['types'][$item->name]['presentase'] = 0;
+                            $row['types'][$item->name]['worktime_item'] = $item;
+                            $row['types'][$item->name]['date'] = $day->format('Y-m-d');
     
-                            // Log::info($worktime_item->penalty);
+                            $now = strtotime('now');
+                            $compare_end = strtotime($day->format('Y-m-d').' '.$item->end_time.':00');
     
-                            $times += $worktime_item->penalty;
-                            $presentase += 1.5;
-    
-                            $row['types'][$worktime_item->name]['id'] = 0;
-                            $row['types'][$worktime_item->name]['type'] = $worktime_item->name;
-                            $row['types'][$worktime_item->name]['attachment_url'] = false;
-                            $row['types'][$worktime_item->name]['pic_url'] = false;
-                            $row['types'][$worktime_item->name]['lat'] = false;
-                            $row['types'][$worktime_item->name]['lng'] = false;
-                            $row['types'][$worktime_item->name]['status'] = false;
-                            $row['types'][$worktime_item->name]['time'] = false;
-                            $row['types'][$worktime_item->name]['in_location'] = false;
-                            $row['types'][$worktime_item->name]['time_left'] = $worktime_item->penalty;
-                            $row['types'][$worktime_item->name]['presentase'] = 1.5;
-                            $row['types'][$worktime_item->name]['worktime_item'] = $worktime_item;
-                            $row['types'][$worktime_item->name]['date'] = $day->format('Y-m-d');
-                        }
-                    }
-    
-                    $day_time_left = 0;
-                    if(isset($other_absen[$day->format("Y-m-d")]))
-                    {
-                        $presence = $other_absen[$day->format("Y-m-d")];
-                        if(in_array($presence->type,['tugas luar','tugas dalam']))
-                        {
-                            $tugas++;
-                            $row['types'][$presence->type]['id'] = $presence->id;
-                            $row['types'][$presence->type]['type'] = $presence->type;
-                            $row['types'][$presence->type]['attachment_url'] = $presence->attachment_url;
-                            $row['types'][$presence->type]['pic_url'] = $presence->pic_url;
-                            $row['types'][$presence->type]['lat'] = $presence->lat;
-                            $row['types'][$presence->type]['lng'] = $presence->lng;
-                            $row['types'][$presence->type]['time'] = false;
-                            $row['types'][$presence->type]['in_location'] = $presence->in_location == 1;
-                            $row['types'][$presence->type]['time_left'] = 0;
-                            $row['types'][$presence->type]['presentase'] = 0;
-                            $row['types'][$presence->type]['worktime_item'] = [];
-                            $row['types'][$presence->type]['date'] = $day->format('Y-m-d H:i:s');
-                            $row['types'][$presence->type]['status'] = $presence->status;
+                            if($day->format('Y-m-d') == date('Y-m-d') && $now > $compare_end)
+                            {
+                                $times += $item->penalty;
+                                $row['types'][$item->name]['time_left'] = $item->penalty;
+                                $row['types'][$item->name]['presentase'] = 1.5;
+                            }
                         }
     
-                        if(in_array($presence->type,$cuti_name))
+                        if($day->format('Y-m-d') != date('Y-m-d') && strtotime($day->format('Y-m-d')) < strtotime(date('Y-m-d')))
                         {
-                            $cuti++;
-                            $row['types'][$presence->type]['id'] = $presence->id;
-                            $row['types'][$presence->type]['type'] = $presence->type;
-                            $row['types'][$presence->type]['attachment_url'] = $presence->attachment_url;
-                            $row['types'][$presence->type]['pic_url'] = $presence->pic_url;
-                            $row['types'][$presence->type]['lat'] = $presence->lat;
-                            $row['types'][$presence->type]['lng'] = $presence->lng;
-                            $row['types'][$presence->type]['time'] = false;
-                            $row['types'][$presence->type]['in_location'] = $presence->in_location == 1;
-                            $row['types'][$presence->type]['time_left'] = 0;
-                            $row['types'][$presence->type]['presentase'] = 0;
-                            $row['types'][$presence->type]['worktime_item'] = [];
-                            $row['types'][$presence->type]['date'] = $day->format('Y-m-d H:i:s');
-                            $row['types'][$presence->type]['status'] = $presence->status;
+                            $alfa++;
+                            $presentase += 3;
                         }
                     }
                     else
                     {
-                        $hadir++;
-                        foreach($absences as $presence)
+                        $worktime_items = $worktime_items->toArray();
+                        
+                        $workime_item_ids = array_map(function($worktime_item){
+                            return $worktime_item['id'];
+                        }, $worktime_items);
+        
+                        // $other_absen_in = array_merge(['tugas luar','tugas dalam'], $cuti_name);
+        
+                        $absen = $p->hadir()->where('type','hadir')->where('status','disetujui')->with('worktime_item')->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
+                        $absences = $absen->get();
+                        // Log::info($absences);
+                        $absence_ids = array_map(function($absence){
+                            return $absence['worktime_item']['id'];
+                        }, $absences->toArray());
+        
+                        // get the different
+                        $diff = array_diff($workime_item_ids, $absence_ids);
+        
+                        if($diff && !isset($other_absen[$day->format("Y-m-d")]))
                         {
-                            if(!$presence->worktime_item){
-                                continue;
-                            }
-                            
-                            $time_left = 0;
-    
-                            $row['types'][$presence->worktime_item->name]['id'] = $presence->id;
-                            $row['types'][$presence->worktime_item->name]['type'] = $presence->worktime_item->name;
-                            $row['types'][$presence->worktime_item->name]['attachment_url'] = $presence->attachment_url;
-                            $row['types'][$presence->worktime_item->name]['pic_url'] = $presence->pic_url;
-                            $row['types'][$presence->worktime_item->name]['lat'] = $presence->lat;
-                            $row['types'][$presence->worktime_item->name]['lng'] = $presence->lng;
-                            $row['types'][$presence->worktime_item->name]['time'] = date('H:i',strtotime($presence->created_at));
-                            $row['types'][$presence->worktime_item->name]['in_location'] = $presence->in_location == 1;
-                            $row['types'][$presence->worktime_item->name]['time_left'] = 0;
-                            $row['types'][$presence->worktime_item->name]['presentase'] = 0;
-                            $row['types'][$presence->worktime_item->name]['worktime_item'] = $presence->worktime_item;
-                            $row['types'][$presence->worktime_item->name]['date'] = $presence->created_at->format('Y-m-d H:i:s');
-                            $row['types'][$presence->worktime_item->name]['status'] = $presence->status;
-            
-                            $on_time_start = strtotime($presence->worktime_item->on_time_start);
-                            $on_time_end   = strtotime($presence->worktime_item->on_time_end);
-                            $presence_time = strtotime(date('H:i',strtotime($presence->created_at)));
-            
-                            if($presence_time >= $on_time_start && $presence_time <= $on_time_end)
+                            foreach($diff as $worktime_item_id)
                             {
-                                // on time
-                                // Log::info('On Time '.$day->format('Y-m-d'));
-                                continue;
+                                $worktime_item = WorktimeItem::find($worktime_item_id);
+                                // Log::info('Tidak Absen '.$worktime_item->name.' '.$day->format('Y-m-d'));
+        
+                                // Log::info($worktime_item->penalty);
+        
+                                $times += $worktime_item->penalty;
+                                $presentase += 1.5;
+        
+                                $row['types'][$worktime_item->name]['id'] = 0;
+                                $row['types'][$worktime_item->name]['type'] = $worktime_item->name;
+                                $row['types'][$worktime_item->name]['attachment_url'] = false;
+                                $row['types'][$worktime_item->name]['pic_url'] = false;
+                                $row['types'][$worktime_item->name]['lat'] = false;
+                                $row['types'][$worktime_item->name]['lng'] = false;
+                                $row['types'][$worktime_item->name]['status'] = false;
+                                $row['types'][$worktime_item->name]['time'] = false;
+                                $row['types'][$worktime_item->name]['in_location'] = false;
+                                $row['types'][$worktime_item->name]['time_left'] = $worktime_item->penalty;
+                                $row['types'][$worktime_item->name]['presentase'] = 1.5;
+                                $row['types'][$worktime_item->name]['worktime_item'] = $worktime_item;
+                                $row['types'][$worktime_item->name]['date'] = $day->format('Y-m-d');
                             }
-            
-                            // terlalu cepat
-                            if($presence_time < $on_time_start)
+                        }
+        
+                        $day_time_left = 0;
+                        if(isset($other_absen[$day->format("Y-m-d")]))
+                        {
+                            $presence = $other_absen[$day->format("Y-m-d")];
+                            if(in_array($presence->type,['tugas luar','tugas dalam']))
                             {
-                                $time_left = ($on_time_start-$presence_time)/60;
-                                // Log::info('Cepat '.$time_left.' '.$day->format('Y-m-d'));
+                                $tugas++;
+                                $row['types'][$presence->type]['id'] = $presence->id;
+                                $row['types'][$presence->type]['type'] = $presence->type;
+                                $row['types'][$presence->type]['attachment_url'] = $presence->attachment_url;
+                                $row['types'][$presence->type]['pic_url'] = $presence->pic_url;
+                                $row['types'][$presence->type]['lat'] = $presence->lat;
+                                $row['types'][$presence->type]['lng'] = $presence->lng;
+                                $row['types'][$presence->type]['time'] = false;
+                                $row['types'][$presence->type]['in_location'] = $presence->in_location == 1;
+                                $row['types'][$presence->type]['time_left'] = 0;
+                                $row['types'][$presence->type]['presentase'] = 0;
+                                $row['types'][$presence->type]['worktime_item'] = [];
+                                $row['types'][$presence->type]['date'] = $day->format('Y-m-d H:i:s');
+                                $row['types'][$presence->type]['status'] = $presence->status;
                             }
-                            
-                            // terlalu lambat
-                            if($presence_time > $on_time_end)
+        
+                            if(in_array($presence->type,$cuti_name))
                             {
-                                $time_left = ($presence_time-$on_time_end)/60;
-                                // Log::info('Lambat '.$time_left.' '.$day->format('Y-m-d'));
+                                $cuti++;
+                                $row['types'][$presence->type]['id'] = $presence->id;
+                                $row['types'][$presence->type]['type'] = $presence->type;
+                                $row['types'][$presence->type]['attachment_url'] = $presence->attachment_url;
+                                $row['types'][$presence->type]['pic_url'] = $presence->pic_url;
+                                $row['types'][$presence->type]['lat'] = $presence->lat;
+                                $row['types'][$presence->type]['lng'] = $presence->lng;
+                                $row['types'][$presence->type]['time'] = false;
+                                $row['types'][$presence->type]['in_location'] = $presence->in_location == 1;
+                                $row['types'][$presence->type]['time_left'] = 0;
+                                $row['types'][$presence->type]['presentase'] = 0;
+                                $row['types'][$presence->type]['worktime_item'] = [];
+                                $row['types'][$presence->type]['date'] = $day->format('Y-m-d H:i:s');
+                                $row['types'][$presence->type]['status'] = $presence->status;
                             }
-            
-                            if($time_left > 0){
-                                $times += $time_left;
-                                $row['types'][$presence->worktime_item->name]['time_left'] = $time_left;
-    
-                                if($time_left >= 1 && $time_left < 31)
-                                {
-                                    $presentase += 0.5;
-                                    $row['types'][$presence->worktime_item->name]['presentase'] = 0.5;
-                                }
-            
-                                if($time_left >= 31 && $time_left < 61)
-                                {
-                                    $presentase += 1;
-                                    $row['types'][$presence->worktime_item->name]['presentase'] = 1;
+                        }
+                        else
+                        {
+                            $hadir++;
+                            foreach($absences as $presence)
+                            {
+                                if(!$presence->worktime_item){
+                                    continue;
                                 }
                                 
-                                if($time_left >= 61 && $time_left < 91)
+                                $time_left = 0;
+        
+                                $row['types'][$presence->worktime_item->name]['id'] = $presence->id;
+                                $row['types'][$presence->worktime_item->name]['type'] = $presence->worktime_item->name;
+                                $row['types'][$presence->worktime_item->name]['attachment_url'] = $presence->attachment_url;
+                                $row['types'][$presence->worktime_item->name]['pic_url'] = $presence->pic_url;
+                                $row['types'][$presence->worktime_item->name]['lat'] = $presence->lat;
+                                $row['types'][$presence->worktime_item->name]['lng'] = $presence->lng;
+                                $row['types'][$presence->worktime_item->name]['time'] = date('H:i',strtotime($presence->created_at));
+                                $row['types'][$presence->worktime_item->name]['in_location'] = $presence->in_location == 1;
+                                $row['types'][$presence->worktime_item->name]['time_left'] = 0;
+                                $row['types'][$presence->worktime_item->name]['presentase'] = 0;
+                                $row['types'][$presence->worktime_item->name]['worktime_item'] = $presence->worktime_item;
+                                $row['types'][$presence->worktime_item->name]['date'] = $presence->created_at->format('Y-m-d H:i:s');
+                                $row['types'][$presence->worktime_item->name]['status'] = $presence->status;
+                
+                                $on_time_start = strtotime($presence->worktime_item->on_time_start);
+                                $on_time_end   = strtotime($presence->worktime_item->on_time_end);
+                                $presence_time = strtotime(date('H:i',strtotime($presence->created_at)));
+                
+                                if($presence_time >= $on_time_start && $presence_time <= $on_time_end)
                                 {
-                                    $presentase += 1.25;
-                                    $row['types'][$presence->worktime_item->name]['presentase'] = 1.25;
+                                    // on time
+                                    // Log::info('On Time '.$day->format('Y-m-d'));
+                                    continue;
+                                }
+                
+                                // terlalu cepat
+                                if($presence_time < $on_time_start)
+                                {
+                                    $time_left = ($on_time_start-$presence_time)/60;
+                                    // Log::info('Cepat '.$time_left.' '.$day->format('Y-m-d'));
                                 }
                                 
-                                if($time_left >= 91)
+                                // terlalu lambat
+                                if($presence_time > $on_time_end)
                                 {
-                                    $presentase += 1.5;
-                                    $row['types'][$presence->worktime_item->name]['presentase'] = 1.5;
+                                    $time_left = ($presence_time-$on_time_end)/60;
+                                    // Log::info('Lambat '.$time_left.' '.$day->format('Y-m-d'));
                                 }
-                            }
-                        }   
+                
+                                if($time_left > 0){
+                                    $times += $time_left;
+                                    $row['types'][$presence->worktime_item->name]['time_left'] = $time_left;
+        
+                                    if($time_left >= 1 && $time_left < 31)
+                                    {
+                                        $presentase += 0.5;
+                                        $row['types'][$presence->worktime_item->name]['presentase'] = 0.5;
+                                    }
+                
+                                    if($time_left >= 31 && $time_left < 61)
+                                    {
+                                        $presentase += 1;
+                                        $row['types'][$presence->worktime_item->name]['presentase'] = 1;
+                                    }
+                                    
+                                    if($time_left >= 61 && $time_left < 91)
+                                    {
+                                        $presentase += 1.25;
+                                        $row['types'][$presence->worktime_item->name]['presentase'] = 1.25;
+                                    }
+                                    
+                                    if($time_left >= 91)
+                                    {
+                                        $presentase += 1.5;
+                                        $row['types'][$presence->worktime_item->name]['presentase'] = 1.5;
+                                    }
+                                }
+                            }   
+                        }
                     }
+        
+                    if(isset($row['types']))
+                    {
+                        $types = $row['types'];
+        
+                        // sort($types);
+                        usort($types, function($a, $b) {
+                            return strcasecmp($a['type'] , $b['type']);
+                        });
+        
+                        $row['types'] = $types;
+                    }
+        
+        
+                    $row['time_left'] = ceil($times);
+                    $row['presentase'] = $presentase >= 3 ? 3 : $presentase;
+                    $row['hari_kerja'] = $hari_kerja;
+                    $row['hadir'] = $hadir;
+                    $row['cuti'] = $cuti;
+                    $row['tugas'] = $tugas;
+                    $row['alfa'] = $alfa;
+                    $rows[] = $row;
                 }
-    
-                if(isset($row['types']))
-                {
-                    $types = $row['types'];
-    
-                    // sort($types);
-                    usort($types, function($a, $b) {
-                        return strcasecmp($a['type'] , $b['type']);
-                    });
-    
-                    $row['types'] = $types;
-                }
-    
-    
-                $row['time_left'] = ceil($times);
-                $row['presentase'] = $presentase >= 3 ? 3 : $presentase;
-                $row['hari_kerja'] = $hari_kerja;
-                $row['hadir'] = $hadir;
-                $row['cuti'] = $cuti;
-                $row['tugas'] = $tugas;
-                $row['alfa'] = $alfa;
-                $rows[] = $row;
+                
+                usort($rows, function($a, $b) {
+                    return strtotime($b['date']) - strtotime($a['date']);
+                });
             }
-
-
         }
 
-        usort($rows, function($a, $b) {
-            return strtotime($b['date']) - strtotime($a['date']);
-        });
 
         return $rows;
     }
