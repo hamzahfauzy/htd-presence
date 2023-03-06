@@ -1208,8 +1208,8 @@ class EmployeeApiController extends Controller
             $html .= "<td style='padding:12px;text-align:center'>$dt[position]</td>";
             
             $additional = "";
-            foreach($dt['types'] as $type_name => $type){
-                if(in_array(strtolower($type_name),['masuk','pulang']))
+            foreach($dt['types'] as $type){
+                if(in_array(strtolower($type['status']),['masuk','pulang']) || $type['status'] == false)
                 {
                     $additional .= "<td style='padding:12px;text-align:center'>";
                     $additional .= "<p style='padding:12px;text-align:center'>".((string)$type['in_location'] === "1" ? "Ya" : "Tidak")."</p>";
