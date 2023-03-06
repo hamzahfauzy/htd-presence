@@ -282,6 +282,7 @@ class EmployeeApiRepository
             $hari_kerja = 0;
             $cuti = 0;
             $tugas = 0;
+            $kehadiran = 0;
             foreach($calc as $c)
             {
                 $time_left += $c['time_left'];
@@ -290,12 +291,14 @@ class EmployeeApiRepository
                 $alfa += $c['alfa']; 
                 $hari_kerja += $c['hari_kerja']; 
                 $cuti += $c['cuti']; 
-                $tugas += $c['tugas']; 
+                $tugas += $c['tugas'];
+                $kehadiran += $c['kehadiran']; 
             }
 
             $p->time_left  = $time_left;
             $p->presentase = $presentase . '%';
             $p->_hadir = $hadir;
+            $p->kehadiran = $kehadiran;
             $p->alfa  = $alfa;
             $p->hari_kerja = $hari_kerja;
             $p->_cuti = $cuti;
@@ -1287,6 +1290,7 @@ class EmployeeApiRepository
                             if(in_array($presence->type,['tugas luar','tugas dalam']))
                             {
                                 $tugas++;
+                                $hadir++;
                                 $row['types'][$presence->type]['id'] = $presence->id;
                                 $row['types'][$presence->type]['type'] = $presence->type;
                                 $row['types'][$presence->type]['attachment_url'] = $presence->attachment_url;
@@ -1422,6 +1426,7 @@ class EmployeeApiRepository
                     $row['cuti'] = $cuti;
                     $row['tugas'] = $tugas;
                     $row['alfa'] = $alfa;
+                    $row['kehadiran'] = $hadir - $tugas;
                     $rows[] = $row;
                 }
                 
