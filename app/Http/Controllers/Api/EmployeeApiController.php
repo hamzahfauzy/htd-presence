@@ -1227,7 +1227,7 @@ class EmployeeApiController extends Controller
                 else
                 {
                     $additional .= "<td style='padding:12px;text-align:center' colspan='8'>";
-                    $additional .= "<p style='padding:12px;text-align:center'>".ucwords($type_name)."</p>";
+                    $additional .= "<p style='padding:12px;text-align:center'>".ucwords($type['status'])."</p>";
                     $additional .= "</td>";
                 }
             }
