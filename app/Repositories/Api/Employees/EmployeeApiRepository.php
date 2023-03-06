@@ -1188,6 +1188,7 @@ class EmployeeApiRepository
                     $row['position'] = $p->position;
                     $row['workunit'] = $p->workunit->name;
                     $row['date'] = $_date;
+                    $row['comments'] = 'initial';
         
                     // $worktime_items = count($p->worktimes) ? $p->worktimes[0]->items : null;
                     
@@ -1205,19 +1206,19 @@ class EmployeeApiRepository
                             $row['types'][$item->name]['status'] = false;
                             $row['types'][$item->name]['time'] = false;
                             $row['types'][$item->name]['in_location'] = false;
-                            $row['types'][$item->name]['time_left'] = 0;
-                            $row['types'][$item->name]['presentase'] = 0;
+                            $row['types'][$item->name]['time_left'] = $item->penalty;
+                            $row['types'][$item->name]['presentase'] = 1.5;
                             $row['types'][$item->name]['worktime_item'] = $item;
                             $row['types'][$item->name]['date'] = $day->format('Y-m-d');
     
-                            $now = strtotime('now');
+                            $now = strtotime(date('Y-m-d H:i:s'));
                             $compare_end = strtotime($day->format('Y-m-d').' '.$item->end_time.':00');
     
-                            if($day->format('Y-m-d') == date('Y-m-d') && $now > $compare_end)
+                            if($day->format('Y-m-d') == date('Y-m-d') && $now < $compare_end)
                             {
                                 $times += $item->penalty;
-                                $row['types'][$item->name]['time_left'] = $item->penalty;
-                                $row['types'][$item->name]['presentase'] = 1.5;
+                                $row['types'][$item->name]['time_left'] = 0;
+                                $row['types'][$item->name]['presentase'] = 0;
                             }
                         }
     
