@@ -1209,7 +1209,7 @@ class EmployeeApiController extends Controller
             
             $additional = "";
             foreach($dt['types'] as $type){
-                if(in_array(strtolower($type['status']),['masuk','pulang']) || $type['status'] == false)
+                if(in_array(strtolower($type['type']),['masuk','pulang']) || $type['type'] == false)
                 {
                     $additional .= "<td style='padding:12px;text-align:center'>";
                     $additional .= "<p style='padding:12px;text-align:center'>".((string)$type['in_location'] === "1" ? "Ya" : "Tidak")."</p>";
@@ -1227,7 +1227,7 @@ class EmployeeApiController extends Controller
                 else
                 {
                     $additional .= "<td style='padding:12px;text-align:center' colspan='8'>";
-                    $additional .= "<p style='padding:12px;text-align:center'>".ucwords($type['status'])."</p>";
+                    $additional .= "<p style='padding:12px;text-align:center'>".ucwords($type['type'])."</p>";
                     $additional .= "</td>";
                 }
             }
