@@ -1210,16 +1210,20 @@ class EmployeeApiRepository
                             $row['types'][$item->name]['presentase'] = 1.5;
                             $row['types'][$item->name]['worktime_item'] = $item;
                             $row['types'][$item->name]['date'] = $day->format('Y-m-d');
+
+                            $late_time = $item->penalty;
     
                             $now = strtotime(date('Y-m-d H:i:s'));
                             $compare_end = strtotime($day->format('Y-m-d').' '.$item->end_time.':00');
     
                             if($day->format('Y-m-d') == date('Y-m-d') && $now < $compare_end)
                             {
-                                $times += $item->penalty;
+                                $late_time = 0;
                                 $row['types'][$item->name]['time_left'] = 0;
                                 $row['types'][$item->name]['presentase'] = 0;
                             }
+
+                            $times += $late_time;
                         }
     
                         if($day->format('Y-m-d') != date('Y-m-d') && strtotime($day->format('Y-m-d')) < strtotime(date('Y-m-d')))
