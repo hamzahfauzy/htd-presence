@@ -1209,7 +1209,7 @@ class EmployeeApiController extends Controller
             
             $additional = "";
             foreach($dt['types'] as $type_name => $type){
-                if(in_array(strtolower($type_name)))
+                if(in_array(strtolower($type_name),['masuk','pulang']))
                 {
                     $additional .= "<td style='padding:12px;text-align:center'>";
                     $additional .= "<p style='padding:12px;text-align:center'>".((string)$type['in_location'] === "1" ? "Ya" : "Tidak")."</p>";
