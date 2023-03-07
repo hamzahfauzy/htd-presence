@@ -245,10 +245,10 @@ class EmployeeApiRepository
                     if($dateStart != $dateEnd)
                     {
                         $query->where(function($q) use ($dateStart, $dateEnd){
-                            $query->whereBetween('started_at',[$dateStart,$dateEnd]);
+                            $q->whereBetween('started_at',[$dateStart,$dateEnd]);
                         });
                         $query->orwhere(function($q) use ($dateStart, $dateEnd){
-                            $query->whereBetween('finished_at',[$dateStart,$dateEnd]);
+                            $q->whereBetween('finished_at',[$dateStart,$dateEnd]);
                         });
                     }
                     else
@@ -339,13 +339,7 @@ class EmployeeApiRepository
     
                     if($dateStart != $dateEnd)
                     {
-                        $query->where(function($q) use ($dateStart, $dateEnd){
-                            $query->whereBetween('started_at',[$dateStart,$dateEnd]);
-                        });
-                        $query->orwhere(function($q) use ($dateStart, $dateEnd){
-                            $query->whereBetween('finished_at',[$dateStart,$dateEnd]);
-                        });
-                        // $query->whereBetween('created_at',[$dateStart,$dateEnd]);
+                        $query->whereBetween('created_at',[$dateStart,$dateEnd]);
                     }
                     else
                     {
@@ -380,7 +374,13 @@ class EmployeeApiRepository
     
                     if($dateStart != $dateEnd)
                     {
-                        $query->whereBetween('started_at',[$dateStart,$dateEnd]);
+                        $query->where(function($q) use ($dateStart, $dateEnd){
+                            $q->whereBetween('started_at',[$dateStart,$dateEnd]);
+                        });
+                        $query->orwhere(function($q) use ($dateStart, $dateEnd){
+                            $q->whereBetween('finished_at',[$dateStart,$dateEnd]);
+                        });
+                        // $query->whereBetween('started_at',[$dateStart,$dateEnd]);
                     }
                     else
                     {
@@ -1085,6 +1085,22 @@ class EmployeeApiRepository
             return date('Y-m-d',strtotime($date));
         })->toArray();
 
+        $p_worktime_dates = [];
+        if(count($p->worktimes))
+        {
+            // pegawai shift
+            $worktime = $p->worktimes()->wherePivot('date_start','<=',$start->format("Y-m-d"))->wherePivot('date_end','>=',$end->format('Y-m-d'))->first();
+            if($worktime)
+            {
+                $_start  = new DateTime($worktime->date_start);
+                $_end    = new DateTime($worktime->date_end);
+                foreach(new DatePeriod($_start, $oneday, $_end->add($oneday)) as $day) {
+                    $p_worktime_dates[$day->format('Y-m-d')] = $day->format('Y-m-d');
+                }
+            }
+
+        }
+
         $dates = $p->hadir()->where('type','hadir')->where('status','disetujui')->whereBetween('created_at',[
             $start->format("Y-m-d").' 00:00:00',$end->format('Y-m-d').' 23:59:59'
         ])->pluck('created_at');
@@ -1099,7 +1115,7 @@ class EmployeeApiRepository
             foreach(new DatePeriod($_start, $oneday, $_end->add($oneday)) as $day) {
                 $day_num = $day->format("N");
                 $holiday = in_array($day->format('Y-m-d'),$holidays);
-                if($day_num < 6 && $day_num > 0 && !$holiday) {
+                if(isset($p_worktime_dates[$day->format('Y-m-d')]) || (!isset($p_worktime_dates[$day->format('Y-m-d')]) && !$holiday)) {
                     $all_tugas_dates[] = $day->format('Y-m-d');
                     $other_absen[$day->format('Y-m-d')] = $date;
                 }
@@ -1115,7 +1131,7 @@ class EmployeeApiRepository
             foreach(new DatePeriod($_start, $oneday, $_end->add($oneday)) as $day) {
                 $day_num = $day->format("N");
                 $holiday = in_array($day->format('Y-m-d'),$holidays);
-                if($day_num < 6 && $day_num > 0 && !$holiday) {
+                if(isset($p_worktime_dates[$day->format('Y-m-d')]) || (!isset($p_worktime_dates[$day->format('Y-m-d')]) && !$holiday)) {
                     $all_cuti_dates[] = $day->format('Y-m-d');
                     $other_absen[$day->format('Y-m-d')] = $date;
                 }
