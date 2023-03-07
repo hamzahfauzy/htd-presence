@@ -227,7 +227,11 @@ class EmployeeApiRepository
     
                     if($dateStart != $dateEnd)
                     {
-                        $query->whereBetween('started_at',[$dateStart,$dateEnd]);
+                        $query->where(function($q) use ($dateStart, $dateEnd){
+                            $q->whereBetween('started_at',[$dateStart,$dateEnd]);
+                            $q->orWhereBetween('finished_at',[$dateStart,$dateEnd]);
+                        });
+                        // $query->whereBetween('started_at',[$dateStart,$dateEnd]);
                     }
                     else
                     {
@@ -246,9 +250,7 @@ class EmployeeApiRepository
                     {
                         $query->where(function($q) use ($dateStart, $dateEnd){
                             $q->whereBetween('started_at',[$dateStart,$dateEnd]);
-                        });
-                        $query->orwhere(function($q) use ($dateStart, $dateEnd){
-                            $q->whereBetween('finished_at',[$dateStart,$dateEnd]);
+                            $q->orWhereBetween('finished_at',[$dateStart,$dateEnd]);
                         });
                     }
                     else
@@ -357,7 +359,11 @@ class EmployeeApiRepository
     
                     if($dateStart != $dateEnd)
                     {
-                        $query->whereBetween('started_at',[$dateStart,$dateEnd]);
+                        $query->where(function($q) use ($dateStart, $dateEnd){
+                            $q->whereBetween('started_at',[$dateStart,$dateEnd]);
+                            $q->orWhereBetween('finished_at',[$dateStart,$dateEnd]);
+                        });
+                        // $query->whereBetween('started_at',[$dateStart,$dateEnd]);
                     }
                     else
                     {
@@ -376,9 +382,7 @@ class EmployeeApiRepository
                     {
                         $query->where(function($q) use ($dateStart, $dateEnd){
                             $q->whereBetween('started_at',[$dateStart,$dateEnd]);
-                        });
-                        $query->orwhere(function($q) use ($dateStart, $dateEnd){
-                            $q->whereBetween('finished_at',[$dateStart,$dateEnd]);
+                            $q->orWhereBetween('finished_at',[$dateStart,$dateEnd]);
                         });
                         // $query->whereBetween('started_at',[$dateStart,$dateEnd]);
                     }
@@ -402,6 +406,8 @@ class EmployeeApiRepository
 
         // $data = $type ? $data->get() : $data->paginate($perPage);
         $data = $data->get();
+
+        return $data;
 
         $rows = [];
 
