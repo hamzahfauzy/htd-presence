@@ -1250,8 +1250,13 @@ class EmployeeApiRepository
     
                             $now = strtotime(date('Y-m-d H:i:s'));
                             $compare_end = strtotime($day->format('Y-m-d').' '.$item->end_time.':00');
+                            $is_today = $day->format('Y-m-d') == date('Y-m-d');
+                            $is_next_day = strtotime($day->format('Y-m-d')) > strtotime(date('Y-m-d'));
+                            $is_now_not_in_time = ($is_today && $now < $compare_end) || $is_next_day;
+
+                            $row['types'][$item->name]['comment'] = $day->format('Y-m-d').' '.date('Y-m-d').' compare '.$now.' '.$compare_end . ' ' .$is_now_not_in_time;
     
-                            if($day->format('Y-m-d') == date('Y-m-d') && $now < $compare_end)
+                            if($is_now_not_in_time)
                             {
                                 $late_time = 0;
                                 $row['types'][$item->name]['time_left'] = 0;
@@ -1296,9 +1301,6 @@ class EmployeeApiRepository
         
                                 // Log::info($worktime_item->penalty);
         
-                                $times += $worktime_item->penalty;
-                                $presentase += 1.5;
-        
                                 $row['types'][$worktime_item->name]['id'] = 0;
                                 $row['types'][$worktime_item->name]['type'] = $worktime_item->name;
                                 $row['types'][$worktime_item->name]['attachment_url'] = false;
@@ -1312,6 +1314,29 @@ class EmployeeApiRepository
                                 $row['types'][$worktime_item->name]['presentase'] = 1.5;
                                 $row['types'][$worktime_item->name]['worktime_item'] = $worktime_item;
                                 $row['types'][$worktime_item->name]['date'] = $day->format('Y-m-d');
+
+                                $now = strtotime(date('Y-m-d H:i:s'));
+                                $compare_end = strtotime($day->format('Y-m-d').' '.$worktime_item->end_time.':00');
+                                $is_today = $day->format('Y-m-d') == date('Y-m-d');
+                                $is_next_day = strtotime($day->format('Y-m-d')) > strtotime(date('Y-m-d'));
+                                $is_now_not_in_time = ($is_today && $now < $compare_end) || $is_next_day;
+
+                                $row['types'][$worktime_item->name]['comment'] = $day->format('Y-m-d').' '.date('Y-m-d').' compare '.$now.' '.$compare_end . ' ' .$is_now_not_in_time;
+        
+                                if($is_now_not_in_time)
+                                {
+                                    $late_time = 0;
+                                    $row['types'][$worktime_item->name]['time_left'] = 0;
+                                    $row['types'][$worktime_item->name]['presentase'] = 0;
+                                    $times += 0;
+                                    $presentase += 0;
+                                }
+                                else
+                                {
+                                    $times += $worktime_item->penalty;
+                                    $presentase += 1.5;
+                                }
+
                             }
                         }
         
