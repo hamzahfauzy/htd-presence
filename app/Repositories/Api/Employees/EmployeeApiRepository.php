@@ -1161,6 +1161,7 @@ class EmployeeApiRepository
             $alfa  = 0;
             $presentase = 0;
             $times = 0;
+            $real_hadir = 0;
 
             $kehadiran = 'hadir';
 
@@ -1358,6 +1359,7 @@ class EmployeeApiRepository
                         else
                         {
                             $hadir++;
+                            $real_hadir++;
                             foreach($absences as $presence)
                             {
                                 if(!$presence->worktime_item){
@@ -1457,7 +1459,7 @@ class EmployeeApiRepository
                     $row['cuti'] = $cuti;
                     $row['tugas'] = $tugas;
                     $row['alfa'] = $alfa;
-                    $row['kehadiran'] = $hadir - $tugas;
+                    $row['kehadiran'] = $real_hadir;
                     $rows[] = $row;
                 }
                 
