@@ -407,8 +407,6 @@ class EmployeeApiRepository
         // $data = $type ? $data->get() : $data->paginate($perPage);
         $data = $data->get();
 
-        return $data;
-
         $rows = [];
 
         foreach($data as $p)
