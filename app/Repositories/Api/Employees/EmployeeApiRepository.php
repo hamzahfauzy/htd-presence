@@ -87,13 +87,11 @@ class EmployeeApiRepository
         $employee = Employee::with([
             'workunit.worktimes.items' => function($q){
                 $q->where('start_time','<=',date('H:i'))
-                        ->where('end_time','>=',date('H:i'))
-                        ->where('days','like', '%'.$this->today().'%');
+                    ->where('end_time','>=',date('H:i'))
+                    ->where('days','like', '%'.$this->today().'%');
             },
             'worktimes.items' => function($q){
-                $q->where('start_time','<=',date('H:i'))
-                        ->where('end_time','>=',date('H:i'))
-                        ->where('days','like', '%'.$this->today().'%');
+                $q->where('days','like', '%'.$this->today().'%');
             },'places','presences','user'])->whereId($id)->first();
 
         $active_worktime = null;
@@ -102,9 +100,42 @@ class EmployeeApiRepository
             if(count($employee->worktimes))
             {
                 $worktime = $employee->worktimes()->wherePivot('date_start','<=',date("Y-m-d"))->wherePivot('date_end','>=',date("Y-m-d"))->first();
-                if($worktime)
+                if($worktime && $worktime->items)
                 {
-                    $active_worktime = $worktime->items()->where('start_time','<=',date('H:i'))->where('end_time','>=',date('H:i'))->first();
+                    $worktime_items = $worktime->items;
+                    foreach($worktime_items as $worktime_item)
+                    {
+                        $is_active = false;
+                        $now = strtotime('now');
+                        $start_time = date('Y-m-d').' '.$worktime_item->start_time.':00';
+                        $end_time = date('Y-m-d').' '.$worktime_item->end_time.':00';
+                        if($worktime_item->end_time < $worktime_item->start_time)
+                        {
+                            $midnight = strtotime(date('Y-m-d').' 23:59:59');
+                            if($now <= $midnight)
+                            {
+                                $end_time = date('Y-m-d', strtotime('+1 day')).' '.$worktime_item->end_time.':00';
+                            }
+                            else
+                            {
+                                $start_time = date('Y-m-d', strtotime('-1 day')).' '.$worktime_item->start_time.':00';
+                            }
+                        }
+
+                        $worktime_item->full_start_time = $start_time;
+                        $worktime_item->full_end_time = $end_time;
+
+                        $start_time = strtotime($start_time);
+                        $end_time   = strtotime($end_time);
+
+                        $is_active = $now >= $start_time && $now <= $end_time;
+                        if($is_active)
+                        {
+                            $active_worktime = $worktime_item;
+                            break;
+                        }
+                    }
+
                     if($active_worktime)
                     {
                         $employee->is_holiday = false;
