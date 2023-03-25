@@ -90,13 +90,13 @@ class EmployeeApiRepository
                     ->where('end_time','>=',date('H:i'))
                     ->where('days','like', '%'.$this->today().'%');
             },
-            'worktimes' => function($q) {
-                $q->wherePivot('date_start','<=',date("Y-m-d"))
-                    ->wherePivot('date_end','>=',date("Y-m-d"));
-            },
+            // 'worktimes' => function($q) {
+            //     $q->wherePivot('date_start','<=',date("Y-m-d"))
+            //         ->wherePivot('date_end','>=',date("Y-m-d"));
+            // },
             'worktimes.items' => function($q){
                 $q->where('days','like', '%'.$this->today().'%');
-            },'places','presences','user'])->whereId($id)->first();
+            },'worktimes','places','presences','user'])->whereId($id)->first();
 
             // return $employee;
 
@@ -105,7 +105,13 @@ class EmployeeApiRepository
             $employee->is_holiday = Holiday::where('date',date("Y-m-d"))->exists();
             if(count($employee->worktimes))
             {
-                $worktime = $employee->worktimes[0];
+                $_employee = Employee::where('id',$employee->id)->with([
+                    'worktimes' => function($q) {
+                        $q->wherePivot('date_start','<=',date("Y-m-d"))
+                            ->wherePivot('date_end','>=',date("Y-m-d"));
+                    }
+                ])->first();
+                $worktime = $_employee->worktimes ? $_employee->worktimes[0] : [];
                 if($worktime && $worktime->items)
                 {
                     $worktime_items = $worktime->items;
