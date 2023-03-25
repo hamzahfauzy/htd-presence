@@ -90,16 +90,22 @@ class EmployeeApiRepository
                     ->where('end_time','>=',date('H:i'))
                     ->where('days','like', '%'.$this->today().'%');
             },
+            'worktimes' => function($q) {
+                $q->wherePivot('date_start','<=',date("Y-m-d"))
+                    ->wherePivot('date_end','>=',date("Y-m-d"));
+            },
             'worktimes.items' => function($q){
                 $q->where('days','like', '%'.$this->today().'%');
             },'places','presences','user'])->whereId($id)->first();
+
+            // return $employee;
 
         $active_worktime = null;
         if($employee){
             $employee->is_holiday = Holiday::where('date',date("Y-m-d"))->exists();
             if(count($employee->worktimes))
             {
-                $worktime = $employee->worktimes()->wherePivot('date_start','<=',date("Y-m-d"))->wherePivot('date_end','>=',date("Y-m-d"))->first();
+                $worktime = $employee->worktimes[0];
                 if($worktime && $worktime->items)
                 {
                     $worktime_items = $worktime->items;
