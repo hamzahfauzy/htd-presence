@@ -111,7 +111,7 @@ class EmployeeApiRepository
                             ->wherePivot('date_end','>=',date("Y-m-d"));
                     }
                 ])->first();
-                $worktime = $_employee->worktimes ? $_employee->worktimes[0] : [];
+                $worktime = $_employee->worktimes && count($_employee->worktimes) ? $_employee->worktimes[0] : [];
                 if($worktime && $worktime->items)
                 {
                     $worktime_items = $worktime->items;
