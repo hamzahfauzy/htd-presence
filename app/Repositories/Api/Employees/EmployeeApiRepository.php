@@ -1325,7 +1325,7 @@ class EmployeeApiRepository
         
                         // $other_absen_in = array_merge(['tugas luar','tugas dalam'], $cuti_name);
         
-                        $absen = $p->hadir()->where('type','hadir')->where('status','disetujui')->with('worktime_item')->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
+                        $absen = $p->hadir()->where('type','hadir')->where('status','disetujui')->whereHas('worktime_item')->with('worktime_item')->where('created_at','LIKE','%'.$day->format("Y-m-d").'%');
                         $absences = $absen->get();
                         // Log::info($absences);
                         $absence_ids = array_map(function($absence){
