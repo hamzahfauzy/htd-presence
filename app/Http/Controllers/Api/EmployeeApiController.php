@@ -402,6 +402,13 @@ class EmployeeApiController extends Controller
      *       type="integer",
      *     )
      *   ),
+     *   @OA\Parameter(
+     *     name="datetime",
+     *     in="query",
+     *     @OA\Schema(
+     *       type="text",
+     *     )
+     *   ),
      *   @OA\Response(
      *     response=200,
      *     description="employee detail",
@@ -410,7 +417,7 @@ class EmployeeApiController extends Controller
      */
     function detail(EmployeeApiDetailRequest $EmployeeApiDetailRequest, EmployeeApiRepository $EmployeeApiRepository)
     {
-        $data = $EmployeeApiRepository->findOne($EmployeeApiDetailRequest->id);
+        $data = $EmployeeApiRepository->findOne($EmployeeApiDetailRequest->id, $EmployeeApiDetailRequest);
         return $this->sendResponse($data, __('messages.employee.detail'));
     }
 

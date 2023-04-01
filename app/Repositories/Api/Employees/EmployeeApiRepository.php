@@ -82,55 +82,67 @@ class EmployeeApiRepository
         return $employees->orderBy($sortBy, $orderBy)->paginate($perPage);
     }
 
-    public function findOne($id)
+    public function findOne($id, $request = false)
     {
+        $date = $request->datetime ? date('Y-m-d', strtotime($request->datetime)) : date('Y-m-d');
+        $time = $request->datetime ? date('H:i', strtotime($request->datetime)) : date('H:i');
+        $day  = $request->datetime ? date('D', strtotime($request->datetime)) : null;
         $employee = Employee::with([
-            'workunit.worktimes.items' => function($q){
-                $q->where('start_time','<=',date('H:i'))
-                    ->where('end_time','>=',date('H:i'))
-                    ->where('days','like', '%'.$this->today().'%');
+            'workunit.worktimes.items' => function($q) use ($day) {
+                $q->where('start_time','<=',$time)
+                    ->where('end_time','>=',$time)
+                    ->where('days','like', '%'.$this->today($day).'%');
             },
             // 'worktimes' => function($q) {
             //     $q->wherePivot('date_start','<=',date("Y-m-d"))
             //         ->wherePivot('date_end','>=',date("Y-m-d"));
             // },
-            'worktimes.items' => function($q){
-                $q->where('days','like', '%'.$this->today().'%');
+            'worktimes.items' => function($q) use ($day){
+                $q->where('days','like', '%'.$this->today($day).'%');
             },'worktimes','places','presences','user'])->whereId($id)->first();
 
             // return $employee;
 
+        $employee->time_request = $time;
         $active_worktime = null;
         if($employee){
-            $employee->is_holiday = Holiday::where('date',date("Y-m-d"))->exists();
+            $employee->is_holiday = Holiday::where('date',$date)->exists();
             if(count($employee->worktimes))
             {
                 $_employee = Employee::where('id',$employee->id)->with([
-                    'worktimes' => function($q) {
-                        $q->wherePivot('date_start','<=',date("Y-m-d"))
-                            ->wherePivot('date_end','>=',date("Y-m-d"));
+                    'worktimes' => function($q) use ($date) {
+                        $q->wherePivot('date_start','<=',$date)
+                            ->wherePivot('date_end','>=',$date);
+                    },
+                    'worktimes.items' => function($q) use ($day){
+                        $q->where('days','like', '%'.$this->today($day).'%');
                     }
                 ])->first();
                 $worktime = $_employee->worktimes && count($_employee->worktimes) ? $_employee->worktimes[0] : [];
                 if($worktime && $worktime->items)
                 {
                     $worktime_items = $worktime->items;
+                    $employee->found = $worktime_items;
                     foreach($worktime_items as $worktime_item)
                     {
                         $is_active = false;
-                        $now = strtotime('now');
-                        $start_time = date('Y-m-d').' '.$worktime_item->start_time.':00';
-                        $end_time = date('Y-m-d').' '.$worktime_item->end_time.':00';
+                        $now = $request->datetime ? strtotime($request->datetime) : strtotime('now');
+                        $start_time = $date.' '.$worktime_item->start_time.':00';
+                        $end_time = $date.' '.$worktime_item->end_time.':00';
                         if($worktime_item->end_time < $worktime_item->start_time)
                         {
-                            $midnight = strtotime(date('Y-m-d').' 23:59:59');
-                            if($now <= $midnight)
+                            $now_time = date('H:i', $now);
+                            // $worktime_item->now_time = $now_time;
+                            $condition_1 = $now_time >= $worktime_item->start_time;
+                            $condition_2 = $now_time <= $worktime_item->end_time;
+                            if($condition_1)
                             {
-                                $end_time = date('Y-m-d', strtotime('+1 day')).' '.$worktime_item->end_time.':00';
+                                $end_time = date('Y-m-d', strtotime($date.' +1 day')).' '.$worktime_item->end_time.':00';
                             }
-                            else
+
+                            if($condition_2)
                             {
-                                $start_time = date('Y-m-d', strtotime('-1 day')).' '.$worktime_item->start_time.':00';
+                                $start_time = date('Y-m-d', strtotime($date.' -1 day')).' '.$worktime_item->start_time.':00';
                             }
                         }
 
@@ -169,10 +181,10 @@ class EmployeeApiRepository
 
             if(empty($active_worktime))
             {
-                $worktime = Worktime::whereid(1)->with(['items' => function($q){
-                    $q->where('start_time','<=',date('H:i'))
-                        ->where('end_time','>=',date('H:i'))
-                        ->where('days','like', '%'.$this->today().'%');
+                $worktime = Worktime::whereid(1)->with(['items' => function($q) use($date,$day) {
+                    $q->where('start_time','<=',$date)
+                        ->where('end_time','>=',$date)
+                        ->where('days','like', '%'.$this->today($day).'%');
                 }])->first();
                 if(count($worktime->items))
                 {
@@ -185,7 +197,7 @@ class EmployeeApiRepository
                 if($active_worktime->days){
                     $days = explode(",",$active_worktime->days);
     
-                    if(!in_array($this->today(),$days)){
+                    if(!in_array($this->today($day),$days)){
                         $employee->active_worktime = null;
                     }else{
                         $employee->active_worktime = $active_worktime;
