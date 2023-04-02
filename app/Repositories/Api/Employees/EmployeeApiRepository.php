@@ -84,9 +84,9 @@ class EmployeeApiRepository
 
     public function findOne($id, $request = false)
     {
-        $date = $request->datetime ? date('Y-m-d', strtotime($request->datetime)) : date('Y-m-d');
-        $time = $request->datetime ? date('H:i', strtotime($request->datetime)) : date('H:i');
-        $day  = $request->datetime ? date('D', strtotime($request->datetime)) : null;
+        $date = isset($request->datetime) ? date('Y-m-d', strtotime($request->datetime)) : date('Y-m-d');
+        $time = isset($request->datetime) ? date('H:i', strtotime($request->datetime)) : date('H:i');
+        $day  = isset($request->datetime) ? date('D', strtotime($request->datetime)) : null;
         $employee = Employee::with([
             'workunit.worktimes.items' => function($q) use ($day) {
                 $q->where('start_time','<=',$time)
@@ -126,7 +126,7 @@ class EmployeeApiRepository
                     foreach($worktime_items as $worktime_item)
                     {
                         $is_active = false;
-                        $now = $request->datetime ? strtotime($request->datetime) : strtotime('now');
+                        $now = isset($request->datetime) ? strtotime($request->datetime) : strtotime('now');
                         $start_time = $date.' '.$worktime_item->start_time.':00';
                         $end_time = $date.' '.$worktime_item->end_time.':00';
                         if($worktime_item->end_time < $worktime_item->start_time)
