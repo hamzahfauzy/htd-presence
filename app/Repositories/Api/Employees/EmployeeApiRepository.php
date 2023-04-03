@@ -88,7 +88,7 @@ class EmployeeApiRepository
         $time = isset($request->datetime) ? date('H:i', strtotime($request->datetime)) : date('H:i');
         $day  = isset($request->datetime) ? date('D', strtotime($request->datetime)) : null;
         $employee = Employee::with([
-            'workunit.worktimes.items' => function($q) use ($day) {
+            'workunit.worktimes.items' => function($q) use ($day, $time) {
                 $q->where('start_time','<=',$time)
                     ->where('end_time','>=',$time)
                     ->where('days','like', '%'.$this->today($day).'%');
