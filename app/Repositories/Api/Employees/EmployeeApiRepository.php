@@ -181,9 +181,9 @@ class EmployeeApiRepository
 
             if(empty($active_worktime))
             {
-                $worktime = Worktime::whereid(1)->with(['items' => function($q) use($date,$day) {
-                    $q->where('start_time','<=',$date)
-                        ->where('end_time','>=',$date)
+                $worktime = Worktime::whereid(1)->with(['items' => function($q) use($time,$day) {
+                    $q->where('start_time','<=',$time)
+                        ->where('end_time','>=',$time)
                         ->where('days','like', '%'.$this->today($day).'%');
                 }])->first();
                 if(count($worktime->items))
