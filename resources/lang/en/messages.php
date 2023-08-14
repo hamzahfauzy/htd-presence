@@ -13,6 +13,9 @@ return [
         'not-found' => 'Presence fail because schedule not found.',
         'once-alert' => 'Presence fail because you are already do it.',
     ],
+    'report_request' => [
+        'create' => 'Report created success.',
+    ],
     'worktime' => [
         'detail' => 'Worktime detail retrieved.',
         'lists'  => 'Worktime lists retrieved.',

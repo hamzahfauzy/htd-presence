@@ -14,6 +14,9 @@ return [
         'once-alert' => 'Absen gagal karena kamu sudah absen.',
         'failed-upload' => 'Upload Lampiran gagal.',
     ],
+    'report_request' => [
+        'create' => 'Buat laporan berhasil.',
+    ],
     'worktime' => [
         'detail' => 'Detail jam kerja.',
         'lists'  => 'Daftar jam kerja.',
@@ -62,22 +65,22 @@ return [
         'report-details'  => 'Daftar Laporan Detail.',
         'reset-device'  => 'Reset Device Berhasil.',
         'reset-password'  => 'Reset Password Berhasil.',
-        'presence'=>[
-            'list'=>'Daftar Absensi',
-            'detail'=>'Detail Absensi',
-            'update'=>'Update Absensi Berhasil',
-            'upload'=>'Upload Lampiran Berhasil',
+        'presence' => [
+            'list' => 'Daftar Absensi',
+            'detail' => 'Detail Absensi',
+            'update' => 'Update Absensi Berhasil',
+            'upload' => 'Upload Lampiran Berhasil',
         ],
-        'worktime'=>[
-            'add'=>'Tambah Jam Kerja berhasil',
-            'delete'=>'Hapus Jam Kerja berhasil',
+        'worktime' => [
+            'add' => 'Tambah Jam Kerja berhasil',
+            'delete' => 'Hapus Jam Kerja berhasil',
         ],
-        
+
     ],
-    'place'=>[
-        'add'=>'Tambah Tempat berhasil',
-        'delete'=>'Hapus Tempat berhasil',
-        'free'=>'Bebas Lokasi berhasil',
+    'place' => [
+        'add' => 'Tambah Tempat berhasil',
+        'delete' => 'Hapus Tempat berhasil',
+        'free' => 'Bebas Lokasi berhasil',
     ],
     'user' => [
         'detail' => 'Detail pengguna.',
