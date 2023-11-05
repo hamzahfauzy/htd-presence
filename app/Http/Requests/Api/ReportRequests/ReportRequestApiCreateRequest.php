@@ -16,7 +16,7 @@ class ReportRequestApiCreateRequest extends APIRequest
     public function rules()
     {
         return [
-            'user_id' => $this->getUserIdRules(),
+            // 'user_id' => $this->getUserIdRules(),
             'workunit_id' => $this->getWorkunitIdRules(),
             'start_at' => $this->getRequiredRules(),
             'end_at' => $this->getRequiredRules(),

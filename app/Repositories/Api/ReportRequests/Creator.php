@@ -24,6 +24,7 @@ class Creator
         $report->start_at = $input['start_at'];
         $report->end_at = $input['end_at'];
         $report->report_type = $input['report_type'];
+        $report->status = 'WAITING';
         $report->save();
 
         return $report;

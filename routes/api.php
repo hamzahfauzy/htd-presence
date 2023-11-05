@@ -74,7 +74,8 @@ Route::middleware('auth:sanctum', 'versionChecker')->group(function () {
         Route::delete('{id}', [PresenceApiController::class, 'destroy']);
     });
 
-    Route::prefix('report_requests')->group(function () {
+    Route::prefix('report-requests')->group(function () {
+        Route::get('/', [ReportRequestApiController::class, 'index']);
         Route::post('/', [ReportRequestApiController::class, 'create']);
     });
 
