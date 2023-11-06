@@ -14,9 +14,17 @@ class ReportRequestApiRepository
         $this->creator = $creator;
     }
 
-    function get()
+    function get($input)
     {
-        return ReportRequest::with('workunit')->orderby('id','desc')->paginate(20);
+        
+        $data = ReportRequest::with('workunit');
+
+        if(isset($input['workunit_id']))
+        {
+            $data = $data->where('workunit_id', $input['workunit_id']);
+        }
+        
+        return $data->orderby('id','desc')->paginate(20);
     }
 
     public function findOne($id)
