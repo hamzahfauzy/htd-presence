@@ -15,4 +15,14 @@ class ReportRequest extends Model
     {
         return $this->belongsTo('App\Models\Workunit');
     }
+
+    public function getStartAtAttribute()
+    {
+        return date('Y-m-d', strtotime($this->attributes['start_at']));
+    }
+    
+    public function getEndAtAttribute()
+    {
+        return date('Y-m-d', strtotime($this->attributes['end_at']));
+    }
 }
