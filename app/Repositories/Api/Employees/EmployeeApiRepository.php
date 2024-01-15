@@ -338,7 +338,7 @@ class EmployeeApiRepository
             $calc = $this->presenceCalculationDetail($start,$oneday,$end,$p);
 
             $time_left = 0;
-            $presentase = 0;
+            // $presentase = 0;
             $hadir = 0;
             $alfa = 0;
             $hari_kerja = 0;
@@ -348,7 +348,7 @@ class EmployeeApiRepository
             foreach($calc as $c)
             {
                 $time_left += $c['time_left'];
-                $presentase += $c['presentase']; 
+                // $presentase += $c['presentase']; 
                 $hadir += $c['hadir']; 
                 $alfa += $c['alfa']; 
                 $hari_kerja += $c['hari_kerja']; 
@@ -358,7 +358,7 @@ class EmployeeApiRepository
             }
 
             $p->time_left  = $time_left;
-            $p->presentase = $presentase . '%';
+            // $p->presentase = $presentase . '%';
             $p->_hadir = $hadir;
             $p->kehadiran = $kehadiran;
             $p->alfa  = $alfa;
@@ -1214,7 +1214,7 @@ class EmployeeApiRepository
             $cuti = 0;
             $tugas = 0;
             $alfa  = 0;
-            $presentase = 0;
+            // $presentase = 0;
             $times = 0;
             $real_hadir = 0;
 
@@ -1297,7 +1297,7 @@ class EmployeeApiRepository
                             $row['types'][$item->name]['time'] = false;
                             $row['types'][$item->name]['in_location'] = false;
                             $row['types'][$item->name]['time_left'] = $item->penalty;
-                            $row['types'][$item->name]['presentase'] = 1.5;
+                            // $row['types'][$item->name]['presentase'] = 1.5;
                             $row['types'][$item->name]['worktime_item'] = $item;
                             $row['types'][$item->name]['date'] = $day->format('Y-m-d');
 
@@ -1315,7 +1315,7 @@ class EmployeeApiRepository
                             {
                                 $late_time = 0;
                                 $row['types'][$item->name]['time_left'] = 0;
-                                $row['types'][$item->name]['presentase'] = 0;
+                                // $row['types'][$item->name]['presentase'] = 0;
                             }
 
                             $times += $late_time;
@@ -1324,7 +1324,7 @@ class EmployeeApiRepository
                         if($day->format('Y-m-d') != date('Y-m-d') && strtotime($day->format('Y-m-d')) < strtotime(date('Y-m-d')))
                         {
                             $alfa++;
-                            $presentase += 3;
+                            // $presentase += 3;
                         }
                     }
                     else
@@ -1366,7 +1366,7 @@ class EmployeeApiRepository
                                 $row['types'][$worktime_item->name]['time'] = false;
                                 $row['types'][$worktime_item->name]['in_location'] = false;
                                 $row['types'][$worktime_item->name]['time_left'] = $worktime_item->penalty;
-                                $row['types'][$worktime_item->name]['presentase'] = 1.5;
+                                // $row['types'][$worktime_item->name]['presentase'] = 1.5;
                                 $row['types'][$worktime_item->name]['worktime_item'] = $worktime_item;
                                 $row['types'][$worktime_item->name]['date'] = $day->format('Y-m-d');
 
@@ -1382,14 +1382,14 @@ class EmployeeApiRepository
                                 {
                                     $late_time = 0;
                                     $row['types'][$worktime_item->name]['time_left'] = 0;
-                                    $row['types'][$worktime_item->name]['presentase'] = 0;
+                                    // $row['types'][$worktime_item->name]['presentase'] = 0;
                                     $times += 0;
-                                    $presentase += 0;
+                                    // $presentase += 0;
                                 }
                                 else
                                 {
                                     $times += $worktime_item->penalty;
-                                    $presentase += 1.5;
+                                    // $presentase += 1.5;
                                 }
 
                             }
@@ -1412,7 +1412,7 @@ class EmployeeApiRepository
                                 $row['types'][$presence->type]['time'] = false;
                                 $row['types'][$presence->type]['in_location'] = $presence->in_location == 1;
                                 $row['types'][$presence->type]['time_left'] = 0;
-                                $row['types'][$presence->type]['presentase'] = 0;
+                                // $row['types'][$presence->type]['presentase'] = 0;
                                 $row['types'][$presence->type]['worktime_item'] = [];
                                 $row['types'][$presence->type]['date'] = $day->format('Y-m-d H:i:s');
                                 $row['types'][$presence->type]['status'] = $presence->status;
@@ -1430,7 +1430,7 @@ class EmployeeApiRepository
                                 $row['types'][$presence->type]['time'] = false;
                                 $row['types'][$presence->type]['in_location'] = $presence->in_location == 1;
                                 $row['types'][$presence->type]['time_left'] = 0;
-                                $row['types'][$presence->type]['presentase'] = 0;
+                                // $row['types'][$presence->type]['presentase'] = 0;
                                 $row['types'][$presence->type]['worktime_item'] = [];
                                 $row['types'][$presence->type]['date'] = $day->format('Y-m-d H:i:s');
                                 $row['types'][$presence->type]['status'] = $presence->status;
@@ -1457,7 +1457,7 @@ class EmployeeApiRepository
                                 $row['types'][$presence->worktime_item->name]['time'] = date('H:i',strtotime($presence->created_at));
                                 $row['types'][$presence->worktime_item->name]['in_location'] = $presence->in_location == 1;
                                 $row['types'][$presence->worktime_item->name]['time_left'] = 0;
-                                $row['types'][$presence->worktime_item->name]['presentase'] = 0;
+                                // $row['types'][$presence->worktime_item->name]['presentase'] = 0;
                                 $row['types'][$presence->worktime_item->name]['worktime_item'] = $presence->worktime_item;
                                 $row['types'][$presence->worktime_item->name]['date'] = $presence->created_at->format('Y-m-d H:i:s');
                                 $row['types'][$presence->worktime_item->name]['status'] = $presence->status;
@@ -1491,29 +1491,29 @@ class EmployeeApiRepository
                                     $times += $time_left;
                                     $row['types'][$presence->worktime_item->name]['time_left'] = $time_left;
         
-                                    if($time_left >= 1 && $time_left < 31)
-                                    {
-                                        $presentase += 0.5;
-                                        $row['types'][$presence->worktime_item->name]['presentase'] = 0.5;
-                                    }
+                                    // if($time_left >= 1 && $time_left < 31)
+                                    // {
+                                    //     $presentase += 0.5;
+                                    //     $row['types'][$presence->worktime_item->name]['presentase'] = 0.5;
+                                    // }
                 
-                                    if($time_left >= 31 && $time_left < 61)
-                                    {
-                                        $presentase += 1;
-                                        $row['types'][$presence->worktime_item->name]['presentase'] = 1;
-                                    }
+                                    // if($time_left >= 31 && $time_left < 61)
+                                    // {
+                                    //     $presentase += 1;
+                                    //     $row['types'][$presence->worktime_item->name]['presentase'] = 1;
+                                    // }
                                     
-                                    if($time_left >= 61 && $time_left < 91)
-                                    {
-                                        $presentase += 1.25;
-                                        $row['types'][$presence->worktime_item->name]['presentase'] = 1.25;
-                                    }
+                                    // if($time_left >= 61 && $time_left < 91)
+                                    // {
+                                    //     $presentase += 1.25;
+                                    //     $row['types'][$presence->worktime_item->name]['presentase'] = 1.25;
+                                    // }
                                     
-                                    if($time_left >= 91)
-                                    {
-                                        $presentase += 1.5;
-                                        $row['types'][$presence->worktime_item->name]['presentase'] = 1.5;
-                                    }
+                                    // if($time_left >= 91)
+                                    // {
+                                    //     $presentase += 1.5;
+                                    //     $row['types'][$presence->worktime_item->name]['presentase'] = 1.5;
+                                    // }
                                 }
                             }   
                         }
@@ -1533,7 +1533,7 @@ class EmployeeApiRepository
         
         
                     $row['time_left'] = ceil($times);
-                    $row['presentase'] = $presentase >= 3 ? 3 : $presentase;
+                    // $row['presentase'] = $presentase >= 3 ? 3 : $presentase;
                     $row['hari_kerja'] = $hari_kerja;
                     $row['hadir'] = $hadir;
                     $row['cuti'] = $cuti;
