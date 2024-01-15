@@ -47,7 +47,7 @@ Route::prefix('dashboards')->group(function () {
     Route::get('index', [DashboardApiController::class, 'index']);
 });
 
-Route::middleware('auth:sanctum', 'versionChecker')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('auth/change-password', [AuthController::class, 'changePassword']);
     Route::post('auth/change-email', [AuthController::class, 'changeEmail']);
