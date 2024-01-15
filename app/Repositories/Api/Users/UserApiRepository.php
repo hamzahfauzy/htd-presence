@@ -38,9 +38,9 @@ class UserApiRepository
                             ->orwhere('role','LIKE','%'.$input['keyword'].'%');
         }
 
-        if(isset($input['user'])){
-            $users = $users->where('role','!=','pegawai')->where('role','!=','superuser');
-        }
+        // if(isset($input['user'])){
+        //     $users = $users->where('role','!=','pegawai')->where('role','!=','superuser');
+        // }
         
 
         return $users->orderBy($sortBy, $orderBy)->paginate($perPage);

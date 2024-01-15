@@ -510,7 +510,7 @@ class EmployeeApiRepository
             return $update;
         } catch (\Throwable $th) {
             //throw $th;
-            // Log::info($th);
+            Log::info($th);
         }
 
         return $this->findOne($create->id);
