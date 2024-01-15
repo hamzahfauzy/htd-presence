@@ -493,7 +493,7 @@ class EmployeeApiRepository
                 'name'  => $input['name'],
                 'email' => $input['email'] ?? $input['nip'],
                 'role'  => 'pegawai',
-                'workunit_id'=>null,
+                'workunit_id' => $input['workunit_id'],
                 'password' => 12345678
             ]);
 
